@@ -5,11 +5,22 @@ const browserSync = require('browser-sync').create();
 const del = require('del');
 const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
+var pegjs = require('gulp-pegjs');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
 let dev = true;
+
+
+
+gulp.task('pegjs', () => {
+    return gulp.src('app/peg/*.pegjs')
+        .pipe(pegjs({format: "globals", exportVar: "parser"}))
+        .pipe(gulp.dest('.tmp/scripts'))
+        .pipe(reload({stream: true}));
+});
+
 
 gulp.task('styles', () => {
   return gulp.src('app/styles/*.scss')
@@ -26,7 +37,7 @@ gulp.task('styles', () => {
     .pipe(reload({stream: true}));
 });
 
-gulp.task('scripts', () => {
+gulp.task('scripts', ['pegjs'], () => {
   return gulp.src('app/scripts/**/*.js')
     .pipe($.plumber())
     .pipe($.if(dev, $.sourcemaps.init()))
@@ -110,12 +121,14 @@ gulp.task('serve', () => {
     gulp.watch([
       'app/*.html',
       'app/images/**/*',
+      'app/peg/*',
       '.tmp/fonts/**/*'
     ]).on('change', reload);
 
     gulp.watch('app/styles/**/*.scss', ['styles']);
     gulp.watch('app/scripts/**/*.js', ['scripts']);
     gulp.watch('app/fonts/**/*', ['fonts']);
+    gulp.watch('app/peg/**/*', ['pegjs']);
     gulp.watch('bower.json', ['wiredep', 'fonts']);
   });
 });
