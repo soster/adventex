@@ -17,7 +17,7 @@ let dev = true;
 gulp.task('pegjs', () => {
     return gulp.src('app/peg/*.pegjs')
         .pipe(pegjs({format: "globals", exportVar: "parser"}))
-        .pipe(gulp.dest('.tmp/scripts'))
+        .pipe(gulp.dest('app/scripts'))
         .pipe(reload({stream: true}));
 });
 

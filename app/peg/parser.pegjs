@@ -1,30 +1,35 @@
-// Simple Arithmetics Grammar
-// ==========================
-//
-// Accepts expressions like "2 * (3 + 4)" and computes their value.
+Start
+ = predicate*
+ 
+predicate
+ = w:word
+ {
+ var type='other';
+ if (	w=='go'||
+ 	 	w=='open'||
+        w=='close'
+ 	) type = 'predicate';
+ return {'type':type,'value':w};
+ }
 
-Expression
-  = head:Term tail:(_ ("+" / "-") _ Term)* {
-      return tail.reduce(function(result, element) {
-        if (element[1] === "+") { return result + element[3]; }
-        if (element[1] === "-") { return result - element[3]; }
-      }, head);
-    }
+list
+ = word *
 
-Term
-  = head:Factor tail:(_ ("*" / "/") _ Factor)* {
-      return tail.reduce(function(result, element) {
-        if (element[1] === "*") { return result * element[3]; }
-        if (element[1] === "/") { return result / element[3]; }
-      }, head);
-    }
+word
+ = l:letter+ _?
+ { return l.join(""); }
 
-Factor
-  = "(" _ expr:Expression _ ")" { return expr; }
-  / Integer
+number
+ = [0-9]
 
-Integer "integer"
-  = _ [0-9]+ { return parseInt(text(), 10); }
+letter
+ = [a-zA-Z]
 
-_ "whitespace"
-  = [ \t\n\r]*
+nl "New line"
+ = "\n"
+
+ws "Whitespace"
+ = [ \t]
+
+_ "One or more whitespaces"
+ = ws+
