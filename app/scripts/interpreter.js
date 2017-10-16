@@ -7,7 +7,9 @@ var Interpreter = {
       } else if (command.startsWith('my name is ')) {
         var name = original.substr(11);
         return 'Your name is '+name;
-      } 
+      } else {
+        
+      }
       
       return MESSAGE.console.error.format(original);
   }

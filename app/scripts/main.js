@@ -9,3 +9,8 @@
         prompt: CONFIG.console.prompt,
         height: CONFIG.console.height
     });
+
+    $('#btn_help').click(function () {
+      term.exec('help',false);
+      $('#terminal').focus();
+    });
