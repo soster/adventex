@@ -1,7 +1,9 @@
 var MESSAGE = {
   name : 'adventex',
   console : {
-    help : 'This is a help text.',
+    help : 'Verbs: ["go", "walk", "talk", "get", "use", "open", "close", "unlock", "lock"];\n' +
+    'Directions: ["north", "east", "south", "west", "up", "down", "left", "right", "forward", "backward"];\n' +
+    'Nouns: ["door", "house", "window", "key", "knife", "wrench", "hammer"];',
     error : 'I don\'t understand \"{0}\", yet.',
     greetings : '           .___                    __                 \n\
   _____    __| ____  __ ____   _____/  |_  ____ ___  ___\n\
