@@ -1,7 +1,7 @@
 {
 
   // globals:
-  const g_verbs = ["go", "walk", "talk", "get", "use", "open", "close", "unlock", "lock", "catch", "switch", "examine"];
+  const g_verbs = ["go", "walk", "talk", "give", "take", "use", "open", "close", "unlock", "lock", "catch", "switch", "examine"];
   const g_directions = ["north", "east", "south", "west", "up", "down", "left", "right", "forward", "backward"];
   const g_things = ["door", "house", "window", "key", "knife", "wrench", "hammer", "vase", "tapestry", "marble floor"];
   const g_persons = ["man", "woman", "boy", "girl", "sam", "max"];

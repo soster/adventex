@@ -1,8 +1,6 @@
 var MESSAGE = {
   name: 'adventex',
-  help: 'Verbs: ["go", "walk", "talk", "get", "use", "open", "close", "unlock", "lock"];\n' +
-  'Directions: ["north", "east", "south", "west", "up", "down", "left", "right", "forward", "backward"];\n' +
-  'Nouns: ["door", "house", "window", "key", "knife", "wrench", "hammer"];',
+  help: '"go", "walk", "talk", "give", "take", "use", "open", "close", "unlock", "lock", "catch", "switch", "examine"',
   error_movement: 'You can\'t go to {0}!',
   error_get: 'You can\'t get {0}!',
   error_portable: '{0} is to heavy, you can\'t pick that up!',

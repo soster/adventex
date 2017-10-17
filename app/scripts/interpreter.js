@@ -11,9 +11,18 @@ var Interpreter = {
       if (get_first_of_type(words,'verbs')=='go') {
         var direction = get_first_of_type(words, 'directions');
         this.move(direction);
-      } else if (get_first_of_type(words,'verbs')=='get') {
+      } else if (get_first_of_type(words,'verbs')=='take') {
         var thing = get_first_of_type(words, 'things');
-        this.get_item(thing); 
+        this.get_item(thing);
+      } else if (get_first_of_type(words,'verbs')=='examine') {
+        var thing = get_first_of_type(words, 'things');
+        if (thing=='') {
+          echo(MESSAGE.error.format(command),'red');
+        } else {
+          var desc = get_description(things, get_first_of_type(words, 'things'));
+          echo(desc);
+        }
+        
       }
     }
     return '';

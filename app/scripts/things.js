@@ -16,6 +16,11 @@ var things = {
 
 }
 
+
+
+
+
+
 function is_portable(item) {
     if (things[item] === undefined) {
         return false;
