@@ -1,23 +1,23 @@
 var Interpreter = {
-    interpret : function(command) {
-      var original = command;
-      command = command.toLowerCase();
-      if (command=='help') {
-        return MESSAGE.console.help;
-      } else if (command.startsWith('my name is ')) {
-        var name = original.substr(11);
-        return 'Your name is '+name;
-      } else {
-        var words = parser.parse(command);
-        var retVal = 'Persons: '+words['persons'];
-        retVal +='\nThings: '+words['things'];
-        retVal +='\nVerbs: '+words['verbs'];
-        retVal +='\nDirections: '+words['directions'];
-        retVal +='\nPrepositions: '+words['prepositions'];
-        retVal +='\nMisc: '+words['misc'];
-        return retVal;
+  interpret: function (command, init_location, echo) {
+    var original = command;
+    command = command.toLowerCase();
+    if (command == 'help') {
+      echo(MESSAGE.console.help);
+    } else {
+      var words = parser.parse(command);
+      console.log(words['directions']);
+      if (words['verbs'].indexOf('go') != -1 && words['directions'] !== undefined) {
+        var direction = words['directions'][0];
+        var location = locations[state.location];
+        console.log(location.connections);
+        console.log(location.connections[direction]);
+        if (location.connections[direction] !== undefined) {
+          var new_location = location.connections[direction];
+          console.log("new: "+new_location);
+          init_location(new_location);
+        }
       }
-      
-      return MESSAGE.console.error.format(original);
+    }
   }
 }

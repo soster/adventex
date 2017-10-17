@@ -1,5 +1,5 @@
 var term = $('#terminal').terminal(function (command) {
-  this.echo(Interpreter.interpret(command));
+  this.echo(Interpreter.interpret(command, init_location, echo));
 }, {
   greetings: MESSAGE.console.greetings,
   name: MESSAGE.name,
@@ -7,10 +7,34 @@ var term = $('#terminal').terminal(function (command) {
   height: CONFIG.console.height
 });
 
+
+function init_location(location) {
+  state.locaction = location;
+  var loc = locations[location];
+  console.log(loc);
+  echo(loc.description, loc.color);
+}
+
+function echo(text, color) {
+  if (color === undefined) {
+    color = 'white';
+  }
+
+
+  term.echo(text, {
+    finalize: function(div) {
+      div.css("color", color);
+    }
+  });
+}
+
+
+
+
 $('#btn_help').click(function () {
   term.exec('help', false);
   init_inventory();
-  term..focus();
+  term.focus();
 });
 
 
@@ -26,3 +50,9 @@ function init_inventory() {
     $('#inventory').append('<p class="inventory_item"><button type="button" onclick="inventory_click(\''+item+'\')" class="btn btn-info btn-sm inventory_button">'+item+'</button></p>');
   }
 }
+
+$(function() {
+  $('#inventory_container').css('height', CONFIG.console.height+'px');
+  init_location(state.location);
+});
+
