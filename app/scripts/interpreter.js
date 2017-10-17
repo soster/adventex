@@ -9,11 +9,12 @@ var Interpreter = {
         return 'Your name is '+name;
       } else {
         var words = parser.parse(command);
-        var retVal = "Nouns: "+words["nouns"];
-        retVal +="\nVerbs: "+words["verbs"];
-        retVal +="\nDirections: "+words["directions"];
-        retVal +="\nMisc: "+words["misc"];
-
+        var retVal = 'Persons: '+words['persons'];
+        retVal +='\nThings: '+words['things'];
+        retVal +='\nVerbs: '+words['verbs'];
+        retVal +='\nDirections: '+words['directions'];
+        retVal +='\nPrepositions: '+words['prepositions'];
+        retVal +='\nMisc: '+words['misc'];
         return retVal;
       }
       

@@ -143,17 +143,22 @@
 
         peg$c0 = function(w) {
           var verbs = [];
-          var nouns = [];
+          var things = [];
           var directions = [];
+          var persons = [];
+          var prepositions = [];
           var misc = [];
 
+
           for (var i = 0; i < w.length; i++) {
-            if (isInArray(w[i], gverbs)) verbs.push(w[i]);
-            else if (isInArray(w[i], gnouns)) nouns.push(w[i]);
-            else if (isInArray(w[i], gdirections)) directions.push(w[i]);
+            if (isInArray(w[i], g_verbs)) verbs.push(w[i]);
+            else if (isInArray(w[i], g_persons)) persons.push(w[i]);
+            else if (isInArray(w[i], g_things)) things.push(w[i]);
+            else if (isInArray(w[i], g_directions)) directions.push(w[i]);
+            else if (isInArray(w[i], g_prepositions)) prepositions.push(w[i]);
             else (misc.push(w[i]));
           }
-          return {verbs:verbs, nouns:nouns, directions:directions, misc:misc};
+          return {verbs:verbs, things:things, persons:persons, prepositions:prepositions,directions:directions, misc:misc};
         },
         peg$c1 = function(w) {
          { return w; }
@@ -170,7 +175,10 @@
         peg$c11 = peg$otherExpectation("Whitespace"),
         peg$c12 = /^[ \t]/,
         peg$c13 = peg$classExpectation([" ", "\t"], false, false),
-        peg$c14 = peg$otherExpectation("One or more whitespaces"),
+        peg$c14 = peg$otherExpectation("One or more punctuations"),
+        peg$c15 = /^[.?!,]/,
+        peg$c16 = peg$classExpectation([".", "?", "!", ","], false, false),
+        peg$c17 = peg$otherExpectation("One or more whitespaces"),
 
         peg$currPos          = 0,
         peg$savedPos         = 0,
@@ -342,7 +350,7 @@
     }
 
     function peg$parseword() {
-      var s0, s1, s2;
+      var s0, s1, s2, s3;
 
       s0 = peg$currPos;
       s1 = [];
@@ -361,9 +369,18 @@
           s2 = null;
         }
         if (s2 !== peg$FAILED) {
-          peg$savedPos = s0;
-          s1 = peg$c2(s1);
-          s0 = s1;
+          s3 = peg$parsepunctuation();
+          if (s3 === peg$FAILED) {
+            s3 = null;
+          }
+          if (s3 !== peg$FAILED) {
+            peg$savedPos = s0;
+            s1 = peg$c2(s1);
+            s0 = s1;
+          } else {
+            peg$currPos = s0;
+            s0 = peg$FAILED;
+          }
         } else {
           peg$currPos = s0;
           s0 = peg$FAILED;
@@ -479,6 +496,41 @@
       return s0;
     }
 
+    function peg$parsepunctuation() {
+      var s0, s1;
+
+      peg$silentFails++;
+      s0 = [];
+      if (peg$c15.test(input.charAt(peg$currPos))) {
+        s1 = input.charAt(peg$currPos);
+        peg$currPos++;
+      } else {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c16); }
+      }
+      if (s1 !== peg$FAILED) {
+        while (s1 !== peg$FAILED) {
+          s0.push(s1);
+          if (peg$c15.test(input.charAt(peg$currPos))) {
+            s1 = input.charAt(peg$currPos);
+            peg$currPos++;
+          } else {
+            s1 = peg$FAILED;
+            if (peg$silentFails === 0) { peg$fail(peg$c16); }
+          }
+        }
+      } else {
+        s0 = peg$FAILED;
+      }
+      peg$silentFails--;
+      if (s0 === peg$FAILED) {
+        s1 = peg$FAILED;
+        if (peg$silentFails === 0) { peg$fail(peg$c14); }
+      }
+
+      return s0;
+    }
+
     function peg$parse_() {
       var s0, s1;
 
@@ -496,7 +548,7 @@
       peg$silentFails--;
       if (s0 === peg$FAILED) {
         s1 = peg$FAILED;
-        if (peg$silentFails === 0) { peg$fail(peg$c14); }
+        if (peg$silentFails === 0) { peg$fail(peg$c17); }
       }
 
       return s0;
@@ -505,9 +557,12 @@
 
 
       // globals:
-      const gverbs = ["go", "walk", "talk", "get", "use", "open", "close", "unlock", "lock"];
-      const gdirections = ["north", "east", "south", "west", "up", "down", "left", "right", "forward", "backward"];
-      const gnouns = ["door", "house", "window", "key", "knife", "wrench", "hammer"];
+      const g_verbs = ["go", "walk", "talk", "get", "use", "open", "close", "unlock", "lock"];
+      const g_directions = ["north", "east", "south", "west", "up", "down", "left", "right", "forward", "backward"];
+      const g_things = ["door", "house", "window", "key", "knife", "wrench", "hammer"];
+      const g_persons = ["man", "woman", "boy", "girl", "sam", "max"];
+      const g_prepositions = ["from", "to", "by", "for", "on", "at", "in", "into", "onto", "over", "under", "through"];
+
 
       function isInArray(value, array) {
         return array.indexOf(value) > -1;
