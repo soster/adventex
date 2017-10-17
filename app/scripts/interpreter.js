@@ -19,8 +19,13 @@ var Interpreter = {
         if (thing=='') {
           echo(MESSAGE.error.format(command),'red');
         } else {
-          var desc = get_description(things, get_first_of_type(words, 'things'));
-          echo(desc);
+          if (in_inventory(thing) || in_location(thing)) {
+            var desc = get_description(things, get_first_of_type(words, 'things'));
+            echo(desc);
+          } else {
+            echo(MESSAGE.error.format(command),'red');
+          }
+
         }
         
       }
@@ -39,8 +44,7 @@ move: function(direction) {
 },
 
 get_item: function(item) {
-  var location = locations[state.location];
-  if (location.things.indexOf(item) != -1) {    
+  if (in_location(item)) {    
     echo(get_description(things, item));
     if (!is_portable(item)) {
       echo(MESSAGE.error_portable.format(item),'red');

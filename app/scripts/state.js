@@ -3,3 +3,18 @@ var state = {
   inventory : ['Flashlight'],
   location : 'start_room'
 }
+
+function in_inventory(item) {
+  if (state.inventory.indexOf(item)!=-1) {
+    return true;
+  }
+  return false;
+}
+
+function in_location(item) {
+  var location = locations[state.location];
+  if (location.things.indexOf(item) != -1) { 
+    return true;
+  }
+  return false;
+}

@@ -21,7 +21,7 @@ var locations = {
     }
   },
   west_room : {
-    description : 'This is the room to the west.',
+    description : 'This is the room to the west. It is a much smaller room than the big hall with two small windows.',
     things : ['marble floor'],
     persons : [],
     color : 'aquamarine',

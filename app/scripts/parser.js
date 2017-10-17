@@ -4,7 +4,7 @@
  * http://pegjs.org/
  */
 (function(root) {
-  "use strict";
+  'use strict';
 
   function peg$subclass(child, parent) {
     function ctor() { this.constructor = child; }
@@ -17,9 +17,9 @@
     this.expected = expected;
     this.found    = found;
     this.location = location;
-    this.name     = "SyntaxError";
+    this.name     = 'SyntaxError';
 
-    if (typeof Error.captureStackTrace === "function") {
+    if (typeof Error.captureStackTrace === 'function') {
       Error.captureStackTrace(this, peg$SyntaxError);
     }
   }
@@ -29,28 +29,28 @@
   peg$SyntaxError.buildMessage = function(expected, found) {
     var DESCRIBE_EXPECTATION_FNS = {
           literal: function(expectation) {
-            return "\"" + literalEscape(expectation.text) + "\"";
+            return '"' + literalEscape(expectation.text) + '"';
           },
 
-          "class": function(expectation) {
-            var escapedParts = "",
+          'class': function(expectation) {
+            var escapedParts = '',
                 i;
 
             for (i = 0; i < expectation.parts.length; i++) {
               escapedParts += expectation.parts[i] instanceof Array
-                ? classEscape(expectation.parts[i][0]) + "-" + classEscape(expectation.parts[i][1])
+                ? classEscape(expectation.parts[i][0]) + '-' + classEscape(expectation.parts[i][1])
                 : classEscape(expectation.parts[i]);
             }
 
-            return "[" + (expectation.inverted ? "^" : "") + escapedParts + "]";
+            return '[' + (expectation.inverted ? '^' : '') + escapedParts + ']';
           },
 
           any: function(expectation) {
-            return "any character";
+            return 'any character';
           },
 
           end: function(expectation) {
-            return "end of input";
+            return 'end of input';
           },
 
           other: function(expectation) {
@@ -117,20 +117,20 @@
           return descriptions[0];
 
         case 2:
-          return descriptions[0] + " or " + descriptions[1];
+          return descriptions[0] + ' or ' + descriptions[1];
 
         default:
-          return descriptions.slice(0, -1).join(", ")
-            + ", or "
+          return descriptions.slice(0, -1).join(', ')
+            + ', or '
             + descriptions[descriptions.length - 1];
       }
     }
 
     function describeFound(found) {
-      return found ? "\"" + literalEscape(found) + "\"" : "end of input";
+      return found ? '"' + literalEscape(found) + '"' : 'end of input';
     }
 
-    return "Expected " + describeExpected(expected) + " but " + describeFound(found) + " found.";
+    return 'Expected ' + describeExpected(expected) + ' but ' + describeFound(found) + ' found.';
   };
 
   function peg$parse(input, options) {
@@ -163,22 +163,22 @@
         peg$c1 = function(w) {
          { return w; }
          },
-        peg$c2 = function(l) { return l.join(""); },
-        peg$c3 = function(n) { return n.join(""); },
+        peg$c2 = function(l) { return l.join(''); },
+        peg$c3 = function(n) { return n.join(''); },
         peg$c4 = /^[0-9]/,
-        peg$c5 = peg$classExpectation([["0", "9"]], false, false),
+        peg$c5 = peg$classExpectation([['0', '9']], false, false),
         peg$c6 = /^[a-zA-Z]/,
-        peg$c7 = peg$classExpectation([["a", "z"], ["A", "Z"]], false, false),
-        peg$c8 = peg$otherExpectation("New line"),
-        peg$c9 = "\n",
-        peg$c10 = peg$literalExpectation("\n", false),
-        peg$c11 = peg$otherExpectation("Whitespace"),
+        peg$c7 = peg$classExpectation([['a', 'z'], ['A', 'Z']], false, false),
+        peg$c8 = peg$otherExpectation('New line'),
+        peg$c9 = '\n',
+        peg$c10 = peg$literalExpectation('\n', false),
+        peg$c11 = peg$otherExpectation('Whitespace'),
         peg$c12 = /^[ \t]/,
-        peg$c13 = peg$classExpectation([" ", "\t"], false, false),
-        peg$c14 = peg$otherExpectation("One or more punctuations"),
+        peg$c13 = peg$classExpectation([' ', '\t'], false, false),
+        peg$c14 = peg$otherExpectation('One or more punctuations'),
         peg$c15 = /^[.?!,]/,
-        peg$c16 = peg$classExpectation([".", "?", "!", ","], false, false),
-        peg$c17 = peg$otherExpectation("One or more whitespaces"),
+        peg$c16 = peg$classExpectation(['.', '?', '!', ','], false, false),
+        peg$c17 = peg$otherExpectation('One or more whitespaces'),
 
         peg$currPos          = 0,
         peg$savedPos         = 0,
@@ -189,9 +189,9 @@
 
         peg$result;
 
-    if ("startRule" in options) {
+    if ('startRule' in options) {
       if (!(options.startRule in peg$startRuleFunctions)) {
-        throw new Error("Can't start parsing from rule \"" + options.startRule + "\".");
+        throw new Error('Can\'t start parsing from rule "' + options.startRule + '".');
       }
 
       peg$startRuleFunction = peg$startRuleFunctions[options.startRule];
@@ -222,23 +222,23 @@
     }
 
     function peg$literalExpectation(text, ignoreCase) {
-      return { type: "literal", text: text, ignoreCase: ignoreCase };
+      return { type: 'literal', text: text, ignoreCase: ignoreCase };
     }
 
     function peg$classExpectation(parts, inverted, ignoreCase) {
-      return { type: "class", parts: parts, inverted: inverted, ignoreCase: ignoreCase };
+      return { type: 'class', parts: parts, inverted: inverted, ignoreCase: ignoreCase };
     }
 
     function peg$anyExpectation() {
-      return { type: "any" };
+      return { type: 'any' };
     }
 
     function peg$endExpectation() {
-      return { type: "end" };
+      return { type: 'end' };
     }
 
     function peg$otherExpectation(description) {
-      return { type: "other", description: description };
+      return { type: 'other', description: description };
     }
 
     function peg$computePosDetails(pos) {
@@ -557,11 +557,11 @@
 
 
       // globals:
-      const g_verbs = ["go", "walk", "talk", "give", "take", "use", "open", "close", "unlock", "lock", "catch", "switch", "examine"];
-      const g_directions = ["north", "east", "south", "west", "up", "down", "left", "right", "forward", "backward"];
-      const g_things = ["door", "house", "window", "key", "knife", "wrench", "hammer", "vase", "tapestry", "marble floor"];
-      const g_persons = ["man", "woman", "boy", "girl", "sam", "max"];
-      const g_prepositions = ["from", "to", "by", "for", "on", "at", "in", "out", "into", "onto", "over", "under", "through"];
+      const g_verbs = ['go', 'walk', 'talk', 'give', 'take', 'use', 'open', 'close', 'unlock', 'lock', 'catch', 'switch', 'examine'];
+      const g_directions = ['north', 'east', 'south', 'west', 'up', 'down', 'left', 'right', 'forward', 'backward'];
+      const g_things = ['door', 'house', 'window', 'key', 'knife', 'wrench', 'hammer', 'vase', 'tapestry', 'marble floor'];
+      const g_persons = ['man', 'woman', 'boy', 'girl', 'sam', 'max'];
+      const g_prepositions = ['from', 'to', 'by', 'for', 'on', 'at', 'in', 'out', 'into', 'onto', 'over', 'under', 'through'];
 
 
       function isInArray(value, array) {
