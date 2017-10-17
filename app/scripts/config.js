@@ -3,5 +3,5 @@ var CONFIG = {
     height : 300,
     prompt : 'advntx> '
   },
-  debug : false
+  debug : true
 }

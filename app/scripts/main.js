@@ -1,19 +1,12 @@
 var term = $('#terminal').terminal(function (command) {
-  this.echo(Interpreter.interpret(command, init_location, echo));
+  term.echo(Interpreter.interpret(command, set_location, add_to_inventory, echo));
 }, {
-  greetings: MESSAGE.console.greetings,
+  greetings: MESSAGE.greetings,
   name: MESSAGE.name,
   prompt: CONFIG.console.prompt,
   height: CONFIG.console.height
 });
 
-
-function init_location(location) {
-  state.locaction = location;
-  var loc = locations[location];
-  console.log(loc);
-  echo(loc.description, loc.color);
-}
 
 function echo(text, color) {
   if (color === undefined) {
@@ -23,9 +16,31 @@ function echo(text, color) {
 
   term.echo(text, {
     finalize: function(div) {
-      div.css("color", color);
+      div.css('color', color);
     }
   });
+}
+
+function set_location(location) {
+  state.location = location;
+  var loc = locations[location];
+  console.log(loc);
+  echo(loc.description, loc.color);
+  var things = loc.things;
+  if (things !== undefined && things.length>0) {
+    var things_text = 'You see the following things:\n';
+    for (var i=0;i<things.length;i++) {
+      things_text+=things[i];
+      if (i<things.length-1)
+        things_text+=', ';
+    }
+    echo(things_text);
+  }
+}
+
+function add_to_inventory(item) {
+  state.inventory.push(item);
+  init_inventory();
 }
 
 
@@ -53,6 +68,7 @@ function init_inventory() {
 
 $(function() {
   $('#inventory_container').css('height', CONFIG.console.height+'px');
-  init_location(state.location);
+  set_location(state.location);
+  init_inventory();
 });
 
