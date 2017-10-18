@@ -5,6 +5,9 @@ var MESSAGE = {
   error_get: 'You can\'t get {0}!',
   error_portable: '{0} is to heavy, you can\'t pick that up!',
   error: 'I don\'t understand \"{0}\", yet.',
+  info_you_see: 'You see:',
+  
+  
   greetings: '           .___                    __                 \n\
   _____    __| ____  __ ____   _____/  |_  ____ ___  ___\n\
   \\__  \\  / __ |\\  \\/ _/ __ \\ /    \\   ___/ __ \\\\  \\/  /\n\

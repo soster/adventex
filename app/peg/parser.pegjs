@@ -1,11 +1,11 @@
 {
 
   // globals:
-  const g_verbs = ["go", "walk", "talk", "give", "take", "use", "open", "close", "unlock", "lock", "catch", "switch", "examine"];
+  const g_verbs = ["go", "walk", "talk", "give", "take", "use", "open", "close", "unlock", "lock", "catch", "switch", "examine", "look"];
   const g_directions = ["north", "east", "south", "west", "up", "down", "left", "right", "forward", "backward"];
   const g_things = ["door", "house", "window", "key", "knife", "wrench", "hammer", "vase", "tapestry", "marble floor"];
   const g_persons = ["man", "woman", "boy", "girl", "sam", "max"];
-  const g_prepositions = ["from", "to", "by", "for", "on", "at", "in", "out", "into", "onto", "over", "under", "through"];
+  const g_prepositions = ["from", "to", "around", "by", "across", "for", "on", "off", "at", "in", "out", "into", "onto", "over", "under", "through"];
 
 
   function isInArray(value, array) {
@@ -42,6 +42,13 @@ words
  {
  { return w; }
  }
+
+ word_combos
+  = w:word _ w:word
+  {
+
+
+  }
 
 word
  = l:letter+ _? punctuation?

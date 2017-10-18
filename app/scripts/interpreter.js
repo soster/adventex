@@ -1,6 +1,8 @@
 var Interpreter = {
   interpret: function (command, set_location, add_to_inventory, echo) {
     var original = command;
+    var chk = this.check;
+    var mv = this.move;
     command = command.toLowerCase();
     if (command == 'help') {
       echo(MESSAGE.help);
@@ -8,26 +10,28 @@ var Interpreter = {
       echo(JSON.stringify(state));
     } else {
       var words = parser.parse(command);
-      if (get_first_of_type(words,'verbs')=='go') {
+      if (chk(get_first_of_type(words,'verbs'),'go')) {
         var direction = get_first_of_type(words, 'directions');
-        this.move(direction);
-      } else if (get_first_of_type(words,'verbs')=='take') {
+        mv(direction);
+      } else if (chk(get_first_of_type(words,'verbs'),'take')) {
         var thing = get_first_of_type(words, 'things');
         this.get_item(thing);
-      } else if (get_first_of_type(words,'verbs')=='examine') {
+      } else if (chk(get_first_of_type(words,'verbs'),'examine')) {
         var thing = get_first_of_type(words, 'things');
         if (thing=='') {
-          echo(MESSAGE.error.format(command),'red');
+          this.standard_error(command);
         } else {
           if (in_inventory(thing) || in_location(thing)) {
-            var desc = get_description(things, get_first_of_type(words, 'things'));
+            var desc = get_description(state.things, get_first_of_type(words, 'things'));
             echo(desc);
           } else {
-            echo(MESSAGE.error.format(command),'red');
+            this.standard_error(command);
           }
 
         }
         
+      } else {// I give up...
+        this.standard_error(command);
       }
     }
     return '';
@@ -55,6 +59,26 @@ get_item: function(item) {
   } else {
     echo(MESSAGE.error_get.format(item),'red');
   }
+},
+
+standard_error: function(command) {
+  echo(MESSAGE.error.format(command), 'red');
+},
+
+/**
+ * Checks a command for equality and for synonyms.
+ */
+check: function(input, to_check) {
+  if (input==to_check) {
+    return true;
+  }
+  if (synonyms[to_check]!=undefined) {
+    if (synonyms[to_check].indexOf(input)!=-1) {
+      return true;
+    }
+  }
+  return false;
+
 }
 
 

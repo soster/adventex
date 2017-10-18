@@ -1,3 +1,6 @@
+/**
+ * Definition of things (objects, immobile and portable).
+ */
 var things = {
     flashlight : {
         description : 'A simple LED flashlight, batteries included!',
@@ -21,9 +24,3 @@ var things = {
 
 
 
-function is_portable(item) {
-    if (things[item] === undefined) {
-        return false;
-    }
-    return things[item].portable;
-}

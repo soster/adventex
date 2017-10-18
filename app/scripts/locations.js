@@ -1,4 +1,9 @@
-var locations = {
+/**
+ * Definition of locations.
+ * Immutable!
+ * 
+ */
+const locations = {
   start_room : {
     description : 'You are in the middle of a vast and clean, almost sterile hall. The ceiling is so far away that it\'s almost invisible to your eyes.\n' +
     'There is a corridor to the west between two columns and another similar corridor to the south.',
@@ -32,12 +37,3 @@ var locations = {
 
 }
 
-function remove_item_from_location(location, item) {
-  var place = locations[location];
-  if (place !== undefined) {
-    var loc = place.things.indexOf(item);
-    if (loc != -1) {
-      place.things.splice(loc, 1 );
-    }
-  }
-}
