@@ -10,19 +10,21 @@ var Interpreter = {
       echo(JSON.stringify(state));
     } else {
       var words = parser.parse(command);
+      var first_verb = get_first_of_type(words,'verbs');
+      console.log('verb: ',first_verb);
       if (chk(get_first_of_type(words,'verbs'),'go')) {
         var direction = get_first_of_type(words, 'directions');
         mv(direction);
       } else if (chk(get_first_of_type(words,'verbs'),'take')) {
-        var thing = get_first_of_type(words, 'things');
+        var thing = get_first_of_type(words, 'misc');
         this.get_item(thing);
       } else if (chk(get_first_of_type(words,'verbs'),'examine')) {
-        var thing = get_first_of_type(words, 'things');
+        var thing = get_first_of_type(words, 'misc');
         if (thing=='') {
           this.standard_error(command);
         } else {
           if (in_inventory(thing) || in_location(thing)) {
-            var desc = get_description(state.things, get_first_of_type(words, 'things'));
+            var desc = get_description(state.things, get_first_of_type(words, 'misc'));
             echo(desc);
           } else {
             this.standard_error(command);
@@ -69,6 +71,7 @@ standard_error: function(command) {
  * Checks a command for equality and for synonyms.
  */
 check: function(input, to_check) {
+  console.log(input+' '+to_check);
   if (input==to_check) {
     return true;
   }

@@ -27,7 +27,7 @@ function set_location(location) {
   if (things !== undefined && things.length>0) {
     var things_text = MESSAGE.info_you_see+'\n';
     for (var i=0;i<things.length;i++) {
-      things_text+=things[i];
+      things_text+=get_name(state.things,things[i]);
       if (i<things.length-1)
         things_text+=', ';
     }
@@ -71,7 +71,9 @@ function init_inventory() {
  $('#inventory > .inventory_item').remove();
   for (var i = 0; i < state.inventory.length; i++) {
     var item = state.inventory[i];
-    $('#inventory').append('<p class="inventory_item"><button type="button" onclick="inventory_click(\''+item+'\')" class="btn btn-info btn-sm inventory_button">'+item+'</button></p>');
+    var item_name = get_name(state.things, item);
+    console.log('name: '+item_name);
+    $('#inventory').append('<p class="inventory_item"><button type="button" onclick="inventory_click(\''+item_name+'\')" class="btn btn-info btn-sm inventory_button">'+item+'</button></p>');
   }
 }
 
@@ -81,12 +83,7 @@ function periodic_updates() {
 }
 
 
-function get_first_of_type(words, type) {
-  if (words[type].length>0) {
-      return words[type][0];
-  }
-  return '';
-}
+
 
 /** Global Initializations */
 $(function() {
