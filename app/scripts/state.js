@@ -5,5 +5,6 @@ var state = {
   seconds : 0,
   locations : undefined,
   persons : undefined,
-  things : undefined
+  things : undefined,
+  events : undefined
 }

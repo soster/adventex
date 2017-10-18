@@ -54,3 +54,12 @@ function get_first_of_type(words, type) {
   }
   return '';
 }
+
+function find_first_match(words, type, objects) {
+  for (var i=0;i<words[type].length;i++) {
+    if (objects[words[type][i]]!== undefined) {
+      return words[type][i];
+    }
+  }
+  return '';
+}

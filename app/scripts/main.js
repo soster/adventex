@@ -21,8 +21,12 @@ function echo(text, color) {
 
 function set_location(location) {
   state.location = location;
+  describe_location(location);
+}
+
+function describe_location(location) {
   var loc = state.locations[location];
-  echo(loc.description, loc.color);
+  echo(loc.description+'\n', loc.color);
   var things = loc.things;
   if (things !== undefined && things.length>0) {
     var things_text = MESSAGE.info_you_see+'\n';
@@ -45,6 +49,7 @@ function init_game(refresh_json) {
     state.locations = JSON.parse(JSON.stringify(locations));
     state.things = JSON.parse(JSON.stringify(things));
     state.persons = JSON.parse(JSON.stringify(persons));
+    state.events = JSON.parse(JSON.stringify(events));
   }
 
   init_inventory();

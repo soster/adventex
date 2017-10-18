@@ -18,6 +18,12 @@ var things = {
         name : 'Vase',
         description : 'A small, chinese vase with marine blue and black chinese signs around the neck.',
         portable : true
+    },
+
+    floor : {
+        name : 'Marble floor',
+        description : 'A clean, elegant looking floor made out of black and white marble.',
+        portable : false
     }
 
 }
