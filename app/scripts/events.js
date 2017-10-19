@@ -5,6 +5,6 @@ var events = {
         prereq_item : 'flashlight',
         prereq_action : 'switch',
         prereq_location : '',
-        prereq_in_inventory : ''
+        prereq_inventory : ''
     }
 }
