@@ -50,8 +50,16 @@ function is_portable(item) {
 }
 
 function get_first_of_type(words, type) {
-  if (words[type].length > 0) {
-    return words[type][0];
+  return get_of_type(words, type, 0);
+}
+
+function get_second_of_type(words, type) {
+  return get_of_type(words, type, 1);
+}
+
+function get_of_type(words, type, number) {
+  if (words[type].length > number) {
+    return words[type][number];
   }
   return '';
 }
@@ -67,13 +75,15 @@ function find_first_match(words, type, objects) {
 }
 
 
-function find_event(location, item, action) {
+function find_event(location, item, second_item, action, preposition) {
   for (var property in state.events) {
     if (state.events.hasOwnProperty(property)) {
       var event = state.events[property];
       if (check_event_prereq(event.prereq_location, location)
         && check_event_prereq(event.prereq_action, action)
         && check_event_prereq(event.prereq_item, item)
+        && check_event_prereq(event.prereq_preposition, preposition)
+        && check_event_prereq(event.prereq_second_item, second_item)
         && check_event_prereq_inventory(event.prereq_inventory)) {
           return event;
         }
@@ -82,3 +92,4 @@ function find_event(location, item, action) {
 
   return undefined;
 }
+

@@ -24,6 +24,24 @@ var things = {
         name : 'Marble floor',
         description : 'A clean, elegant looking floor made out of black and white marble.',
         portable : false
+    },
+
+    potato : {
+        name : 'Very large potato',
+        description : 'The farmer has to be very dumb.',
+        portable : true
+    },
+
+    east_door : {
+        name : 'Door',
+        description : 'A door with a big knob',
+        portable : false
+    },
+
+    troll : {
+        name : 'Troll',
+        description : 'A large, angry troll with a big club in his hands.',
+        portable : false
     }
 
 }

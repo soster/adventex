@@ -14,7 +14,9 @@ var Interpreter =  {
     }else {
       var words = parser.parse(command); 
       var first_verb = get_first_of_type(words, 'verbs'); 
-      var first_misc = get_first_of_type(words, 'misc'); 
+      var first_misc = get_first_of_type(words, 'misc');
+      var preposition = get_first_of_type(words, 'prepositions');
+      var second_misc = get_second_of_type(words, 'misc'); 
 
       if (chk(first_verb, 'go')) {
         var direction = get_first_of_type(words, 'directions'); 
@@ -25,7 +27,7 @@ var Interpreter =  {
       }else if (chk(first_verb, 'examine')) {
         this.examine(words, first_misc); 
       }else {// I give up...
-        var event = find_event(state.location, first_misc, first_verb);
+        var event = find_event(state.location, first_misc, second_misc, first_verb, preposition);
         if (event!==undefined) {
           this.trigger_event(event);
         } else {
@@ -38,7 +40,7 @@ var Interpreter =  {
 
 
 move:function(direction) {
-  var location = locations[state.location]; 
+  var location = state.locations[state.location]; 
   if (location.connections[direction] !== undefined) {
     var new_location = location.connections[direction]; 
     set_location(new_location); 
@@ -79,6 +81,7 @@ examine:function(words, first_misc) {
 
 trigger_event:function(event) {
   echo(event.description);
+  execute_event(event);
 },
 
 standard_error:function(command) {

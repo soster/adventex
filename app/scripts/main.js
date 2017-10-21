@@ -28,15 +28,30 @@ function describe_location(location) {
   var loc = state.locations[location];
   echo(loc.description+'\n', loc.color);
   var things = loc.things;
-  if (things !== undefined && things.length>0) {
-    var things_text = MESSAGE.info_you_see+'\n';
-    for (var i=0;i<things.length;i++) {
-      things_text+=get_name(state.things,things[i]);
-      if (i<things.length-1)
-        things_text+=', ';
+  var persons = loc.persons;
+  var message = MESSAGE.info_you_see;
+  var things_message = list_stuff(things, state.things);
+  var persons_message = list_stuff(persons, state.persons);
+  if (persons_message != '' || things_message != '') {
+    echo(message);
+    echo(things_message);
+    echo(persons_message);
+  } 
+  
+}
+
+function list_stuff(list, list_of_all) {
+  var message = '';
+  if (list !== undefined && list.length>0) {
+    for (var i=0;i<list.length;i++) {
+      message+=get_name(list_of_all,list[i]);
+      if (i<list.length-1)
+      message+=', ';
     }
-    echo(things_text);
-  }
+    message+='\n';
+  } 
+  return message;
+  
 }
 
 function add_to_inventory(item) {
@@ -56,6 +71,8 @@ function init_game(refresh_json) {
   set_location(state.location);  
   async_refocus_terminal();
 }
+
+
 
 
 function refocus_terminal() {

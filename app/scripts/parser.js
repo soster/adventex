@@ -554,7 +554,7 @@
 
       // globals:
       const g_verbs = ["go", "walk", "talk", "give", "take", 
-        "use", "open", "close", "unlock", "lock", "catch", "switch", "examine", "look", "get", "fetch", "pick", "read", "run", "search"];
+        "use", "climb", "open", "close", "unlock", "lock", "catch", "switch", "examine", "look", "get", "fetch", "pick", "read", "run", "search", 'conjure'];
       const g_directions = ["north", "east", "south", "west", "up", 
         "down", "left", "right", "forward", "backward", "away"];
       const g_prepositions = ["from", "to", "around", "by", "across", 
