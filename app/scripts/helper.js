@@ -11,6 +11,10 @@ function get_name(objects, id) {
   return get_property(objects, 'name', id);
 }
 
+function is_hidden(objects, id) {
+  return get_property(objects, 'hidden', id);
+}
+
 
 function get_property(objects, property, id) {
   id = id.toLowerCase();
@@ -51,13 +55,17 @@ function find_first_match(words, type, objects) {
   return '';
 }
 
-function list_stuff(list, list_of_all) {
+function list_objects(list, list_of_all) {
   var message = '';
   if (list !== undefined && list.length>0) {
     for (var i=0;i<list.length;i++) {
+      if (is_hidden(list_of_all, list[i])) {
+        continue;
+      }
+      if (i>0 && !is_hidden(list_of_all, list[i-1])) {
+        message+=', ';
+      }
       message+=get_name(list_of_all,list[i]);
-      if (i<list.length-1)
-      message+=', ';
     }
     message+='\n';
   } 

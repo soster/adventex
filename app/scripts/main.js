@@ -26,8 +26,8 @@ function describe_location_echo(location) {
   var things = loc.things;
   var persons = loc.persons;
   var message = MESSAGE.info_you_see;
-  var things_message = list_stuff(things, state.things);
-  var persons_message = list_stuff(persons, state.persons);
+  var things_message = list_objects(things, state.things);
+  var persons_message = list_objects(persons, state.persons);
   if (persons_message != '' || things_message != '') {
     echo(message);
     echo(things_message);
