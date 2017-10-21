@@ -1,6 +1,5 @@
 /** some useful functions. */
 
-
 /**
 * Simple format function:
 * 'Replace {0}'.format('this')
@@ -14,4 +13,8 @@ String.prototype.format = String.prototype.f = function() {
     }
     return s;
 };
+
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
 

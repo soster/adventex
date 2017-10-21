@@ -1,5 +1,5 @@
 var term = $('#terminal').terminal(function (command) {
-  term.echo(Interpreter.interpret(command, set_location, add_to_inventory, echo));
+  term.echo(Interpreter.interpret(command, describe_location_echo, add_to_inventory_echo, echo));
 }, {
   greetings: MESSAGE.greetings,
   name: MESSAGE.name,
@@ -19,12 +19,8 @@ function echo(text, color) {
   });
 }
 
-function set_location(location) {
-  state.location = location;
-  describe_location(location);
-}
 
-function describe_location(location) {
+function describe_location_echo(location) {
   var loc = state.locations[location];
   echo(loc.description+'\n', loc.color);
   var things = loc.things;
@@ -40,22 +36,10 @@ function describe_location(location) {
   
 }
 
-function list_stuff(list, list_of_all) {
-  var message = '';
-  if (list !== undefined && list.length>0) {
-    for (var i=0;i<list.length;i++) {
-      message+=get_name(list_of_all,list[i]);
-      if (i<list.length-1)
-      message+=', ';
-    }
-    message+='\n';
-  } 
-  return message;
-  
-}
 
-function add_to_inventory(item) {
-  state.inventory.push(item);
+
+function add_to_inventory_echo(item) {
+  inventoryhandler.add_to_inventory(item);
   init_inventory();
 }
 
@@ -68,7 +52,8 @@ function init_game(refresh_json) {
   }
 
   init_inventory();
-  set_location(state.location);  
+  locationhandler.set_location(state.location);
+  describe_location_echo(state.location); 
   async_refocus_terminal();
 }
 

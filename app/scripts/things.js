@@ -33,7 +33,7 @@ var things = {
     },
 
     east_door : {
-        name : 'Door',
+        name : 'Door to the east',
         description : 'A door with a big knob',
         portable : false
     },

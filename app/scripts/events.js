@@ -99,27 +99,7 @@ var events = {
         prereq_item : 'troll',
         // verb to use:
         prereq_action : 'talk',
-        // location:
-        prereq_location : '',
-        // item has to be in inventory:
-        prereq_inventory : '',
-        // TODO:
-        prereq_preposition : '',
-        // if you have to combine two items:
-        prereq_second_item : '',
-        // actions:
-
-        // Add item to inventory (or location if set):
-        action_add_item : '',
-        // Add item defined in action_add_item to this location:
-        action_add_item_location : '',
-        // Remove item from inventory (if possible):
-        action_remove_item : '',
-        // Move to location:
-        action_move_to_location : 'dungeon',
-        // add a new connection to a location:
-        action_new_connection : '',
-        action_new_connection_location : ''
+        action_move_to_location : 'dungeon'
     }
 
 

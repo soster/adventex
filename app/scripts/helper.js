@@ -24,38 +24,15 @@ function get_property(objects, property, id) {
   return '';
 }
 
-
-function in_inventory(item) {
-  if (state.inventory.indexOf(item.toLowerCase()) != -1) {
-    return true;
-  }
-  return false;
-}
-
-
-function in_location(item) {
-  var olocation = state.locations[state.location];
-  if (olocation.things.indexOf(item.toLowerCase()) != -1) {
-    return true;
-  }
-  return false;
-}
-
-
-function is_portable(item) {
-  if (state.things[item] === undefined) {
-    return false;
-  }
-  return state.things[item].portable;
-}
-
 function get_first_of_type(words, type) {
   return get_of_type(words, type, 0);
 }
 
+
 function get_second_of_type(words, type) {
   return get_of_type(words, type, 1);
 }
+
 
 function get_of_type(words, type, number) {
   if (words[type].length > number) {
@@ -74,22 +51,17 @@ function find_first_match(words, type, objects) {
   return '';
 }
 
-
-function find_event(location, item, second_item, action, preposition) {
-  for (var property in state.events) {
-    if (state.events.hasOwnProperty(property)) {
-      var event = state.events[property];
-      if (check_event_prereq(event.prereq_location, location)
-        && check_event_prereq(event.prereq_action, action)
-        && check_event_prereq(event.prereq_item, item)
-        && check_event_prereq(event.prereq_preposition, preposition)
-        && check_event_prereq(event.prereq_second_item, second_item)
-        && check_event_prereq_inventory(event.prereq_inventory)) {
-          return event;
-        }
+function list_stuff(list, list_of_all) {
+  var message = '';
+  if (list !== undefined && list.length>0) {
+    for (var i=0;i<list.length;i++) {
+      message+=get_name(list_of_all,list[i]);
+      if (i<list.length-1)
+      message+=', ';
     }
-  }
-
-  return undefined;
+    message+='\n';
+  } 
+  return message;
+  
 }
 
