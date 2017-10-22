@@ -49,6 +49,10 @@ var eventhandler = {
         if (!isEmpty(event.action_move_to_location)) {
           locationhandler.set_location(event.action_move_to_location);
         }
+        if (!isEmpty(event.action_new_location_description)) {
+          var place = state.locations[state.location];
+          place['additional_description'] = event.action_new_location_description;
+        }
       
       }
 

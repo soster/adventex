@@ -34,5 +34,19 @@ var locationhandler = {
 
       set_location : function(location) {
         state.location = location;
+      },
+
+      get_location_description(location_id) {
+        var loc = state.locations[location_id];
+        var description = loc.description;
+        if (!isEmpty(loc.additional_description)) {
+          description+='\n\n';
+          description+=loc.additional_description;
+        }
+        return description+='\n';
+      },
+
+      get_location_by_id(location_id) {
+        return state.locations[location_id];
       }
 }

@@ -21,14 +21,15 @@ function echo(text, color) {
 
 
 function describe_location_echo(location) {
-  var loc = state.locations[location];
-  echo(loc.description+'\n', loc.color);
+  var loc = locationhandler.get_location_by_id(location);
+  var description = locationhandler.get_location_description(location);
+  echo(description, loc.color);
   var things = loc.things;
   var persons = loc.persons;
   var message = MESSAGE.info_you_see;
   var things_message = list_objects(things, state.things);
   var persons_message = list_objects(persons, state.persons);
-  if (persons_message != '' || things_message != '') {
+  if (!isEmpty(persons_message) || !isEmpty(things_message)) {
     echo(message);
     echo(things_message);
     echo(persons_message);
@@ -95,7 +96,8 @@ function periodic_updates() {
 
 /** Global Initializations */
 $(function() {
-  $('#inventory_container').css('height', CONFIG.console.height+'px');
+  $('#inventory_container').css('max-height', CONFIG.console.height+'px');
+  term.wrap(false);
   $('#btn_help').click(function () {
     term.exec('help', false);
     init_inventory();

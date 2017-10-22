@@ -46,7 +46,7 @@ var things = {
 
     scorchmarks : {
         name : 'scorch marks',
-        description : 'A fire left large, frightening scorchmarks. Bigger than possible if they where created by a torch.',
+        description : 'A fire left large, frightening scorchmarks. Bigger than expected if created by a torch.',
         portable : false
     }
 

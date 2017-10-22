@@ -92,7 +92,7 @@ examine:function(item) {
 },
 
 trigger_event:function(event) {
-  echo(event.description);
+  echo(event.description+'\n');
   eventhandler.execute_event(event);
   describe_location_echo(state.location);
 },
