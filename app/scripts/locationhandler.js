@@ -37,7 +37,7 @@ var locationhandler = {
         state.location = location;
       },
 
-      get_location_description(location_id) {
+      get_location_description : function(location_id) {
         var loc = state.locations[location_id];
         var description = loc.description;
         if (!isEmpty(loc.additional_description)) {
@@ -47,7 +47,7 @@ var locationhandler = {
         return description+='\n';
       },
 
-      get_location_by_id(location_id) {
+      get_location_by_id : function(location_id) {
         return state.locations[location_id];
       }
 }
