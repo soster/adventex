@@ -37,7 +37,13 @@ var Interpreter = {
         this.trigger_event(event);
         state.steps++;
       } else if (found_nothing) {
-        this.standard_error(command);
+        if (check_synonyms('open', first_verb) && !isEmpty(last_misc)) {
+          var item_id = locationhandler.find_item_id_for_names(last_misc, first_misc);
+          echo(MESSAGE.error_open.format(inventoryhandler.get_name_definitive(item_id)));
+        } else {
+          this.standard_error(command);
+        }
+        
       } else {
         state.steps++;
       }

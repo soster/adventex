@@ -78,7 +78,7 @@ const events = {
     demo: {
         name: 'Demo',
         // will be echoed if the event is triggered:
-        description: 'Demo event activated!.',
+        description: 'This is the demo event! Just for testing purposes...',
         // Prerequisites:
         // Item to use (Inventory or room):
         prereq_item: 'demo',
@@ -87,11 +87,14 @@ const events = {
         // location:
         prereq_location: '',
         // item has to be in inventory:
-        prereq_inventory: 'demo',
+        prereq_inventory: '',
         // TODO:
         prereq_preposition: 'on',
         // if you have to combine two items:
         prereq_second_item: '',
+        // prerequisites not with items but terms:
+        prereq_first_misc: 'demo',
+        prereq_second_misc: '',
         // number of steps:
         prereq_steps: '',
         // actions:
