@@ -52,7 +52,9 @@ function init_game(refresh_json) {
   }
 
   init_inventory();
-  locationhandler.set_location(state.location);
+  var start_event = state.events['start_event'];
+  eventhandler.execute_event(start_event);
+  echo(start_event.description+'\n');
   describe_location_echo(state.location); 
   async_refocus_terminal();
 }

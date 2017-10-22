@@ -1,12 +1,12 @@
 {
 
   // globals:
-  const g_verbs = ["go", "walk", "talk", "give", "take", 
-    "use", "climb", "open", "close", "unlock", "lock", "catch", "switch", "examine", "look", "get", "fetch", "pick", "read", "run", "search", 'conjure'];
-  const g_directions = ["north", "east", "south", "west", "up", 
-    "down", "left", "right", "forward", "backward", "away"];
-  const g_prepositions = ["from", "to", "around", "by", "across", 
-    "for", "on", "off", "at", "in", "out", "into", "onto", "over", "under", "through"];
+  const g_verbs = ['go', 'walk', 'talk', 'give', 'take', 'get', 
+    'use', 'climb', 'open', 'close', 'push', 'pull', 'unlock', 'lock', 'catch', 'switch', 'examine', 'look', 'fetch', 'pick', 'read', 'run', 'search', 'conjure', 'bribe', 'kindle', 'light'];
+  const g_directions = ['north', 'east', 'south', 'west', 'up', 
+    'down', 'left', 'right', 'forward', 'backward', 'away'];
+  const g_prepositions = ['from', 'to', 'with', 'around', 'by', 'across', 
+    'for', 'on', 'off', 'at', 'in', 'out', 'into', 'onto', 'over', 'under', 'through'];
 
 
   function isInArray(value, array) {

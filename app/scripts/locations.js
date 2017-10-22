@@ -4,62 +4,51 @@
  * 
  */
 const locations = {
-  start_room : {
-    name : 'Start room',
-    description : 'You are in the middle of a vast and clean, almost sterile hall.\n' +
-    'The ceiling is so far away that it\'s almost invisible to your eyes.\n' +
-    'There is a corridor to the west between two columns and another similar corridor to the south.',
-    things : ['tapestry','vase', 'floor', 'east_door'],
+  dungeon_cell : {
+    name : 'Dungeon cell',
+    description : 'Your dungeon cell. It is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n'+
+    'Because of the light you see the outlines of the few things in your cell. The door seems very massive and locked.\nDirty, half rotten straw is lying on the floor.\n',
+    things : ['straw','bucket','bed','barred_window','trap_door'],
     persons : [],
-    color : 'cornsilk',
+    color : 'steelblue',
     connections : {
-      south : 'balkony',
-      west : 'west_room'
     }
   },
 
-  balkony : {
-    name : 'Balkony',
-    description : 'This is the balkony of the hall. It faces south, to an empty place with a statue in the middle.',
-    things : ['floor'],
-    persons : ['moleman'],
-    color : 'coral',
-    connections : {
-      north : 'start_room'
-    }
-  },
-  west_room : {
-    name : 'West room',
-    description : 'This is a much smaller room than the main hall with two small windows to the west.',
-    things : ['floor', 'troll'],
+  corridor : {
+    name : 'A small corridor',
+    description : 'A small corridor. It stretches forward and backward. There is a burning torch on the wall, it flickers and casts creepy shadows.',
+    things : ['good_torch'],
     persons : [],
-    color : 'aquamarine',
+    color : 'tan',
     connections : {
-      east : 'start_room'
+      up : 'dungeon_cell',
+      forward: 'forward_corridor',
+      forward: 'backward_corridor'
     }
   },
-
-  room_behind_door : {
-    name : 'Room behind door',
-    description : 'A small room behind the door with the large knob.',
+  forward_corridor : {
+    name : 'A small corridor',
+    description : 'A small corridor. It stretches backward. It ends in a solid wall.',
     things : [],
     persons : [],
-    color : 'green',
+    color : 'tan',
     connections : {
-      west : 'start_room'
+      backward: 'corridor',
     }
   },
 
-  dungeon : {
-    name : 'Dungeon',
-    description : 'A dark and humid dungeon. There is a hole in the ceiling. Maybe it is possible to climb up?',
+  backward_corridor : {
+    name : 'A small corridor',
+    description : 'A small corridor. It stretches forward and backward. It ends in a solid wall.',
     things : [],
     persons : [],
-    color : 'blue',
+    color : 'tan',
     connections : {
-      up : 'start_room'
+      forward: 'corridor',
     }
   }
+
 
 }
 

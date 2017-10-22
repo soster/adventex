@@ -1,6 +1,6 @@
 var CONFIG = {
   console : {
-    height : 300,
+    height : 400,
     prompt : 'advntx> '
   },
   debug : true

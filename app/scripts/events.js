@@ -1,21 +1,76 @@
+/**
+ * Events are triggered by prerequisites. 
+ * There is a minimum of two events:
+ * 1. start_event
+ * 2. finish_event
+ * 
+ * The start_event has to have an action_move_to_location with the first location in the game.
+ */
+
 var events = {
-    flashlight_on : {
-        name : 'Flashlight active',
+    start_event : {
+        name : 'Awake',
+        description : 'It begins as soon as you wake up, with a searing pain piercing your temples and spreading across your entire head.\n'+
+        'Then comes the sickness, the dry mouth and the sudden panic - all accompanied alongside that phrase, "never again".\n\n'+
+        'As soon as you open your eyes you realize: This is no hangover. Something terrible must have happened.\n'+
+        'You are not in your bedroom, but in a dark, moist and cold room lying on a hard wooden bunk.\n'+
+        'You have lost your memories of yesterday, the last thing you remember is... you are not sure WHAT you remember.',
+        action_move_to_location : 'dungeon_cell',
+
+    },
+
+    trapdoor : {
+        name : 'Open trapdoor',
+        description : 'The trapdoor is easily to open with it\'s large metal ring. Opening it reveals a small corridor below your cell.\n'+
+        'It should be possible to climb down.',
+        // Item to use (Inventory or room):
+        prereq_item : '',
+        // verb to use:
+        prereq_action : 'open',
+        // location:
+        prereq_location : 'dungeon_cell',
+        // item has to be in inventory:
+        prereq_inventory : '',
+        // TODO:
+        prereq_preposition : '',
+        // if you have to combine two items:
+        prereq_second_item : '',
+        // actions:
+
+        // Add item to inventory (or location if set):
+        action_add_item : '',
+        // Add item defined in action_add_item to this location:
+        action_add_item_location : '',
+        // Remove item from inventory (if possible):
+        action_remove_item : '',
+        // Move to location:
+        action_move_to_location : '',
+        // add a new connection to a location:
+        action_new_connection : 'down',
+        action_new_connection_location : 'corridor'
+    },
+
+
+
+    demo : {
+        name : 'Demo',
         // will be echoed if the event is triggered:
-        description : 'The flashlight shines brightly.',
+        description : 'Demo event activated!.',
         // Prerequisites:
         // Item to use (Inventory or room):
-        prereq_item : 'flashlight',
+        prereq_item : 'demo',
         // verb to use:
         prereq_action : 'switch',
         // location:
         prereq_location : '',
         // item has to be in inventory:
-        prereq_inventory : 'flashlight',
+        prereq_inventory : 'demo',
         // TODO:
         prereq_preposition : 'on',
         // if you have to combine two items:
         prereq_second_item : '',
+        // number of steps:
+        prereq_steps : '',
         // actions:
 
         // Add item to inventory (or location if set):
@@ -31,35 +86,7 @@ var events = {
         action_new_connection_location : ''
     },
 
-    magic_trick : {
-        name : 'Magic Trick',
-        description : 'Expectum Patronum',
-        // Item to use (Inventory or room):
-        prereq_item : '',
-        // verb to use:
-        prereq_action : 'conjure',
-        // location:
-        prereq_location : '',
-        // item has to be in inventory:
-        prereq_inventory : '',
-        // TODO:
-        prereq_preposition : '',
-        // if you have to combine two items:
-        prereq_second_item : '',
-        // actions:
 
-        // Add item to inventory (or location if set):
-        action_add_item : 'potato',
-        // Add item defined in action_add_item to this location:
-        action_add_item_location : 'start_room',
-        // Remove item from inventory (if possible):
-        action_remove_item : '',
-        // Move to location:
-        action_move_to_location : '',
-        // add a new connection to a location:
-        action_new_connection : '',
-        action_new_connection_location : ''
-    },
 
     open_east_door : {
         name : 'Open door',
