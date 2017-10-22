@@ -16,7 +16,7 @@ var eventhandler = {
 
       find_event : function(location, item, second_item, action, preposition) {
         for (var property in state.events) {
-          if (state.events.hasOwnProperty(property)) {
+          if (state.events.hasOwnProperty(property) && property != 'start_event') {
             var event = state.events[property];
             if (this.check_event_prereq(event.prereq_location, location)
               && this.check_event_prereq(event.prereq_action, action)

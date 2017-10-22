@@ -21,6 +21,8 @@ var locationhandler = {
 
       },
 
+      
+
       set_location : function(location) {
         state.location = location;
       }
