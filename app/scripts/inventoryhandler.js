@@ -24,6 +24,11 @@ var inventoryhandler = {
         init_inventory();
       },
 
+      remove_from_inventory : function(item) {
+        state.inventory.remove(item);
+        init_inventory();
+      },
+
       find_item_id_for_name : function (name) {
         for (var i=0;i<state.inventory.length;i++) {
           item_id = state.inventory[i];

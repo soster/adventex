@@ -9,6 +9,7 @@ const MESSAGE = {
   error_thing: 'You don\'t carry or see {0}!',
   error: 'I don\'t understand \"{0}\", sorry.',
   info_you_see: 'You see:',
+  info_you_dropped: 'You dropped {0}.',
   
   
   greetings: '           .___                    __                 \n\

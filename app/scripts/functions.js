@@ -14,6 +14,15 @@ String.prototype.format = String.prototype.f = function() {
     return s;
 };
 
+Array.prototype.remove = function(value) {
+    if (this.indexOf(value)!==-1) {
+       this.splice(this.indexOf(value), 1);
+       return true;
+   } else {
+      return false;
+   };
+} 
+
 function isEmpty(str) {
     return (!str || 0 === str.length);
 }

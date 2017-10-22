@@ -10,6 +10,11 @@ var locationhandler = {
         }
       },
 
+    add_item_to_location : function(location, item) {
+      var place = state.locations[location];
+      place.things.push(item);
+    },
+
     in_location : function(itemOrPerson) {
         var olocation = state.locations[state.location];
         if (olocation.things.indexOf(itemOrPerson.toLowerCase()) != -1) {

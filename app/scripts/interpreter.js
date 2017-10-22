@@ -27,7 +27,11 @@ var Interpreter =  {
         this.get_item(last_misc); 
       }else if (check_synonyms('examine', first_verb)) {
         this.examine(last_misc); 
-      }else {// I give up...
+      }else if (check_synonyms('drop', first_verb)) {
+        this.drop(last_misc);
+      }
+      
+      else {// I give up...
         found_nothing = true;
       }
       var event = eventhandler.find_event(state.location, first_misc, second_misc, first_verb, preposition);
@@ -94,6 +98,17 @@ examine:function(item) {
     }else {
       this.standard_error(command); 
     }
+  }
+},
+
+drop:function(item) {
+  var item_id = inventoryhandler.find_item_id_for_name(item);
+  if (isEmpty(item_id)) {
+    echo(MESSAGE.error_thing.format(item), 'red'); 
+  } else {
+    inventoryhandler.remove_from_inventory(item_id);
+    locationhandler.add_item_to_location(state.location, item_id);
+    echo(MESSAGE.info_you_dropped.format(item));
   }
 },
 
