@@ -21,9 +21,9 @@ const events = {
 
     trapdoor: {
         name: 'Open trapdoor',
-        description: 'The trap door opens easily using its large metal ring. Opening it reveals a small corridor below your cell.',
+        description: 'You can open the trap door easily with its large metal ring. The opening reveals a small corridor below your cell.',
         // Item to use (Inventory or room):
-        prereq_item: '',
+        prereq_item: 'trap',
         // verb to use:
         prereq_action: 'open',
         // location:
@@ -34,8 +34,11 @@ const events = {
         prereq_preposition: '',
         // if you have to combine two items:
         prereq_second_item: '',
-        // actions:
 
+        // prerequisites not with items but terms:
+        prereq_first_misc: 'trap',
+        prereq_second_misc: 'door',
+        // actions:
         // Add item to inventory (or location if set):
         action_add_item: '',
         // Add item defined in action_add_item to this location:
@@ -62,7 +65,7 @@ const events = {
     },
 
     get_torch: {
-        description: 'You remove the torch from its mount.',
+        description: 'The mount on the wall is now empty.',
         prereq_location: 'corridor',
         prereq_action: 'take',
         prereq_item: 'torch',

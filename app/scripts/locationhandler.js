@@ -27,13 +27,19 @@ var locationhandler = {
 
       },
 
-      find_item_id_for_name : function (name) {
+      find_item_id_for_names : function (name, first_misc) {
         var loc = state.locations[state.location];
         for (var i=0;i<loc.things.length;i++) {
           var item_id = loc.things[i];
           var item = state.things[item_id];
           if (item.name.endsWith(name)) {
-            return item_id;
+            if (isEmpty(first_misc)) {
+              return item_id;
+            } else {
+              if (item.name.includes(first_misc)) {
+                return item_id;
+              }
+            }
           }
         }
         return '';

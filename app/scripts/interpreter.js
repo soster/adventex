@@ -24,17 +24,15 @@ var Interpreter = {
         var direction = get_first_of_type(words, 'directions');
         this.move(direction);
       } else if (check_synonyms('take', first_verb)) {
-        this.get_item(last_misc);
+        this.get_item(last_misc, first_misc);
       } else if (check_synonyms('examine', first_verb)) {
-        this.examine(last_misc);
+        this.examine(last_misc, first_misc);
       } else if (check_synonyms('drop', first_verb)) {
         this.drop(last_misc);
-      }
-
-      else {// I give up...
+      }else {// I give up...
         found_nothing = true;
       }
-      var event = eventhandler.find_event(state.location, first_misc, second_misc, first_verb, preposition);
+      var event = eventhandler.find_event(state.location, first_misc, second_misc, '', '', first_verb, preposition);
       if (event !== undefined) {
         this.trigger_event(event);
         state.steps++;
@@ -60,33 +58,41 @@ var Interpreter = {
     }
   },
 
-  get_item: function (item) {
-    var item_id = locationhandler.find_item_id_for_name(item);
+  get_item: function (item, first_misc) {
+    var item_id = locationhandler.find_item_id_for_names(item, first_misc);
 
     if (!isEmpty(item_id)) {
-      echo(get_description(things, item_id));
+      
       if (!inventoryhandler.is_portable(item_id)) {
         var portable_error = inventoryhandler.get_portable_error(item_id);
         if (!isEmpty(portable_error)) {
-          echo(portable_error, 'red');
+          echo(portable_error, 'coral');
         } else {
           echo(MESSAGE.error_portable.format(item), 'red');
         }
 
       } else {
+        echo(MESSAGE.info_you_took.format(inventoryhandler.get_name_definitive(item_id)));
         add_to_inventory_echo(item_id);
         locationhandler.remove_item_from_location(state.location, item_id);
       }
     } else {
-      echo(MESSAGE.error_get.format(item), 'red');
+      var item_id = inventoryhandler.find_item_id_for_name_anywhere(item, first_misc);
+
+      if (!isEmpty(item_id)) {
+        echo(MESSAGE.error_specific_get.format(inventoryhandler.get_name_definitive(item_id)));
+      } else {
+        echo(MESSAGE.error_get.format(item), 'red');
+      }
+      
     }
   },
 
-  examine: function (item) {
+  examine: function (item, first_misc) {
     if (isEmpty(item)) {
       describe_location_echo(state.location);
     } else {
-      var item_id = locationhandler.find_item_id_for_name(item);
+      var item_id = locationhandler.find_item_id_for_names(item, first_misc);
       if (isEmpty(item_id)) {
         item_id = inventoryhandler.find_item_id_for_name(item);
       }
@@ -108,7 +114,7 @@ var Interpreter = {
     } else {
       inventoryhandler.remove_from_inventory(item_id);
       locationhandler.add_item_to_location(state.location, item_id);
-      echo(MESSAGE.info_you_dropped.format(item));
+      echo(MESSAGE.info_you_dropped.format(inventoryhandler.get_name_definitive(item_id)));
     }
   },
 

@@ -1,26 +1,26 @@
 var inventoryhandler = {
-      in_inventory : function(item) {
-        if (state.inventory.indexOf(item.toLowerCase()) != -1) {
+      in_inventory : function(item_id) {
+        if (state.inventory.indexOf(item_id) != -1) {
           return true;
         }
         return false;
       },
       
 
-      is_portable : function(item) {
-        if (state.things[item] === undefined) {
+      is_portable : function(item_id) {
+        if (state.things[item_id] === undefined) {
           return false;
         }
-        return state.things[item].portable;
+        return state.things[item_id].portable;
       },
 
-      get_portable_error : function(item) {
-        var text = state.things[item].error_portable;
+      get_portable_error : function(item_id) {
+        var text = state.things[item_id].error_portable;
         return text;
       },
 
-      add_to_inventory : function(item) {
-        state.inventory.push(item);
+      add_to_inventory : function(item_id) {
+        state.inventory.push(item_id);
         init_inventory();
       },
 
@@ -38,6 +38,44 @@ var inventoryhandler = {
           }
         }
         return '';
+      },
+
+      find_item_id_for_name_anywhere : function (name, first_misc) {
+        for (var property in state.things) {
+          var item = state.things[property];
+          if (item.name.endsWith(name)) {
+            if (isEmpty(first_misc)) {
+              return property;
+            } else {
+              if (item.name.includes(first_misc)) {
+                return property;
+              }
+            }
+          }
+        }
+        return '';
+      },
+
+      get_name_definitive : function(item_id) {
+        var item = state.things[item_id];
+        var article = item.definite_article;
+        var name = item.name;
+        if (!isEmpty(article)) {
+          return article + ' ' + name;
+        } else {
+          return name;
+        }
+      },
+
+      get_name_indefinitive : function(item_id) {
+        var item = state.things[item_id];
+        var article = item.indefinite_article;
+        var name = item.name;
+        if (!isEmpty(article)) {
+          return article + ' ' + name;
+        } else {
+          return name;
+        }
       }
 
 };
