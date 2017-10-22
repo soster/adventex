@@ -50,6 +50,14 @@ var events = {
         action_new_connection_location : 'corridor'
     },
 
+    arest : {
+        name : 'The guard arests you!',
+        description : 'The guards points his sword into your direction. "You! Don\'t move!" he barks.\n'+
+        'You stand still. He grabs your arm with his free left hand and hits you with his sword handle on the back of your head. Again, it get\'s dark around you when you loose your consciousness.',
+        prereq_location : 'backward_corridor',
+        action_move_to_location : 'dungeon_cell',
+    },
+
 
 
     demo : {

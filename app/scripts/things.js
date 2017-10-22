@@ -38,11 +38,16 @@ var things = {
         portable : false
     },
 
-    good_torch : {
-        name : 'Flaming torch',
+    torch : {
+        name : 'burning torch',
         description : 'The torch is quite bright!',
         portable : true
+    },
 
+    scorchmarks : {
+        name : 'scorch marks',
+        description : 'A fire left large, frightening scorchmarks. Bigger than possible if they where created by a torch.',
+        portable : false
     }
 
 }

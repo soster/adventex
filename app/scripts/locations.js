@@ -16,21 +16,22 @@ const locations = {
   },
 
   corridor : {
-    name : 'A small corridor',
-    description : 'A small corridor. It stretches forward and backward. There is a burning torch on the wall, it flickers and casts creepy shadows.',
-    things : ['good_torch'],
+    name : 'A narrow corridor',
+    description : 'A narrow corridor. It stretches forward and backward. There is a burning torch on a mount on the wall, it flickers and casts creepy shadows.\n\n'+
+    'The hole to your cell is too high for you to climb back.\n'+
+    'You hear a noise from behind!',
+    things : ['torch'],
     persons : [],
     color : 'tan',
     connections : {
-      up : 'dungeon_cell',
       forward: 'forward_corridor',
       backward: 'backward_corridor'
     }
   },
   forward_corridor : {
-    name : 'A small corridor',
-    description : 'A small corridor. It stretches backward. It ends in a solid wall.',
-    things : [],
+    name : 'A narrow corridor',
+    description : 'A narrow corridor. It stretches backward. It ends forwards in a solid wall with scorchmarks.',
+    things : ['scorchmarks'],
     persons : [],
     color : 'tan',
     connections : {
@@ -39,10 +40,10 @@ const locations = {
   },
 
   backward_corridor : {
-    name : 'A small corridor',
-    description : 'A small corridor. It stretches forward. It ends in a solid wall.',
+    name : 'A narrow corridor',
+    description : 'A narrow corridor. It stretches forward. It ends backwards in a solid wall.',
     things : [],
-    persons : [],
+    persons : ['guard'],
     color : 'tan',
     connections : {
       forward: 'corridor'
