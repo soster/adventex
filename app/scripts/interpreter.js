@@ -5,7 +5,7 @@
 var Interpreter =  {
   interpret:function (command, describe_location_echo, add_to_inventory_echo, echo) {
     var original = command; 
-    var chk = this.check; 
+
     command = command.toLowerCase(); 
     if (command == 'help') {
       echo(MESSAGE.help); 
@@ -20,12 +20,12 @@ var Interpreter =  {
       var preposition = get_first_of_type(words, 'prepositions');
       
       var found_nothing = false;
-      if (chk(first_verb, 'go')) {
+      if (check_synonyms('go', first_verb)) {
         var direction = get_first_of_type(words, 'directions'); 
         this.move(direction); 
-      }else if (chk(first_verb, 'take')) {
+      }else if (check_synonyms('take', first_verb)) {
         this.get_item(last_misc); 
-      }else if (chk(first_verb, 'examine')) {
+      }else if (check_synonyms('examine', first_verb)) {
         this.examine(last_misc); 
       }else {// I give up...
         found_nothing = true;

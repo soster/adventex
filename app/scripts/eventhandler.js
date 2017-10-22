@@ -18,6 +18,11 @@ var eventhandler = {
         for (var property in state.events) {
           if (state.events.hasOwnProperty(property) && property != 'start_event') {
             var event = state.events[property];
+            if (!isEmpty(event.prereq_action) && !isEmpty(action)) {
+              if (check_synonyms(event.prereq_action, action)) {
+                action = event.prereq_action;
+              }
+            }
             if (this.check_event_prereq(event.prereq_location, location)
               && this.check_event_prereq(event.prereq_action, action)
               && this.check_event_prereq(event.prereq_item, item)

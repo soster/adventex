@@ -77,3 +77,16 @@ function list_objects(list, list_of_all) {
   
 }
 
+function check_synonyms(main, to_check) {
+  if (main == to_check) {
+    return true;
+  }
+  if (synonyms[main]==undefined) {
+    return false;
+  }
+  if (synonyms[main].indexOf(to_check) != -1) {
+    return true; 
+  }
+  return false;
+}
+

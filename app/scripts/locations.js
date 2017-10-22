@@ -17,9 +17,10 @@ const locations = {
 
   corridor : {
     name : 'A narrow corridor',
-    description : 'A narrow corridor. It stretches forward and backward. There is a burning torch on a mount on the wall, it flickers and casts creepy shadows.\n\n'+
-    'The hole to your cell is too high for you to climb back.\n\n'+
+    description : 'A narrow corridor. It stretches forward and backward.\n\n'+
+    'The hole in the ceiling with the trap door is too high for you to climb back.\n\n'+
     'You hear a faint noise from behind!',
+    additional_description : 'There is a burning torch on a mount on the wall, it flickers and casts creepy shadows.',
     things : ['torch'],
     persons : [],
     color : 'tan',
