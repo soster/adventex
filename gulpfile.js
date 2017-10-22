@@ -7,9 +7,19 @@ const del = require('del');
 const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
 var pegjs = require('gulp-pegjs');
+var version = require('gulp-version-number');
+const jasmine = require('gulp-jasmine');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
+
+const versionConfig = {
+  'value': '%MDS%',
+  'append': {
+    'key': 'v',
+    'to': ['css', 'js'],
+  },
+};
 
 let dev = true;
 
@@ -21,6 +31,12 @@ gulp.task('pegjs', () => {
         .pipe(gulp.dest('app/scripts'))
         .pipe(reload({stream: true}));
 });
+
+gulp.task('test', () =>
+gulp.src('test/spec/test.js')
+  // gulp-jasmine works on filepaths so you can't have any plugins before it
+  .pipe(jasmine())
+);
 
 
 gulp.task('styles', () => {
@@ -71,6 +87,7 @@ gulp.task('html', ['styles', 'pegjs', 'scripts'], () => {
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
     .pipe($.if(/\.css$/, $.cssnano({safe: true, autoprefixer: false})))
+    .pipe($.versionNumber(versionConfig))
     .pipe($.if(/\.html$/, $.htmlmin({
       collapseWhitespace: true,
       minifyCSS: true,

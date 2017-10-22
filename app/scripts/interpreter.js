@@ -57,7 +57,13 @@ get_item:function(item) {
   if (!isEmpty(item_id)) {
     echo(get_description(things, item_id)); 
     if ( ! inventoryhandler.is_portable(item_id)) {
-      echo(MESSAGE.error_portable.format(item), 'red'); 
+      var portable_error = inventoryhandler.get_portable_error(item_id);
+      if (!isEmpty(portable_error)) {
+        echo(portable_error, 'red');
+      } else {
+        echo(MESSAGE.error_portable.format(item), 'red'); 
+      }
+      
     }else {
       add_to_inventory_echo(item_id);
       locationhandler.remove_item_from_location(state.location, item_id); 

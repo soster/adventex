@@ -14,6 +14,11 @@ var inventoryhandler = {
         return state.things[item].portable;
       },
 
+      get_portable_error : function(item) {
+        var text = state.things[item].error_portable;
+        return text;
+      },
+
       add_to_inventory : function(item) {
         state.inventory.push(item);
         init_inventory();

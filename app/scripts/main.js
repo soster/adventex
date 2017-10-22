@@ -81,7 +81,6 @@ function init_inventory() {
   for (var i = 0; i < state.inventory.length; i++) {
     var item = state.inventory[i];
     var item_name = get_name(state.things, item);
-    console.log('name: '+item_name);
     $('#inventory').append('<p class="inventory_item"><button type="button" onclick="inventory_click(\''+item_name+'\')" class="btn btn-info btn-sm inventory_button">'+item_name+'</button></p>');
   }
 }
