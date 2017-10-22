@@ -14,15 +14,17 @@ var Interpreter = {
     } else {
       var words = parser.parse(command);
       var first_verb = get_first_of_type(words, 'verbs');
+      var last_verb = get_last_of_type(words, 'verbs');
       var first_misc = get_first_of_type(words, 'misc');
       var second_misc = get_second_of_type(words, 'misc');
+      // most important misc word, example 'take red door' -> door is last misc.
       var last_misc = get_last_of_type(words, 'misc');
       var preposition = get_first_of_type(words, 'prepositions');
 
       var found_nothing = false;
       if (check_synonyms('go', first_verb)) {
         var direction = get_first_of_type(words, 'directions');
-        this.move(direction);
+        this.move(direction, last_misc, first_misc);
       } else if (check_synonyms('take', first_verb)) {
         this.get_item(last_misc, first_misc);
       } else if (check_synonyms('examine', first_verb)) {
@@ -53,7 +55,18 @@ var Interpreter = {
   },
 
 
-  move: function (direction) {
+  move: function (direction, first_misc, last_misc) {
+    if (isEmpty(direction)) {
+      if (!isEmpty(last_misc)) {
+        var item_id = locationhandler.find_item_id_for_names(last_misc, first_misc);
+        if (!isEmpty(item_id)) {
+          echo(MESSAGE.error_movement_thing.format(inventoryhandler.get_name_definitive(item_id)), 'coral');
+          return;
+        }
+      }
+      echo(MESSAGE.error_movement.format(last_misc), 'red');
+      return;
+    }
     var location = state.locations[state.location];
     if (location.connections[direction] !== undefined) {
       var new_location = location.connections[direction];
@@ -74,7 +87,8 @@ var Interpreter = {
         if (!isEmpty(portable_error)) {
           echo(portable_error, 'coral');
         } else {
-          echo(MESSAGE.error_portable.format(item), 'red');
+          var indevname = inventoryhandler.get_name_indefinitive(item_id);
+          echo(MESSAGE.error_portable.format(indevname), 'coral');
         }
 
       } else {

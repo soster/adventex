@@ -8,6 +8,13 @@
     'down', 'left', 'right', 'forward', 'backward', 'away'];
   const g_prepositions = ['from', 'to', 'with', 'around', 'by', 'across', 
     'for', 'on', 'off', 'at', 'in', 'out', 'into', 'onto', 'over', 'under', 'through'];
+  const g_adjectives = ['black','white','gray','grey','blue','yellow','red','brown','green',
+    'orange','purple',
+    'heavy','light','defect','shiny','bright','dark','dirty','rotten','fancy','vast','odd',
+    'broad','strong','fat','big','huge','small','tall','ancient','deep','flat','shallow','bitter','sweet',
+    'delicious','tiny','wet','hot','cold'];
+
+
 
 
   function isInArray(value, array) {
@@ -23,6 +30,7 @@ wordtypes
   var verbs = [];
   var directions = [];
   var prepositions = [];
+  var adjectives = [];
   var misc = [];
 
 
@@ -30,9 +38,10 @@ wordtypes
     if (isInArray(w[i], g_verbs)) verbs.push(w[i]);
     else if (isInArray(w[i], g_directions)) directions.push(w[i]);
     else if (isInArray(w[i], g_prepositions)) prepositions.push(w[i]);
+    else if (isInArray(w[i], g_adjectives)) adjectives.push(w[i]);
     else (misc.push(w[i]));
   }
-  return {verbs:verbs, things:things, persons:persons, prepositions:prepositions,directions:directions, misc:misc};
+  return {verbs:verbs, things:things, persons:persons, prepositions:prepositions,directions:directions, adjectives:adjectives, misc:misc};
 }
 
 words

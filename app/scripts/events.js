@@ -21,7 +21,7 @@ const events = {
 
     trapdoor: {
         name: 'Open trapdoor',
-        description: 'You can open the trap door easily with its large metal ring. The opening reveals a small corridor below your cell.',
+        description: 'You open the trap door with its large metal ring. The opening reveals a small corridor below your cell.',
         // Item to use (Inventory or room):
         prereq_item: 'trap',
         // verb to use:
