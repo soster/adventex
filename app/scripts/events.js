@@ -21,7 +21,7 @@ var events = {
 
     trapdoor : {
         name : 'Open trapdoor',
-        description : 'The trapdoor is easily to open with it\'s large metal ring. Opening it reveals a small corridor below your cell.\n'+
+        description : 'The trap door opens easily using its large metal ring. Opening it reveals a small corridor below your cell.\n'+
         'It should be possible to climb down.',
         // Item to use (Inventory or room):
         prereq_item : '',

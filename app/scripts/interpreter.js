@@ -19,7 +19,7 @@ var Interpreter =  {
       var last_misc = get_last_of_type(words, 'misc');
       var preposition = get_first_of_type(words, 'prepositions');
       
-
+      var found_nothing = false;
       if (chk(first_verb, 'go')) {
         var direction = get_first_of_type(words, 'directions'); 
         this.move(direction); 
@@ -28,13 +28,15 @@ var Interpreter =  {
       }else if (chk(first_verb, 'examine')) {
         this.examine(last_misc); 
       }else {// I give up...
-        var event = eventhandler.find_event(state.location, first_misc, second_misc, first_verb, preposition);
-        if (event!==undefined) {
-          this.trigger_event(event);
-        } else {
-          this.standard_error(command); 
-        }
+        found_nothing = true;
       }
+      var event = eventhandler.find_event(state.location, first_misc, second_misc, first_verb, preposition);
+      if (event!==undefined) {
+        this.trigger_event(event);
+      }  else if (found_nothing) {
+        this.standard_error(command);
+      }
+
     }
     return ''; 
   }, 
