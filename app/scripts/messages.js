@@ -1,4 +1,4 @@
-var MESSAGE = {
+const MESSAGE = {
   name: 'adventex',
   help: 'Possible verbs: "go", "walk", "talk", "give", "take", "get", '+
   '"use", "climb", "open", "close", "push", "pull", "unlock", "lock", "catch", "switch", "examine", "look", "fetch", "pick", "read", "run", "search", "conjure", "bribe", "kindle", "light"',
@@ -18,4 +18,4 @@ var MESSAGE = {
        \\/     \\/           \\/     \\/          \\/      \\/\n\
 Type \'help\' for help.\n'
 
-}
+};

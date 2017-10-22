@@ -9,6 +9,7 @@ const runSequence = require('run-sequence');
 var pegjs = require('gulp-pegjs');
 var version = require('gulp-version-number');
 const jasmine = require('gulp-jasmine');
+var gutil = require('gulp-util');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -86,6 +87,7 @@ gulp.task('html', ['styles', 'pegjs', 'scripts'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
+    .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
     .pipe($.if(/\.css$/, $.cssnano({safe: true, autoprefixer: false})))
     .pipe($.versionNumber(versionConfig))
     .pipe($.if(/\.html$/, $.htmlmin({

@@ -1,3 +1,4 @@
+'use strict';
 var eventhandler = {
     check_event_prereq : function(prereq, to_check) {
         if (isEmpty(prereq) || prereq == to_check) {
@@ -61,4 +62,4 @@ var eventhandler = {
       
       }
 
-}
+};

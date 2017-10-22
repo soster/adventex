@@ -92,9 +92,13 @@ examine:function(item) {
 },
 
 trigger_event:function(event) {
+  var old_location = state.location;
   echo(event.description+'\n');
   eventhandler.execute_event(event);
-  describe_location_echo(state.location);
+  if (old_location != state.location) {
+    describe_location_echo(state.location);
+  }
+  
 },
 
 standard_error:function(command) {
@@ -119,4 +123,4 @@ check:function(input, to_check) {
 
 
 
-}
+};

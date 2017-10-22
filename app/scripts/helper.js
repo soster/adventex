@@ -1,7 +1,7 @@
 /**
  * Helper functions. They do not manipulate states.
  */
-
+'use strict';
 function get_description(objects, id) {
   return get_property(objects, 'description', id)
 }
