@@ -54,8 +54,9 @@ const events = {
     arest: {
         name: 'The guard arests you!',
         description: 'The guard points his sword into your direction. "You! Don\'t move!" he barks.\n\n' +
-        'You stand still. He grabs your arm with his free hand, turns you around in a swift movement and hits you with his sword handle on the back of your head.\n' +
-        'Again, it gets dark around you when you loose consciousness.',
+        'You stand still. He grabs your arm with his free hand and turns you around in a swift movement.\n'+
+        'Afterwards he hits you with his sword handle on the back of your head.\n\n' +
+        'Again, it gets dark around you when you loose consciousness...',
         prereq_location: 'backward_corridor',
         action_move_to_location: 'dungeon_cell'
     },

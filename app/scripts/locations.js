@@ -7,7 +7,7 @@
 const locations = {
   dungeon_cell: {
     name: 'Dungeon cell',
-    description: 'Your dungeon cell. It is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n\n' +
+    description: 'A dungeon cell. It is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n\n' +
     'Because of the light you see the outlines of the few things in your cell. The door seems very massive and locked.\n\nDirty, half rotten straw is lying on the floor.',
     things: ['straw', 'bucket', 'bed', 'barred_window', 'trap_door'],
     persons: [],
