@@ -17,6 +17,16 @@ var inventoryhandler = {
       add_to_inventory : function(item) {
         state.inventory.push(item);
         init_inventory();
+      },
+
+      find_item_id_for_name : function (name) {
+        for (var i=0;i<state.inventory.length;i++) {
+          item_id = state.inventory[i];
+          var item = state.things[item_id];
+          if (item.name.endsWith(name)) {
+            return item_id;
+          }
+        }
       }
 
 }

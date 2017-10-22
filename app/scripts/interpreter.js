@@ -15,17 +15,18 @@ var Interpreter =  {
       var words = parser.parse(command); 
       var first_verb = get_first_of_type(words, 'verbs'); 
       var first_misc = get_first_of_type(words, 'misc');
-      var preposition = get_first_of_type(words, 'prepositions');
       var second_misc = get_second_of_type(words, 'misc'); 
+      var last_misc = get_last_of_type(words, 'misc');
+      var preposition = get_first_of_type(words, 'prepositions');
+      
 
       if (chk(first_verb, 'go')) {
         var direction = get_first_of_type(words, 'directions'); 
         this.move(direction); 
       }else if (chk(first_verb, 'take')) {
-        var thing = first_misc; 
-        this.get_item(thing); 
+        this.get_item(last_misc); 
       }else if (chk(first_verb, 'examine')) {
-        this.examine(words, first_misc); 
+        this.examine(last_misc); 
       }else {// I give up...
         var event = eventhandler.find_event(state.location, first_misc, second_misc, first_verb, preposition);
         if (event!==undefined) {
@@ -51,29 +52,31 @@ move:function(direction) {
 }, 
 
 get_item:function(item) {
-  if (locationhandler.in_location(item)) {
-    echo(get_description(things, item)); 
-    if ( ! inventoryhandler.is_portable(item)) {
+  var item_id = locationhandler.find_item_id_for_name(item);
+
+  if (!isEmpty(item_id)) {
+    echo(get_description(things, item_id)); 
+    if ( ! inventoryhandler.is_portable(item_id)) {
       echo(MESSAGE.error_portable.format(item), 'red'); 
     }else {
-      add_to_inventory_echo(item);
-      locationhandler.remove_item_from_location(state.location, item); 
+      add_to_inventory_echo(item_id);
+      locationhandler.remove_item_from_location(state.location, item_id); 
     }
   }else {
     echo(MESSAGE.error_get.format(item), 'red'); 
   }
 }, 
 
-examine:function(words, first_misc) {
-  var thing = find_first_match(words, 'misc', state.things); 
-  if (thing == '' && first_misc == '') {
+examine:function(item) {
+  if (isEmpty(item)) {
     describe_location_echo(state.location); 
   }else {
-    if (inventoryhandler.in_inventory(thing) || locationhandler.in_location(thing)) {
-      var desc = get_description(state.things, thing); 
+    var item_id = locationhandler.find_item_id_for_name(item);
+    if (!isEmpty(item_id)) {
+      var desc = get_description(state.things, item_id); 
       echo(desc); 
-    }else if (first_misc != '') {
-      echo(MESSAGE.error_thing.format(first_misc), 'red'); 
+    }else if (!isEmpty(item)) {
+      echo(MESSAGE.error_thing.format(item), 'red'); 
     }else {
       this.standard_error(command); 
     }

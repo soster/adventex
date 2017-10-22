@@ -21,7 +21,16 @@ var locationhandler = {
 
       },
 
-      
+      find_item_id_for_name : function (name) {
+        var loc = state.locations[state.location];
+        for (var i=0;i<loc.things.length;i++) {
+          item_id = loc.things[i];
+          var item = state.things[item_id];
+          if (item.name.endsWith(name)) {
+            return item_id;
+          }
+        }
+      },
 
       set_location : function(location) {
         state.location = location;

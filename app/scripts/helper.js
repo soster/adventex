@@ -37,6 +37,10 @@ function get_second_of_type(words, type) {
   return get_of_type(words, type, 1);
 }
 
+function get_last_of_type(words, type) {
+  return get_of_type(words, type, words[type].length-1);
+}
+
 
 function get_of_type(words, type, number) {
   if (words[type].length > number) {

@@ -1,7 +1,7 @@
 var state = {
   timestamp : new Date(2000, 0, 0, 0, 0, 0, 0),
-  inventory : ['flashlight'],
-  location : 'start_room',
+  inventory : [],
+  location : undefined,
   seconds : 0,
   locations : undefined,
   persons : undefined,

@@ -24,7 +24,7 @@ const locations = {
     connections : {
       up : 'dungeon_cell',
       forward: 'forward_corridor',
-      forward: 'backward_corridor'
+      backward: 'backward_corridor'
     }
   },
   forward_corridor : {
@@ -34,18 +34,18 @@ const locations = {
     persons : [],
     color : 'tan',
     connections : {
-      backward: 'corridor',
+      backward: 'corridor'
     }
   },
 
   backward_corridor : {
     name : 'A small corridor',
-    description : 'A small corridor. It stretches forward and backward. It ends in a solid wall.',
+    description : 'A small corridor. It stretches forward. It ends in a solid wall.',
     things : [],
     persons : [],
     color : 'tan',
     connections : {
-      forward: 'corridor',
+      forward: 'corridor'
     }
   }
 
