@@ -1,8 +1,9 @@
 {
 
   // globals:
-  const g_verbs = ['go', 'walk', 'talk', 'give', 'take', 'get', 
-    'use', 'climb', 'open', 'close', 'push', 'pull', 'unlock', 'lock', 'catch', 'switch', 'examine', 'look', 'fetch', 'pick', 'read', 'run', 'search', 'conjure', 'bribe', 'kindle', 'light'];
+  const g_verbs = ['go', 'walk', 'talk', 'give', 'take', 'get', 'drop',
+    'use', 'climb', 'open', 'close', 'push', 'press', 'pull', 'unlock', 'lock', 'catch', 'switch', 'examine', 
+    'look', 'fetch', 'pick', 'read', 'run', 'search', 'conjure', 'bribe', 'kindle', 'light', 'hint'];
   const g_directions = ['north', 'east', 'south', 'west', 'up', 
     'down', 'left', 'right', 'forward', 'backward', 'away'];
   const g_prepositions = ['from', 'to', 'with', 'around', 'by', 'across', 

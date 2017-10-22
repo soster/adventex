@@ -33,8 +33,11 @@ var Interpreter =  {
       var event = eventhandler.find_event(state.location, first_misc, second_misc, first_verb, preposition);
       if (event!==undefined) {
         this.trigger_event(event);
+        state.steps++;
       }  else if (found_nothing) {
         this.standard_error(command);
+      } else {
+        state.steps++;
       }
 
     }
@@ -80,6 +83,9 @@ examine:function(item) {
     describe_location_echo(state.location); 
   }else {
     var item_id = locationhandler.find_item_id_for_name(item);
+    if (isEmpty(item_id)) {
+      item_id = inventoryhandler.find_item_id_for_name(item);
+    }
     if (!isEmpty(item_id)) {
       var desc = get_description(state.things, item_id); 
       echo(desc); 
@@ -93,11 +99,15 @@ examine:function(item) {
 
 trigger_event:function(event) {
   var old_location = state.location;
-  echo(event.description+'\n');
-  eventhandler.execute_event(event);
-  if (old_location != state.location) {
-    describe_location_echo(state.location);
-  }
+  setTimeout(function() {
+    eventhandler.execute_event(event);
+    echo(event.description+'\n');
+    
+    if (old_location != state.location) {
+      setTimeout(describe_location_echo(state.location), CONFIG.standard_event_wait);
+    }
+  }, CONFIG.standard_event_wait);
+
   
 },
 

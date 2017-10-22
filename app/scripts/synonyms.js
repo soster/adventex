@@ -1,5 +1,6 @@
 var synonyms = {
     take : ['get', 'pick'],
     go : ['walk', 'drive', 'climb'],
-    examine : ['look','watch']
+    examine : ['look','watch'],
+    push : ['press']
 };

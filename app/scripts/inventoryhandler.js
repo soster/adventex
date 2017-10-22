@@ -32,6 +32,7 @@ var inventoryhandler = {
             return item_id;
           }
         }
+        return '';
       }
 
 };

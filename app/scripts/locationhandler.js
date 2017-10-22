@@ -31,6 +31,7 @@ var locationhandler = {
             return item_id;
           }
         }
+        return '';
       },
 
       set_location : function(location) {

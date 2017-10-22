@@ -1,7 +1,8 @@
 const MESSAGE = {
   name: 'adventex',
   help: 'Possible verbs: "go", "walk", "talk", "give", "take", "get", '+
-  '"use", "climb", "open", "close", "push", "pull", "unlock", "lock", "catch", "switch", "examine", "look", "fetch", "pick", "read", "run", "search", "conjure", "bribe", "kindle", "light"',
+  '"use", "climb", "open", "close", "push", "press", "pull", "unlock", "lock", '+
+  '"catch", "switch", "examine", "look", "fetch", "pick", "read", "run", "search", "conjure", "bribe", "kindle", "light", "hint"',
   error_movement: 'You can\'t go to {0}!',
   error_get: 'You can\'t get {0}!',
   error_portable: '{0} is to heavy, you can\'t pick that up!',
