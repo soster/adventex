@@ -46,12 +46,18 @@ function add_to_inventory_echo(item) {
 
 function init_game(refresh_json) {
   if (refresh_json == true) {
-    state.locations = JSON.parse(JSON.stringify(locations));
-    state.things = JSON.parse(JSON.stringify(things));
-    state.persons = JSON.parse(JSON.stringify(persons));
-    state.events = JSON.parse(JSON.stringify(events));
+    $.getJSON('json/gamestate.json',
+    function(result) {
+      state = JSON.parse(JSON.stringify(result));
+      console.log(JSON.stringify(state.events));
+      init_game_async();
+    });
+  } else {
+    init_game_async();
   }
+}
 
+function init_game_async() {
   init_inventory();
   var start_event = state.events['start_event'];
   eventhandler.execute_event(start_event);

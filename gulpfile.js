@@ -10,6 +10,7 @@ var pegjs = require('gulp-pegjs');
 var version = require('gulp-version-number');
 const jasmine = require('gulp-jasmine');
 var gutil = require('gulp-util');
+var jsonminify = require('gulp-jsonminify');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -83,7 +84,7 @@ gulp.task('lint:test', () => {
     .pipe(gulp.dest('test/spec'));
 });
 
-gulp.task('html', ['styles', 'pegjs', 'scripts'], () => {
+gulp.task('html', ['styles', 'pegjs', 'scripts', 'json'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
@@ -107,6 +108,12 @@ gulp.task('images', () => {
   return gulp.src('app/images/**/*')
     .pipe($.cache($.imagemin()))
     .pipe(gulp.dest('dist/images'));
+});
+
+gulp.task('json', () => {
+  return gulp.src('app/json/**/*')
+    .pipe(jsonminify())
+    .pipe(gulp.dest('dist/json'));
 });
 
 gulp.task('fonts', () => {
@@ -143,6 +150,7 @@ gulp.task('serve', () => {
       'app/*.html',
       'app/images/**/*',
       'app/peg/*',
+      'app/json/*',
       '.tmp/fonts/**/*'
     ]).on('change', reload);
 
@@ -200,7 +208,7 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
+gulp.task('build', ['lint', 'json', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 

@@ -1,0 +1,202 @@
+{
+	"timestamp": "1999-12-30T23:00:00.000Z",
+	"inventory": [],
+	"location": "dungeon_cell",
+	"seconds": 0,
+	"steps": 0,
+	"hints": 0,
+	"locations": {
+		"dungeon_cell": {
+			"name": "Dungeon cell",
+			"description": "A dungeon cell. It is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n\nBecause of the light you see the outlines of the few things in your cell. The door seems very massive and is locked.\n\nDirty, half rotten straw is lying on the floor.",
+			"things": ["straw",
+			"bucket",
+			"bed",
+			"barred_window",
+			"cell_door",
+			"trap_door"],
+			"persons": [],
+			"color": "steelblue",
+			"connections": {
+				
+			}
+		},
+		"corridor": {
+			"name": "A narrow corridor",
+			"description": "A narrow corridor. It stretches to the east and to the west, slightly curved.\n\nThe hole in the ceiling with the trap door is too high for you to climb back.\n\nYou hear a faint noise from the west!",
+			"additional_description": "There is a burning torch on a mount on the wall, it flickers and casts creepy shadows.",
+			"things": ["torch"],
+			"persons": [],
+			"color": "tan",
+			"connections": {
+				"east": "forward_corridor",
+				"west": "backward_corridor"
+			}
+		},
+		"forward_corridor": {
+			"name": "A narrow corridor",
+			"description": "A narrow corridor. It stretches further to the east, slightly curved. There is a big scorch mark on the inner wall.",
+			"things": ["scorchmarks"],
+			"persons": [],
+			"color": "tan",
+			"connections": {
+				"west": "corridor",
+				"east": "entrance_corridor"
+			}
+		},
+		"backward_corridor": {
+			"name": "A narrow corridor",
+			"description": "A narrow corridor. It stretches further to the west, slightly curved.",
+			"things": [],
+			"persons": ["guard"],
+			"color": "tan",
+			"connections": {
+				"east": "corridor",
+				"west": "entrance_corridor"
+			}
+		},
+		"entrance_corridor": {
+			"name": "Entrance hall",
+			"description": "An entrance hall. It stretches to the east and west, slightly curved. There is a big portal to the south.",
+			"things": [],
+			"persons": [],
+			"color": "white",
+			"connections": {
+				"east": "forward_corridor",
+				"west": "backward_corridor",
+				"south": ""
+			}
+		}
+	},
+	"persons": {
+		"guard": {
+			"name": "armed guard",
+			"description": "A man in amrs, obviously a guard. He looks kind of dim, but also very grim.",
+			"portable": false
+		}
+	},
+	"things": {
+		"straw": {
+			"name": "straw",
+			"description": "The straw is dirty, rotten and full with vermin. But underneath you see a trap door in the floor!",
+			"portable": false,
+			"error_portable": "While touching the rotten straw you feel an iron ring which belongs to a hidden trap door!\nBut it makes no sense to fill your pockets with the straw, so you leave it where it is.",
+			"hidden": false,
+			"definite_article": "the",
+			"indefinite_article": "some"
+		},
+		"bucket": {
+			"name": "wooden bucket",
+			"description": "A wooden bucket. It appears to be used for... well you can imagine. No other facilities here.",
+			"portable": false,
+			"error_portable": "Trust me, you DON'T want to carry THAT around! It is nearly full with... you know.",
+			"hidden": false,
+			"definite_article": "the",
+			"indefinite_article": "a"
+		},
+		"bed": {
+			"name": "bunk bed",
+			"description": "Your bunk bed. Comfortable as a wooden board. Maybe due to the fact that it IS a wooden board.\nIt is mounted on the wall.",
+			"portable": false,
+			"hidden": false,
+			"definite_article": "the",
+			"indefinite_article": "a"
+		},
+		"trap_door": {
+			"name": "trap door",
+			"description": "After removing the straw, you can see a trap door in the floor.",
+			"portable": false,
+			"hidden": true,
+			"definite_article": "the",
+			"indefinite_article": "a"
+		},
+		"cell_door": {
+			"name": "cell door",
+			"description": "Very sturdy and locked.",
+			"portable": false,
+			"hidden": false,
+			"definite_article": "the",
+			"indefinite_article": "a"
+		},
+		"barred_window": {
+			"name": "barred window",
+			"description": "It is to high for you, you can't reach it!",
+			"portable": false,
+			"definite_article": "the",
+			"indefinite_article": "a"
+		},
+		"torch": {
+			"name": "burning torch",
+			"description": "The torch is quite bright!",
+			"portable": true,
+			"definite_article": "the",
+			"indefinite_article": "a"
+		},
+		"scorchmarks": {
+			"name": "scorch marks",
+			"description": "A fire left large, frightening scorchmarks. Bigger than expected if created by a torch.",
+			"portable": false,
+			"definite_article": "the",
+			"indefinite_article": "some"
+		}
+	},
+	"events": {
+		"start_event": {
+			"name": "Awake",
+			"description": "It begins as soon as you wake up, with a searing pain piercing your temples and spreading across your entire head.\nThen comes the sickness, the dry mouth and the sudden panic - all accompanied alongside that phrase, \"never again\".\n\nAs soon as you open your eyes you realize: This is no hangover. Something terrible must have happened.\nYou are not in your bedroom, but in a dark, moist and cold room lying on a hard wooden bunk.\nYou have lost your memories of yesterday, the last thing you remember is... you are not sure WHAT you remember.",
+			"action_move_to_location": "dungeon_cell"
+		},
+		"trapdoor": {
+			"name": "Open trapdoor",
+			"description": "You open the trap door with its large metal ring. The opening reveals a small corridor below your cell.",
+			"prereq_item": "trap",
+			"prereq_action": "open",
+			"prereq_location": "dungeon_cell",
+			"prereq_inventory": "",
+			"prereq_preposition": "",
+			"prereq_second_item": "",
+			"prereq_first_misc": "trap",
+			"prereq_second_misc": "door",
+			"action_add_item": "",
+			"action_add_item_location": "",
+			"action_remove_item": "",
+			"action_new_location_description": "An open trap door leads down.",
+			"action_move_to_location": "",
+			"action_new_connection": "down",
+			"action_new_connection_location": "corridor"
+		},
+		"arest": {
+			"name": "The guard arests you!",
+			"description": "The guard points his sword into your direction. \"You! Don't move!\" he barks.\n\nYou stand still. He grabs your arm with his free hand and turns you around in a swift movement.\nAfterwards he hits you with his sword handle on the back of your head.\n\nAgain, it gets dark around you when you loose consciousness...",
+			"prereq_location": "backward_corridor",
+			"action_move_to_location": "dungeon_cell"
+		},
+		"get_torch": {
+			"description": "The mount on the wall is now empty.",
+			"prereq_location": "corridor",
+			"prereq_action": "take",
+			"prereq_item": "torch",
+			"action_new_location_description": "There is an empty mount on the wall."
+		},
+		"demo": {
+			"name": "Demo",
+			"description": "This is the demo event! Just for testing purposes...",
+			"prereq_item": "demo",
+			"prereq_action": "switch",
+			"prereq_location": "",
+			"prereq_inventory": "",
+			"prereq_preposition": "on",
+			"prereq_second_item": "",
+			"prereq_first_misc": "demo",
+			"prereq_second_misc": "",
+			"prereq_steps": "",
+			"action_add_item": "",
+			"action_add_item_location": "",
+			"action_remove_item": "",
+			"action_new_location_description": "",
+			"action_move_to_location": "",
+			"action_new_connection": "",
+			"action_new_connection_location": ""
+		}
+	}
+}

@@ -41,7 +41,7 @@ wordtypes
     else if (isInArray(w[i], g_adjectives)) adjectives.push(w[i]);
     else (misc.push(w[i]));
   }
-  return {verbs:verbs, things:things, persons:persons, prepositions:prepositions,directions:directions, adjectives:adjectives, misc:misc};
+  return {verbs:verbs, prepositions:prepositions, directions:directions, adjectives:adjectives, misc:misc};
 }
 
 words

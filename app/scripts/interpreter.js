@@ -55,7 +55,7 @@ var Interpreter = {
   },
 
 
-  move: function (direction, first_misc, last_misc) {
+  move: function (direction, last_misc, first_misc) {
     if (isEmpty(direction)) {
       if (!isEmpty(last_misc)) {
         var item_id = locationhandler.find_item_id_for_names(last_misc, first_misc);
