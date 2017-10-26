@@ -1,4 +1,4 @@
-/** some useful functions. */
+/** some useful global functions. */
 
 /**
 * Simple format function:

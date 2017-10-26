@@ -1,140 +1,141 @@
-var vocabulary = {
 
-};
-
-var term = $('#terminal').terminal(function (command) {
-  term.echo(Interpreter.interpret(command, describe_location_echo, add_to_inventory_echo, echo));
-}, {
-  greetings: MESSAGE.greetings,
-  name: MESSAGE.name,
-  prompt: CONFIG.console.prompt,
-  height: CONFIG.console.height
-});
+'use strict';
+var advntx = (function (my) {
 
 
-function echo(text, color) {
+
+my.echo = function(text, color) {
   if (color === undefined) {
     color = 'white';
   }
-  term.echo(text, {
+  my.term.echo(text, {
     finalize: function(div) {
       div.css('color', color);
     }
   });
-}
+};
 
 
-function describe_location_echo(location) {
-  var loc = locationhandler.get_location_by_id(location);
-  var description = locationhandler.get_location_description(location);
-  echo(description, loc.color);
+my.describe_location_echo = function(location) {
+  var loc = advntx.locationhandler.get_location_by_id(location);
+  var description = advntx.locationhandler.get_location_description(location);
+  my.echo(description, loc.color);
   var things = loc.things;
   var persons = loc.persons;
   var message = MESSAGE.info_you_see;
-  var things_message = list_objects(things, state.things);
-  var persons_message = list_objects(persons, state.persons);
+  var things_message = advntx.list_objects(things, advntx.state.things);
+  var persons_message = advntx.list_objects(persons, advntx.state.persons);
   if (!isEmpty(persons_message) || !isEmpty(things_message)) {
-    echo(message);
-    echo(things_message);
-    echo(persons_message);
+    my.echo(message);
+    my.echo(things_message);
+    my.echo(persons_message);
   } 
   
+};
+
+my.term = $('#terminal').terminal(function (command) {
+  var echo = my.echo;
+
+  my.term.echo(advntx.interpreter.interpret(command, my.describe_location_echo, my.add_to_inventory_echo, my.echo));
+}, {
+  greetings: MESSAGE.greetings,
+  name: MESSAGE.name,
+  prompt: advntx.config.console.prompt,
+  height: advntx.config.console.height
+});
+
+
+my.add_to_inventory_echo = function(item) {
+  advntx.inventoryhandler.add_to_inventory(item);
+  my.init_inventory();
 }
 
-
-
-function add_to_inventory_echo(item) {
-  inventoryhandler.add_to_inventory(item);
-  init_inventory();
-}
-
-function init_game(refresh_json) {
+my.init_game = function(refresh_json) {
   if (refresh_json == true) {
     $.getJSON('json/vocabulary.json',
     function(result) {
-      vocabulary = JSON.parse(JSON.stringify(result));
+      advntx.vocabulary = JSON.parse(JSON.stringify(result));
     });
 
     $.getJSON('json/gamestate.json',
     function(result) {
-      state = JSON.parse(JSON.stringify(result));
-      console.log(JSON.stringify(state.events));
-      init_game_async();
+      advntx.state = JSON.parse(JSON.stringify(result));
+      my.init_game_async();
     });
   } else {
-    init_game_async();
+    my.init_game_async();
   }
 }
 
-function init_game_async() {
-  init_inventory();
-  var start_event = state.events['start_event'];
-  eventhandler.execute_event(start_event);
-  echo(start_event.description+'\n');
-  describe_location_echo(state.location); 
-  async_refocus_terminal();
+my.init_game_async = function() {
+  my.init_inventory();
+  var start_event = advntx.state.events['start_event'];
+  advntx.eventhandler.execute_event(start_event);
+  my.echo(start_event.description+'\n');
+  my.describe_location_echo(advntx.state.location); 
+  my.async_refocus_terminal();
 }
 
 
 
 
-function refocus_terminal() {
-  term.focus();
+my.refocus_terminal = function(){
+  my.term.focus();
 }
 
-function async_refocus_terminal() {
-  window.setTimeout('refocus_terminal()', 250);
+my.async_refocus_terminal = function() {
+  window.setTimeout('advntx.refocus_terminal()', 250);
 }
 
 
-function inventory_click(item) {
-  term.insert(' '+item+' ');
-  async_refocus_terminal();
+my.inventory_click = function(item) {
+  my.term.insert(' '+item+' ');
+  my.async_refocus_terminal();
 }
 
-function init_inventory() {
+my.init_inventory = function() {
  $('#inventory > .inventory_item').remove();
-  for (var i = 0; i < state.inventory.length; i++) {
-    var item = state.inventory[i];
-    var item_name = get_name(state.things, item);
+  for (var i = 0; i < advntx.state.inventory.length; i++) {
+    var item = advntx.state.inventory[i];
+    var item_name = advntx.get_name(advntx.state.things, item);
     $('#inventory').append('<p class="inventory_item"><button type="button" onclick="inventory_click(\''+item_name+'\')" class="btn btn-info btn-sm inventory_button">'+item_name+'</button></p>');
   }
 }
 
-function periodic_updates() {
-  state.seconds++;
-  $('#time_element').text(state.seconds);
+my.periodic_updates=function() {
+  advntx.state.seconds++;
+  $('#time_element').text(advntx.state.seconds);
 }
 
-function init_words() {
-
-}
+return my;
+}(advntx||{}));
 
 
 
 /** Global Initializations */
 $(function() {
-  $('#inventory_container').css('max-height', CONFIG.console.height+'px');
-  term.wrap(false);
+  $('#inventory_container').css('max-height', advntx.config.console.height+'px');
+  advntx.term.wrap(false);
+
   $('#btn_help').click(function () {
-    term.exec('help', false);
-    init_inventory();
-    async_refocus_terminal();
+    advntx.term.exec('help', false);
+    advntx.init_inventory();
+    advntx.async_refocus_terminal();
   });
   
   $('#btn_save').click(function () {
-    $('#game_state').val(JSON.stringify(state));
-    init_inventory();
-    async_refocus_terminal();
+    $('#game_state').val(JSON.stringify(advntx.state));
+    advntx.init_inventory();
+    advntx.async_refocus_terminal();
   });
   
   $('#btn_load').click(function () {
-    state = $.parseJSON($('#game_state').val());
-    term.exec('clear');
-    init_game(false);
+    advntx.state = $.parseJSON($('#game_state').val());
+    advntx.term.exec('clear');
+    advntx.init_game(false);
     
   });
-  window.setInterval('periodic_updates()',1000);
-  init_game(true);
+  window.setInterval('advntx.periodic_updates()',1000);
+  advntx.init_game(true);
 });
 

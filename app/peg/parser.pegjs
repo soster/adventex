@@ -1,10 +1,10 @@
 {
 
   // globals:
-  const g_verbs = vocabulary.verbs;
-  const g_directions = vocabulary.directions;
-  const g_prepositions = vocabulary.prepositions;
-  const g_adjectives = vocabulary.adjectives;
+  const g_verbs = advntx.vocabulary.verbs;
+  const g_directions = advntx.vocabulary.directions;
+  const g_prepositions = advntx.vocabulary.prepositions;
+  const g_adjectives = advntx.vocabulary.adjectives;
 
 
 

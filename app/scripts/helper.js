@@ -2,91 +2,95 @@
  * Helper functions. They do not manipulate states.
  */
 'use strict';
-function get_description(objects, id) {
-  return get_property(objects, 'description', id)
-}
+
+var advntx = (function (my) {
+
+  my.get_description = function(objects, id) {
+    return my.get_property(objects, 'description', id)
+  }
 
 
-function get_name(objects, id) {
-  return get_property(objects, 'name', id);
-}
+  my.get_name = function(objects, id) {
+    return my.get_property(objects, 'name', id);
+  }
 
-function is_hidden(objects, id) {
-  return get_property(objects, 'hidden', id);
-}
+  my.is_hidden = function(objects, id) {
+    return my.get_property(objects, 'hidden', id);
+  }
 
 
-function get_property(objects, property, id) {
-  id = id.toLowerCase();
-  var obj = objects[id];
-  if (obj === undefined) {
+  my.get_property = function(objects, property, id) {
+    id = id.toLowerCase();
+    var obj = objects[id];
+    if (obj === undefined) {
+      return '';
+    }
+    var retVal = obj[property];
+    if (retVal !== undefined)
+      return retVal;
     return '';
   }
-  var retVal = obj[property];
-  if (retVal !== undefined)
-    return retVal;
-  return '';
-}
 
-function get_first_of_type(words, type) {
-  return get_of_type(words, type, 0);
-}
-
-
-function get_second_of_type(words, type) {
-  return get_of_type(words, type, 1);
-}
-
-function get_last_of_type(words, type) {
-  return get_of_type(words, type, words[type].length-1);
-}
-
-
-function get_of_type(words, type, number) {
-  if (words[type].length > number) {
-    return words[type][number];
+  my.get_first_of_type = function(words, type) {
+    return my.get_of_type(words, type, 0);
   }
-  return '';
-}
 
 
-function find_first_match(words, type, objects) {
-  for (var i=0;i<words[type].length;i++) {
-    if (objects[words[type][i]]!== undefined) {
-      return words[type][i];
+  my.get_second_of_type = function(words, type) {
+    return my.get_of_type(words, type, 1);
+  }
+
+  my.get_last_of_type = function(words, type) {
+    return my.get_of_type(words, type, words[type].length - 1);
+  }
+
+
+  my.get_of_type = function(words, type, number) {
+    if (words[type].length > number) {
+      return words[type][number];
     }
+    return '';
   }
-  return '';
-}
 
-function list_objects(list, list_of_all) {
-  var message = '';
-  if (list !== undefined && list.length>0) {
-    for (var i=0;i<list.length;i++) {
-      if (is_hidden(list_of_all, list[i])) {
-        continue;
+
+  my.find_first_match = function(words, type, objects) {
+    for (var i = 0; i < words[type].length; i++) {
+      if (objects[words[type][i]] !== undefined) {
+        return words[type][i];
       }
-      if (i>0 && !is_hidden(list_of_all, list[i-1])) {
-        message+=', ';
-      }
-      message+=get_name(list_of_all,list[i]);
     }
-    message+='\n';
-  } 
-  return message;
-  
-}
-
-function check_synonyms(main, to_check) {
-  if (main == to_check) {
-    return true;
+    return '';
   }
-  if (vocabulary.synonyms[main]==undefined) {
+
+  my.list_objects = function(list, list_of_all) {
+    var message = '';
+    if (list !== undefined && list.length > 0) {
+      for (var i = 0; i < list.length; i++) {
+        if (my.is_hidden(list_of_all, list[i])) {
+          continue;
+        }
+        if (i > 0 && !my.is_hidden(list_of_all, list[i - 1])) {
+          message += ', ';
+        }
+        message += my.get_name(list_of_all, list[i]);
+      }
+      message += '\n';
+    }
+    return message;
+
+  }
+
+  my.check_synonyms = function(main, to_check) {
+    if (main == to_check) {
+      return true;
+    }
+    if (advntx.vocabulary.synonyms[main] == undefined) {
+      return false;
+    }
+    if (advntx.vocabulary.synonyms[main].indexOf(to_check) != -1) {
+      return true;
+    }
     return false;
   }
-  if (vocabulary.synonyms[main].indexOf(to_check) != -1) {
-    return true; 
-  }
-  return false;
-}
-
+  return my;
+}(advntx || {}));
