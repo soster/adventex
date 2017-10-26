@@ -9,23 +9,25 @@
 		"dungeon_cell": {
 			"name": "Dungeon cell",
 			"description": "A dungeon cell. It is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n\nBecause of the light you see the outlines of the few things in your cell. The door seems very massive and is locked.\n\nDirty, half rotten straw is lying on the floor.",
-			"things": ["straw",
-			"bucket",
-			"bed",
-			"barred_window",
-			"cell_door",
-			"trap_door"],
+			"things": [
+				"straw",
+				"bucket",
+				"bed",
+				"barred_window",
+				"cell_door",
+				"trap_door"
+			],
 			"persons": [],
 			"color": "steelblue",
-			"connections": {
-				
-			}
+			"connections": {}
 		},
 		"corridor": {
 			"name": "A narrow corridor",
 			"description": "A narrow corridor. It stretches to the east and to the west, slightly curved.\n\nThe hole in the ceiling with the trap door is too high for you to climb back.\n\nYou hear a faint noise from the west!",
 			"additional_description": "There is a burning torch on a mount on the wall, it flickers and casts creepy shadows.",
-			"things": ["torch"],
+			"things": [
+				"torch"
+			],
 			"persons": [],
 			"color": "tan",
 			"connections": {
@@ -36,7 +38,9 @@
 		"forward_corridor": {
 			"name": "A narrow corridor",
 			"description": "A narrow corridor. It stretches further to the east, slightly curved. There is a big scorch mark on the inner wall.",
-			"things": ["scorchmarks"],
+			"things": [
+				"scorchmarks"
+			],
 			"persons": [],
 			"color": "tan",
 			"connections": {
@@ -48,7 +52,9 @@
 			"name": "A narrow corridor",
 			"description": "A narrow corridor. It stretches further to the west, slightly curved.",
 			"things": [],
-			"persons": ["guard"],
+			"persons": [
+				"guard"
+			],
 			"color": "tan",
 			"connections": {
 				"east": "corridor",

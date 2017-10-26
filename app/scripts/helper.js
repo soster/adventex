@@ -81,10 +81,10 @@ function check_synonyms(main, to_check) {
   if (main == to_check) {
     return true;
   }
-  if (synonyms[main]==undefined) {
+  if (vocabulary.synonyms[main]==undefined) {
     return false;
   }
-  if (synonyms[main].indexOf(to_check) != -1) {
+  if (vocabulary.synonyms[main].indexOf(to_check) != -1) {
     return true; 
   }
   return false;

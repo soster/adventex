@@ -164,8 +164,8 @@ var Interpreter = {
     if (input == to_check) {
       return true;
     }
-    if (synonyms[to_check] != undefined) {
-      if (synonyms[to_check].indexOf(input) != -1) {
+    if (vocabulary.synonyms[to_check] != undefined) {
+      if (vocabulary.synonyms[to_check].indexOf(input) != -1) {
         return true;
       }
     }

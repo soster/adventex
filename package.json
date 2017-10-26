@@ -31,7 +31,7 @@
     "gulp-version-number": "^0.1.7",
     "gulp-jasmine": "^2.4.0",
     "gulp-util": "^3.0.8",
-    "gulp-jsonminify":"1.0.0",
+    "gulp-jsonminify": "1.0.0",
     "run-sequence": "^1.2.2",
     "wiredep": "^4.0.0"
   },

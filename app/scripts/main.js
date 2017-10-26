@@ -1,3 +1,7 @@
+var vocabulary = {
+
+};
+
 var term = $('#terminal').terminal(function (command) {
   term.echo(Interpreter.interpret(command, describe_location_echo, add_to_inventory_echo, echo));
 }, {
@@ -46,6 +50,11 @@ function add_to_inventory_echo(item) {
 
 function init_game(refresh_json) {
   if (refresh_json == true) {
+    $.getJSON('json/vocabulary.json',
+    function(result) {
+      vocabulary = JSON.parse(JSON.stringify(result));
+    });
+
     $.getJSON('json/gamestate.json',
     function(result) {
       state = JSON.parse(JSON.stringify(result));
@@ -97,6 +106,9 @@ function periodic_updates() {
   $('#time_element').text(state.seconds);
 }
 
+function init_words() {
+
+}
 
 
 

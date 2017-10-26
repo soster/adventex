@@ -555,18 +555,10 @@
 
 
       // globals:
-      const g_verbs = ['go', 'walk', 'talk', 'give', 'take', 'get', 'drop',
-        'use', 'climb', 'open', 'close', 'push', 'press', 'pull', 'unlock', 'lock', 'catch', 'switch', 'examine', 
-        'look', 'fetch', 'pick', 'read', 'run', 'search', 'conjure', 'bribe', 'kindle', 'light', 'hint'];
-      const g_directions = ['north', 'east', 'south', 'west', 'up', 
-        'down', 'left', 'right', 'forward', 'backward', 'away'];
-      const g_prepositions = ['from', 'to', 'with', 'around', 'by', 'across', 
-        'for', 'on', 'off', 'at', 'in', 'out', 'into', 'onto', 'over', 'under', 'through'];
-      const g_adjectives = ['black','white','gray','grey','blue','yellow','red','brown','green',
-        'orange','purple',
-        'heavy','light','defect','shiny','bright','dark','dirty','rotten','fancy','vast','odd',
-        'broad','strong','fat','big','huge','small','tall','ancient','deep','flat','shallow','bitter','sweet',
-        'delicious','tiny','wet','hot','cold'];
+      const g_verbs = vocabulary.verbs;
+      const g_directions = vocabulary.directions;
+      const g_prepositions = vocabulary.prepositions;
+      const g_adjectives = vocabulary.adjectives;
 
 
 
