@@ -12,7 +12,7 @@ my.interpreter = {
 
     command = command.toLowerCase();
     if (command == 'help') {
-      echo(MESSAGE.help);
+      echo(advntx.messages.help);
     } else if (command == 'debug' && advntx.config.debug) {
       echo(JSON.stringify(advntx.state));
     } else {
@@ -45,7 +45,7 @@ my.interpreter = {
       } else if (found_nothing) {
         if (advntx.check_synonyms('open', first_verb) && !isEmpty(last_misc)) {
           var item_id = advntx.locationhandler.find_item_id_for_names(last_misc, first_misc);
-          echo(MESSAGE.error_open.format(advntx.inventoryhandler.get_name_definitive(item_id)));
+          echo(advntx.messages.error_open.format(advntx.inventoryhandler.get_name_definitive(item_id)));
         } else {
           this.standard_error(command);
         }
@@ -64,11 +64,11 @@ my.interpreter = {
       if (!isEmpty(last_misc)) {
         var item_id = advntx.locationhandler.find_item_id_for_names(last_misc, first_misc);
         if (!isEmpty(item_id)) {
-          my.interpreter.echo(MESSAGE.error_movement_thing.format(advntx.inventoryhandler.get_name_definitive(item_id)), 'coral');
+          my.interpreter.echo(advntx.messages.error_movement_thing.format(advntx.inventoryhandler.get_name_definitive(item_id)), 'coral');
           return;
         }
       }
-      my.interpreter.echo(MESSAGE.error_movement.format(last_misc), 'red');
+      my.interpreter.echo(advntx.messages.error_movement.format(last_misc), 'red');
       return;
     }
     var location = advntx.state.locations[advntx.state.location];
@@ -92,11 +92,11 @@ my.interpreter = {
           this.echo(portable_error, 'coral');
         } else {
           var indevname = advntx.inventoryhandler.get_name_indefinitive(item_id);
-          this.echo(MESSAGE.error_portable.format(indevname), 'coral');
+          this.echo(advntx.messages.error_portable.format(indevname), 'coral');
         }
 
       } else {
-        this.echo(MESSAGE.info_you_took.format(advntx.inventoryhandler.get_name_definitive(item_id)));
+        this.echo(advntx.messages.info_you_took.format(advntx.inventoryhandler.get_name_definitive(item_id)));
         this.add_to_inventory_echo(item_id);
         advntx.locationhandler.remove_item_from_location(advntx.state.location, item_id);
       }
@@ -104,9 +104,9 @@ my.interpreter = {
       var item_id = advntx.inventoryhandler.find_item_id_for_name_anywhere(item, first_misc);
 
       if (!isEmpty(item_id)) {
-        this.echo(MESSAGE.error_specific_get.format(advntx.inventoryhandler.get_name_definitive(item_id)));
+        this.echo(advntx.messages.error_specific_get.format(advntx.inventoryhandler.get_name_definitive(item_id)));
       } else {
-        this.echo(MESSAGE.error_get.format(item), 'red');
+        this.echo(advntx.messages.error_get.format(item), 'red');
       }
       
     }
@@ -124,7 +124,7 @@ my.interpreter = {
         var desc = advntx.get_description(advntx.state.things, item_id);
         this.echo(desc);
       } else if (!isEmpty(item)) {
-        this.echo(MESSAGE.error_thing.format(item), 'red');
+        this.echo(advntx.messages.error_thing.format(item), 'red');
       } else {
         this.standard_error(command);
       }
@@ -134,11 +134,11 @@ my.interpreter = {
   drop: function (item) {
     var item_id = advntx.inventoryhandler.find_item_id_for_name(item);
     if (isEmpty(item_id)) {
-      this.echo(MESSAGE.error_thing.format(item), 'red');
+      this.echo(advntx.messages.error_thing.format(item), 'red');
     } else {
       advntx.inventoryhandler.remove_from_inventory(item_id);
       advntx.locationhandler.add_item_to_location(advntx.state.location, item_id);
-      this.echo(MESSAGE.info_you_dropped.format(advntx.inventoryhandler.get_name_definitive(item_id)));
+      this.echo(advntx.messages.info_you_dropped.format(advntx.inventoryhandler.get_name_definitive(item_id)));
     }
   },
 
@@ -158,7 +158,7 @@ my.interpreter = {
   },
 
   standard_error: function (command) {
-    this.echo(MESSAGE.error.format(command), 'red');
+    this.echo(advntx.messages.error.format(command), 'red');
   },
 
   /**

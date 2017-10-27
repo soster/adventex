@@ -22,7 +22,7 @@ my.describe_location_echo = function(location) {
   my.echo(description, loc.color);
   var things = loc.things;
   var persons = loc.persons;
-  var message = MESSAGE.info_you_see;
+  var message = my.messages.info_you_see;
   var things_message = advntx.list_objects(things, advntx.state.things);
   var persons_message = advntx.list_objects(persons, advntx.state.persons);
   if (!isEmpty(persons_message) || !isEmpty(things_message)) {
@@ -33,16 +33,7 @@ my.describe_location_echo = function(location) {
   
 };
 
-my.term = $('#terminal').terminal(function (command) {
-  var echo = my.echo;
 
-  my.term.echo(advntx.interpreter.interpret(command, my.describe_location_echo, my.add_to_inventory_echo, my.echo));
-}, {
-  greetings: MESSAGE.greetings,
-  name: MESSAGE.name,
-  prompt: advntx.config.console.prompt,
-  height: advntx.config.console.height
-});
 
 
 my.add_to_inventory_echo = function(item) {
@@ -51,16 +42,36 @@ my.add_to_inventory_echo = function(item) {
 }
 
 my.init_game = function(refresh_json) {
+  var jsons = 0;
+  const num_requests = 3;
   if (refresh_json == true) {
     $.getJSON('json/vocabulary.json',
     function(result) {
       advntx.vocabulary = JSON.parse(JSON.stringify(result));
+      jsons++;
+      if (jsons==num_requests) {
+        my.init_game_async();
+      }
+
+    });
+
+    $.getJSON('json/messages.json',
+    function(result) {
+      advntx.messages = JSON.parse(JSON.stringify(result));
+      jsons++;
+      if (jsons==num_requests) {
+        my.init_game_async();
+      }
     });
 
     $.getJSON('json/gamestate.json',
     function(result) {
       advntx.state = JSON.parse(JSON.stringify(result));
-      my.init_game_async();
+      jsons++;
+      if (jsons==num_requests) {
+        my.init_game_async();
+      }
+      
     });
   } else {
     my.init_game_async();
@@ -68,6 +79,16 @@ my.init_game = function(refresh_json) {
 }
 
 my.init_game_async = function() {
+  my.term = $('#terminal').terminal(function (command) {
+    var echo = my.echo;
+  
+    my.term.echo(advntx.interpreter.interpret(command, my.describe_location_echo, my.add_to_inventory_echo, my.echo));
+  }, {
+    greetings: advntx.messages.greetings,
+    name: advntx.messages.name,
+    prompt: advntx.config.console.prompt,
+    height: advntx.config.console.height
+  });
   my.init_inventory();
   var start_event = advntx.state.events['start_event'];
   advntx.eventhandler.execute_event(start_event);
@@ -115,7 +136,7 @@ return my;
 /** Global Initializations */
 $(function() {
   $('#inventory_container').css('max-height', advntx.config.console.height+'px');
-  advntx.term.wrap(false);
+  
 
   $('#btn_help').click(function () {
     advntx.term.exec('help', false);
