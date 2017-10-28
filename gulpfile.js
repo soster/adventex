@@ -60,7 +60,14 @@ gulp.task('scripts', () => {
 
 function lint(files) {
   return gulp.src(files)
-    .pipe($.eslint({ fix: true }))
+  .pipe($.eslint())
+  .pipe($.eslint.result(result => {
+      // Called for each ESLint result. 
+      console.log(`ESLint result: ${result.filePath}`);
+      console.log(`# Messages: ${result.messages.length}`);
+      console.log(`# Warnings: ${result.warningCount}`);
+      console.log(`# Errors: ${result.errorCount}`);
+  }))
     .pipe(reload({stream: true, once: true}))
     .pipe($.eslint.format())
     .pipe($.if(!browserSync.active, $.eslint.failAfterError()));

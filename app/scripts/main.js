@@ -48,8 +48,9 @@ my.add_to_inventory_echo = function(item) {
 my.init_game = function(refresh_json) {
   var jsons = 0;
   const num_requests_necessary = 4;
+  const parameter = '?a=1';
   if (refresh_json == true) {
-    $.getJSON('json/vocabulary.json',
+    $.getJSON('json/vocabulary.json'+parameter,
     function(result) {
       advntx.vocabulary = JSON.parse(JSON.stringify(result));
       jsons++;
@@ -59,7 +60,7 @@ my.init_game = function(refresh_json) {
 
     });
 
-    $.getJSON('json/messages.json',
+    $.getJSON('json/messages.json'+parameter,
     function(result) {
       advntx.messages = JSON.parse(JSON.stringify(result));
       jsons++;
@@ -68,7 +69,7 @@ my.init_game = function(refresh_json) {
       }
     });
 
-    $.getJSON('json/gamestate.json',
+    $.getJSON('json/gamestate.json'+parameter,
     function(result) {
       advntx.state = JSON.parse(JSON.stringify(result));
       jsons++;
@@ -78,7 +79,7 @@ my.init_game = function(refresh_json) {
       
     });
 
-    $.getJSON('json/config.json',
+    $.getJSON('json/config.json'+parameter,
     function(result) {
       advntx.config = JSON.parse(JSON.stringify(result));
       jsons++;

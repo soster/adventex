@@ -30,6 +30,8 @@ var advntx = (function (my) {
 
     find_item_ids_for_names_in_location: function (objects, location) {
       var item_ids = [];
+      if (objects===undefined || location===undefined || location.objects===undefined)
+        return item_ids;
       for (var i = 0; i < location.objects.length; i++) {
         for (var i2 = 0;i2 < objects.length; i2++) {
           var object = objects[i2];
