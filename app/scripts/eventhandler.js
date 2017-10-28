@@ -16,7 +16,7 @@ var advntx = (function (my) {
       return advntx.inventoryhandler.in_inventory(prereq);
     },
 
-    find_event: function (location, first_misc, second_misc, first_item, second_item, action, preposition) {
+    find_event: function (location, first_item, second_item, action, preposition) {
       for (var property in advntx.state.events) {
         if (advntx.state.events.hasOwnProperty(property) && property != 'start_event') {
           var event = advntx.state.events[property];
@@ -27,9 +27,7 @@ var advntx = (function (my) {
           }
           if (this.check_event_prereq(event.prereq_location, location)
             && this.check_event_prereq(event.prereq_action, action)
-            && this.check_event_prereq(event.prereq_first_misc, first_misc)
             && this.check_event_prereq(event.prereq_preposition, preposition)
-            && this.check_event_prereq(event.prereq_second_misc, second_misc)
             && this.check_event_prereq(event.prereq_first_item, first_item)
             && this.check_event_prereq(event.prereq_second_item, second_item)
             && this.check_event_prereq_inventory(event.prereq_inventory)) {

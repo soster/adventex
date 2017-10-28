@@ -16,36 +16,52 @@ my.interpreter = {
     } else if (command == 'debug' && advntx.config.debug) {
       echo(JSON.stringify(advntx.state));
     } else {
-      var words = parser.parse(command);
+      //var words = parser.parse(command);
+      var words = advntx.parser.parse(command);
       var first_verb = advntx.get_first_of_type(words, 'verbs');
       var last_verb = advntx.get_last_of_type(words, 'verbs');
-      var first_misc = advntx.get_first_of_type(words, 'misc');
-      var second_misc = advntx.get_second_of_type(words, 'misc');
-      // most important misc word, example 'take red door' -> door is last misc.
-      var last_misc = advntx.get_last_of_type(words, 'misc');
       var preposition = advntx.get_first_of_type(words, 'prepositions');
-
+      var objects = words['objects'];
+      var misc = words['misc'];
       var found_nothing = false;
+
+      var item_ids_from_location = advntx.locationhandler.find_item_ids_for_names_in_location(objects,advntx.state.locations[advntx.state.location]);
+      var item_ids_from_inventory = advntx.inventoryhandler.find_item_ids_in_inventory(objects);
+      var item_ids = [];
+      var first_item = undefined;
+      var second_item = undefined;
+      
+      var item_ids = item_ids_from_location.concat(item_ids_from_inventory);
+      
+      if (item_ids.length>0) {
+        first_item = item_ids[0];
+      }
+      if (item_ids.length>1) {
+        second_item = item_ids[1];
+      }
+
       if (advntx.check_synonyms('go', first_verb)) {
         var direction = advntx.get_first_of_type(words, 'directions');
-        this.move(direction, last_misc, first_misc);
+        this.move(direction, item_ids_from_location);
       } else if (advntx.check_synonyms('take', first_verb)) {
-        this.get_item(last_misc, first_misc);
+        this.get_item(objects, item_ids_from_location);
       } else if (advntx.check_synonyms('examine', first_verb)) {
-        this.examine(last_misc, first_misc);
+        this.examine(objects, item_ids);
       } else if (advntx.check_synonyms('drop', first_verb)) {
-        this.drop(last_misc);
+        this.drop(objects, item_ids_from_inventory);
       }else {// I give up...
         found_nothing = true;
       }
-      var event = advntx.eventhandler.find_event(advntx.state.location, first_misc, second_misc, '', '', first_verb, preposition);
+
+
+      var event = advntx.eventhandler.find_event(advntx.state.location, first_item, second_item, first_verb, preposition);
       if (event !== undefined) {
         this.trigger_event(event);
         advntx.state.steps++;
       } else if (found_nothing) {
-        if (advntx.check_synonyms('open', first_verb) && !isEmpty(last_misc)) {
-          var item_id = advntx.locationhandler.find_item_id_for_names(last_misc, first_misc);
-          echo(advntx.messages.error_open.format(advntx.inventoryhandler.get_name_definitive(item_id)));
+        if (advntx.check_synonyms('open', first_verb) && objects.length>0) {
+          var item_id = item_ids[0];
+          echo(advntx.messages.error_open.format(advntx.inventoryhandler.get_name_definitive(item_id)), 'red');
         } else {
           this.standard_error(command);
         }
@@ -59,16 +75,15 @@ my.interpreter = {
   },
 
 
-  move: function (direction, last_misc, first_misc) {
+
+  move: function (direction, item_ids) {
     if (isEmpty(direction)) {
-      if (!isEmpty(last_misc)) {
-        var item_id = advntx.locationhandler.find_item_id_for_names(last_misc, first_misc);
-        if (!isEmpty(item_id)) {
+      if (item_ids.length>0) {
+        var item_id = item_ids[0];
           my.interpreter.echo(advntx.messages.error_movement_thing.format(advntx.inventoryhandler.get_name_definitive(item_id)), 'coral');
           return;
-        }
       }
-      my.interpreter.echo(advntx.messages.error_movement.format(last_misc), 'red');
+      my.interpreter.echo(advntx.messages.error_movement, 'red');
       return;
     }
     var location = advntx.state.locations[advntx.state.location];
@@ -77,15 +92,18 @@ my.interpreter = {
       advntx.locationhandler.set_location(new_location);
       my.interpreter.describe_location_echo(new_location);
     } else {
-      my.interpreter.echo(MESSAGE.error_movement.format(direction), 'red');
+      my.interpreter.echo(advntx.messages.error_movement.format(direction), 'red');
     }
   },
 
-  get_item: function (item, first_misc) {
-    var item_id = advntx.locationhandler.find_item_id_for_names(item, first_misc);
-
-    if (!isEmpty(item_id)) {
-      
+  get_item: function (objects, item_ids) {
+    if (item_ids.length==0&&objects.length>0) {
+      this.echo(advntx.messages.error_specific_get.format(objects[0]), 'red')
+    } else if (objects.length==0){
+      this.echo(advntx.messages.error_specific_get.format('this'), 'red');
+    }
+    for (var i=0;i<item_ids.length;i++) {
+      var item_id = item_ids[i];
       if (!advntx.inventoryhandler.is_portable(item_id)) {
         var portable_error = advntx.inventoryhandler.get_portable_error(item_id);
         if (!isEmpty(portable_error)) {
@@ -100,26 +118,14 @@ my.interpreter = {
         this.add_to_inventory_echo(item_id);
         advntx.locationhandler.remove_item_from_location(advntx.state.location, item_id);
       }
-    } else {
-      var item_id = advntx.inventoryhandler.find_item_id_for_name_anywhere(item, first_misc);
-
-      if (!isEmpty(item_id)) {
-        this.echo(advntx.messages.error_specific_get.format(advntx.inventoryhandler.get_name_definitive(item_id)));
-      } else {
-        this.echo(advntx.messages.error_get.format(item), 'red');
-      }
-      
     }
   },
 
-  examine: function (item, first_misc) {
-    if (isEmpty(item)) {
+  examine: function (objects, item_ids) {
+    if (objects.length==0) {
       this.describe_location_echo(advntx.state.location);
     } else {
-      var item_id = advntx.locationhandler.find_item_id_for_names(item, first_misc);
-      if (isEmpty(item_id)) {
-        item_id = advntx.inventoryhandler.find_item_id_for_name(item);
-      }
+      var item_id = item_ids[0];
       if (!isEmpty(item_id)) {
         var desc = advntx.get_description(advntx.state.things, item_id);
         this.echo(desc);
@@ -131,15 +137,26 @@ my.interpreter = {
     }
   },
 
-  drop: function (item) {
-    var item_id = advntx.inventoryhandler.find_item_id_for_name(item);
-    if (isEmpty(item_id)) {
-      this.echo(advntx.messages.error_thing.format(item), 'red');
-    } else {
-      advntx.inventoryhandler.remove_from_inventory(item_id);
-      advntx.locationhandler.add_item_to_location(advntx.state.location, item_id);
-      this.echo(advntx.messages.info_you_dropped.format(advntx.inventoryhandler.get_name_definitive(item_id)));
+  drop: function (objects, item_ids) {
+    if (item_ids.length==0&&objects.length>0) {
+      this.echo(advntx.messages.error_specific_get.format(objects[0]))
+    } else if (objects.length==0){
+      this.echo(advntx.messages.error_specific_get.format('this'));
     }
+
+    for (var i=0;i<item_ids.length;i++) {
+      var item_id = item_ids[i];
+      if (isEmpty(item_id)) {
+        this.echo(advntx.messages.error_thing.format(item), 'red');
+        break;
+      } else {
+        advntx.inventoryhandler.remove_from_inventory(item_id);
+        advntx.locationhandler.add_item_to_location(advntx.state.location, item_id);
+        this.echo(advntx.messages.info_you_dropped.format(advntx.inventoryhandler.get_name_definitive(item_id)));
+      }
+    }
+    
+
   },
 
   trigger_event: function (event) {

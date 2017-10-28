@@ -28,22 +28,18 @@ var advntx = (function (my) {
 
     },
 
-    find_item_id_for_names: function (name, first_misc) {
-      var loc = advntx.state.locations[advntx.state.location];
-      for (var i = 0; i < loc.things.length; i++) {
-        var item_id = loc.things[i];
-        var item = advntx.state.things[item_id];
-        if (item.name.endsWith(name)) {
-          if (isEmpty(first_misc)) {
-            return item_id;
-          } else {
-            if (item.name.includes(first_misc)) {
-              return item_id;
-            }
+    find_item_ids_for_names_in_location: function (objects, location) {
+      var item_ids = [];
+      for (var i = 0; i < location.things.length; i++) {
+        for (var i2 = 0;i2 < objects.length; i2++) {
+          var object = objects[i2];
+          var item_id = advntx.inventoryhandler.find_item_id_for_name_anywhere(object);
+          if (item_id == location.things[i]) {
+            item_ids.push(item_id);
           }
         }
       }
-      return '';
+      return item_ids;
     },
 
     set_location: function (location) {

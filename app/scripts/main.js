@@ -43,13 +43,13 @@ my.add_to_inventory_echo = function(item) {
 
 my.init_game = function(refresh_json) {
   var jsons = 0;
-  const num_requests = 3;
+  const num_requests_necessary = 3;
   if (refresh_json == true) {
     $.getJSON('json/vocabulary.json',
     function(result) {
       advntx.vocabulary = JSON.parse(JSON.stringify(result));
       jsons++;
-      if (jsons==num_requests) {
+      if (jsons==num_requests_necessary) {
         my.init_game_async();
       }
 
@@ -59,7 +59,7 @@ my.init_game = function(refresh_json) {
     function(result) {
       advntx.messages = JSON.parse(JSON.stringify(result));
       jsons++;
-      if (jsons==num_requests) {
+      if (jsons==num_requests_necessary) {
         my.init_game_async();
       }
     });
@@ -68,7 +68,7 @@ my.init_game = function(refresh_json) {
     function(result) {
       advntx.state = JSON.parse(JSON.stringify(result));
       jsons++;
-      if (jsons==num_requests) {
+      if (jsons==num_requests_necessary) {
         my.init_game_async();
       }
       
@@ -89,6 +89,13 @@ my.init_game_async = function() {
     prompt: advntx.config.console.prompt,
     height: advntx.config.console.height
   });
+    advntx.vocabulary.objects = [];
+    for (var property in advntx.state.things) {
+      var item = advntx.state.things[property];
+      advntx.vocabulary.objects.push(item.name);
+    }
+
+  advntx.parser.set(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
   my.init_inventory();
   var start_event = advntx.state.events['start_event'];
   advntx.eventhandler.execute_event(start_event);
