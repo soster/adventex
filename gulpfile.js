@@ -6,7 +6,6 @@ const browserSync = require('browser-sync').create();
 const del = require('del');
 const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
-var pegjs = require('gulp-pegjs');
 var version = require('gulp-version-number');
 const jasmine = require('gulp-jasmine');
 var gutil = require('gulp-util');
@@ -26,13 +25,6 @@ const versionConfig = {
 let dev = true;
 
 
-
-gulp.task('pegjs', () => {
-    return gulp.src('app/peg/*.pegjs')
-        .pipe(pegjs({format: "globals", exportVar: "parser"}))
-        .pipe(gulp.dest('app/scripts'))
-        .pipe(reload({stream: true}));
-});
 
 gulp.task('test', () =>
 gulp.src('test/spec/test.js')
@@ -84,7 +76,7 @@ gulp.task('lint:test', () => {
     .pipe(gulp.dest('test/spec'));
 });
 
-gulp.task('html', ['styles', 'pegjs', 'scripts', 'json'], () => {
+gulp.task('html', ['styles', 'scripts', 'json'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))

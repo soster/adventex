@@ -8,8 +8,5 @@ yeoman with the webapp-generator has been used to generate the basics:
 # After Clone
 `npm install && bower install`
 
-# Parser Generator
-PegJS is used to generate the parser:
-`https://pegjs.org/documentation`
 # Language:
 `http://www.udoklinger.de/Deutsch/Grammatik/Wortarten.htm`

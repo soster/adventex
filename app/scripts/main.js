@@ -16,10 +16,14 @@ my.echo = function(text, color) {
 };
 
 
-my.describe_location_echo = function(location) {
-  var loc = advntx.locationhandler.get_location_by_id(location);
-  var description = advntx.locationhandler.get_location_description(location);
-  my.echo(description, loc.color);
+my.describe_location_echo = function(location_id) {
+  var loc = advntx.locationhandler.get_location_by_id(location_id);
+  if (!advntx.locationhandler.visited(location_id)) {
+    my.echo(advntx.locationhandler.get_location_description(location_id), loc.color);
+  } else {
+    my.echo(advntx.get_name(advntx.state.locations,location_id), loc.color);
+  }
+  
   var things = loc.things;
   var persons = loc.persons;
   var message = my.messages.info_you_see;
@@ -43,7 +47,7 @@ my.add_to_inventory_echo = function(item) {
 
 my.init_game = function(refresh_json) {
   var jsons = 0;
-  const num_requests_necessary = 3;
+  const num_requests_necessary = 4;
   if (refresh_json == true) {
     $.getJSON('json/vocabulary.json',
     function(result) {
@@ -73,34 +77,47 @@ my.init_game = function(refresh_json) {
       }
       
     });
+
+    $.getJSON('json/config.json',
+    function(result) {
+      advntx.config = JSON.parse(JSON.stringify(result));
+      jsons++;
+      if (jsons==num_requests_necessary) {
+        my.init_game_async();
+      }
+      
+    });
   } else {
     my.init_game_async();
   }
 }
 
-my.init_game_async = function() {
+my.init_game_async = function () {
   my.term = $('#terminal').terminal(function (command) {
     var echo = my.echo;
-  
+
     my.term.echo(advntx.interpreter.interpret(command, my.describe_location_echo, my.add_to_inventory_echo, my.echo));
   }, {
-    greetings: advntx.messages.greetings,
-    name: advntx.messages.name,
-    prompt: advntx.config.console.prompt,
-    height: advntx.config.console.height
-  });
-    advntx.vocabulary.objects = [];
-    for (var property in advntx.state.things) {
-      var item = advntx.state.things[property];
-      advntx.vocabulary.objects.push(item.name);
-    }
+      greetings: advntx.messages.greetings,
+      name: advntx.messages.name,
+      prompt: advntx.config.console.prompt,
+      height: advntx.config.console.height
+    });
+
+  $('#inventory_container').css('max-height', advntx.config.console.height + 'px');
+
+  advntx.vocabulary.objects = [];
+  for (var property in advntx.state.things) {
+    var item = advntx.state.things[property];
+    advntx.vocabulary.objects.push(item.name);
+  }
 
   advntx.parser.set(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
   my.init_inventory();
   var start_event = advntx.state.events['start_event'];
   advntx.eventhandler.execute_event(start_event);
-  my.echo(start_event.description+'\n');
-  my.describe_location_echo(advntx.state.location); 
+  my.echo(start_event.description + '\n');
+  my.describe_location_echo(advntx.state.location);
   my.async_refocus_terminal();
 }
 
@@ -126,7 +143,7 @@ my.init_inventory = function() {
   for (var i = 0; i < advntx.state.inventory.length; i++) {
     var item = advntx.state.inventory[i];
     var item_name = advntx.get_name(advntx.state.things, item);
-    $('#inventory').append('<p class="inventory_item"><button type="button" onclick="inventory_click(\''+item_name+'\')" class="btn btn-info btn-sm inventory_button">'+item_name+'</button></p>');
+    $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventory_click(\''+item_name+'\')" class="btn btn-info btn-sm inventory_button">'+item_name+'</button></p>');
   }
 }
 
@@ -142,9 +159,6 @@ return my;
 
 /** Global Initializations */
 $(function() {
-  $('#inventory_container').css('max-height', advntx.config.console.height+'px');
-  
-
   $('#btn_help').click(function () {
     advntx.term.exec('help', false);
     advntx.init_inventory();

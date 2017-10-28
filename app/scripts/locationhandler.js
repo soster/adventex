@@ -42,8 +42,8 @@ var advntx = (function (my) {
       return item_ids;
     },
 
-    set_location: function (location) {
-      advntx.state.location = location;
+    set_location: function (location_id) {
+      advntx.state.location = location_id;
     },
 
     get_location_description: function (location_id) {
@@ -58,6 +58,15 @@ var advntx = (function (my) {
 
     get_location_by_id: function (location_id) {
       return advntx.state.locations[location_id];
+    },
+
+    visited: function(location_id) {
+      var loc = this.get_location_by_id(location_id);
+      if (loc.visited===undefined||loc.visited==false) {
+        loc.visited = true;
+        return false;
+      }
+      return true;
     }
   }
   return my;
