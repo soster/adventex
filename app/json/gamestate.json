@@ -17,7 +17,6 @@
 				"cell_door",
 				"trap_door"
 			],
-			"persons": [],
 			"color": "steelblue",
 			"connections": {}
 		},
@@ -28,7 +27,6 @@
 			"objects": [
 				"torch"
 			],
-			"persons": [],
 			"color": "tan",
 			"connections": {
 				"east": "forward_corridor",
@@ -41,7 +39,6 @@
 			"objects": [
 				"barrel"
 			],
-			"persons": [],
 			"color": "tan",
 			"connections": {
 				"west": "corridor",
@@ -51,10 +48,7 @@
 		"backward_corridor": {
 			"name": "A narrow corridor",
 			"description": "A narrow corridor. It stretches further to the west, slightly curved.",
-			"objects": [],
-			"persons": [
-				"guard"
-			],
+			"objects": ["guard"],
 			"color": "tan",
 			"connections": {
 				"east": "corridor",
@@ -65,7 +59,6 @@
 			"name": "Entrance hall",
 			"description": "An entrance hall. It stretches to the east and west, slightly curved. There is a big portal to the south.",
 			"objects": [],
-			"persons": [],
 			"color": "white",
 			"connections": {
 				"east": "forward_corridor",
@@ -137,6 +130,14 @@
 			"portable": false,
 			"definite_article": "the",
 			"indefinite_article": "a"
+		},
+		"guard": {
+			"name": "guard",
+			"description": "A big, dim looking guard. Looks like he could eat you for breakfast.",
+			"portable": false,
+			"definite_article": "the",
+			"indefinite_article": "a",
+			"person": "true"
 		}
 	},
 	"events": {
@@ -148,13 +149,13 @@
 		"trapdoor": {
 			"name": "Open trapdoor",
 			"description": "You open the trap door with its large metal ring. The opening reveals a small corridor below your cell.",
-			"prereq_item": "trap",
-			"prereq_action": "open",
+			"prereq_verb": "open",
 			"prereq_location": "dungeon_cell",
-			"prereq_inventory": "",
+			"prereq_inventory_items": [],
 			"prereq_preposition": "",
-			"prereq_first_item": "trap_door",
-			"prereq_second_item": "",
+			"prereq_used_items": ["trap_door"],
+			"prereq_steps": "",
+			"prereq_triggered_event": "",
 			"action_add_item": "",
 			"action_add_item_location": "",
 			"action_remove_item": "",
@@ -167,25 +168,29 @@
 			"name": "The guard arests you!",
 			"description": "The guard points his sword into your direction. \"You! Don't move!\" he barks.\n\nYou stand still. He grabs your arm with his free hand and turns you around in a swift movement.\nAfterwards he hits you with his sword handle on the back of your head.\n\nAgain, it gets dark around you when you loose consciousness...",
 			"prereq_location": "backward_corridor",
+			"prereq_triggered_events": [],
+			"prereq_inventory_items": [],
+			"prereq_visited_locations": [],
 			"action_move_to_location": "dungeon_cell"
 		},
 		"get_torch": {
 			"description": "The mount on the wall is now empty.",
 			"prereq_location": "corridor",
-			"prereq_action": "take",
-			"prereq_item": "torch",
+			"prereq_verb": "take",
+			"prereq_items": ["torch"],
 			"action_new_location_description": "There is an empty mount on the wall."
 		},
 		"demo": {
 			"name": "Demo",
 			"description": "This is the demo event! Just for testing purposes...",
-			"prereq_item": "",
-			"prereq_action": "switch",
+			"prereq_verb": "switch",
 			"prereq_location": "",
-			"prereq_inventory": "",
+			"prereq_used_items": [],
+			"prereq_inventory_items": [],
 			"prereq_preposition": "on",
-			"prereq_second_item": "",
 			"prereq_steps": "",
+			"prereq_triggered_events": [],
+			"prereq_visited_locations": [],
 			"action_add_item": "",
 			"action_add_item_location": "",
 			"action_remove_item": "",

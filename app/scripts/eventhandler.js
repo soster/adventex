@@ -9,28 +9,73 @@ var advntx = (function (my) {
     },
 
     check_event_prereq_inventory: function (prereq) {
-      if (isEmpty(prereq)) {
+      return this.check_event_prereq_array(prereq, advntx.state.inventory);
+    },
+
+    check_event_prereq_array: function (prereq, to_check) {
+      if (prereq===undefined || prereq == "") {
         return true;
       }
 
-      return advntx.inventoryhandler.in_inventory(prereq);
+      if (to_check===undefined) {
+        return false;
+      }
+      
+      for (var i=0;i<prereq.length;i++) {
+        if (to_check.indexOf(prereq[i])==-1) {
+          return false;
+        }
+      }
+
+      return true;
     },
 
-    find_event: function (location, first_item, second_item, action, preposition) {
+    check_triggered_events: function(prereq_triggered_events) {
+      if (prereq_triggered_events===undefined || prereq_triggered_events == "") {
+        return true;
+      }
+
+      for (var i=0;i<prereq_triggered_events.length;i++) {
+        var event = advntx.state.events[prereq_triggered_events[i]];
+        if (event.triggered===undefined || event.triggered == false) {
+          return false;
+        }
+      }
+      return true;
+    },
+
+    check_visited_locations: function(prereq_visited_locations) {
+      if (prereq_visited_locations===undefined || prereq_visited_locations == "") {
+        return true;
+      }
+
+      for (var i=0;i<prereq_visited_locations.length;i++) {
+        var loc = advntx.state.locations[prereq_visited_locations[i]];
+        if (loc.visited===undefined || loc.visited == false) {
+          return false;
+        }
+      }
+      return true;
+    },
+
+    find_event: function (location, used_items, verb, preposition) {
       for (var property in advntx.state.events) {
         if (advntx.state.events.hasOwnProperty(property) && property != 'start_event') {
           var event = advntx.state.events[property];
-          if (!isEmpty(event.prereq_action) && !isEmpty(action)) {
-            if (advntx.check_synonyms(event.prereq_action, action)) {
-              action = event.prereq_action;
+          if (!isEmpty(event.prereq_verb) && !isEmpty(verb)) {
+            if (advntx.check_synonyms(event.prereq_verb, verb)) {
+              verb = event.prereq_verb;
             }
           }
+
+
           if (this.check_event_prereq(event.prereq_location, location)
-            && this.check_event_prereq(event.prereq_action, action)
+            && this.check_event_prereq(event.prereq_verb, verb)
             && this.check_event_prereq(event.prereq_preposition, preposition)
-            && this.check_event_prereq(event.prereq_first_item, first_item)
-            && this.check_event_prereq(event.prereq_second_item, second_item)
-            && this.check_event_prereq_inventory(event.prereq_inventory)) {
+            && this.check_event_prereq_array(event.prereq_used_items, used_items)
+            && this.check_event_prereq_inventory(event.prereq_inventory_items)
+            && this.check_triggered_events(event.prereq_triggered_events)
+            && this.check_visited_locations(event.prereq_visited_locations)) {
             return event;
           }
         }
@@ -60,6 +105,7 @@ var advntx = (function (my) {
         var place = advntx.state.locations[advntx.state.location];
         place['additional_description'] = event.action_new_location_description;
       }
+      event.triggered = true;
 
     }
 

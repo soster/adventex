@@ -57,7 +57,7 @@ my.interpreter = {
       }
 
 
-      var event = advntx.eventhandler.find_event(advntx.state.location, first_item, second_item, first_verb, preposition);
+      var event = advntx.eventhandler.find_event(advntx.state.location, item_ids, first_verb, preposition);
       if (event !== undefined) {
         this.trigger_event(event);
         advntx.state.steps++;
