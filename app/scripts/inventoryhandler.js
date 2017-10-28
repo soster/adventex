@@ -10,14 +10,14 @@ var advntx = (function (my) {
 
 
     is_portable:function (item_id) {
-      if (advntx.state.things[item_id] === undefined) {
+      if (advntx.state.objects[item_id] === undefined) {
         return false; 
       }
-      return advntx.state.things[item_id].portable; 
+      return advntx.state.objects[item_id].portable; 
     }, 
 
     get_portable_error:function (item_id) {
-      var text = advntx.state.things[item_id].error_portable; 
+      var text = advntx.state.objects[item_id].error_portable; 
       return text; 
     }, 
 
@@ -34,7 +34,7 @@ var advntx = (function (my) {
     find_item_id_for_name:function (name) {
       for (var i = 0; i < advntx.state.inventory.length; i++ ) {
         var item_id = advntx.state.inventory[i]; 
-        var item = advntx.state.things[item_id]; 
+        var item = advntx.state.objects[item_id]; 
         if (item.name.endsWith(name)) {
           return item_id; 
         }
@@ -59,8 +59,8 @@ var advntx = (function (my) {
     }, 
 
     find_item_id_for_name_anywhere:function (name, first_misc) {
-      for (var property in advntx.state.things) {
-        var item = advntx.state.things[property]; 
+      for (var property in advntx.state.objects) {
+        var item = advntx.state.objects[property]; 
         if (item.name.endsWith(name)) {
           if (isEmpty(first_misc)) {
             return property; 
@@ -75,7 +75,7 @@ var advntx = (function (my) {
     }, 
 
     get_name_definitive:function (item_id) {
-      var item = advntx.state.things[item_id]; 
+      var item = advntx.state.objects[item_id]; 
       var article = item.definite_article; 
       var name = item.name; 
       if ( ! isEmpty(article)) {
@@ -86,7 +86,7 @@ var advntx = (function (my) {
     }, 
 
     get_name_indefinitive:function (item_id) {
-      var item = advntx.state.things[item_id]; 
+      var item = advntx.state.objects[item_id]; 
       var article = item.indefinite_article; 
       var name = item.name; 
       if ( ! isEmpty(article)) {

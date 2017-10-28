@@ -16,18 +16,18 @@ my.echo = function(text, color) {
 };
 
 
-my.describe_location_echo = function(location_id) {
+my.describe_location_echo = function(location_id, always_show_full_description = false) {
   var loc = advntx.locationhandler.get_location_by_id(location_id);
-  if (!advntx.locationhandler.visited(location_id)) {
+  if (!advntx.locationhandler.visited(location_id) || always_show_full_description) {
     my.echo(advntx.locationhandler.get_location_description(location_id), loc.color);
   } else {
     my.echo(advntx.get_name(advntx.state.locations,location_id), loc.color);
   }
   
-  var things = loc.things;
+  var things = loc.objects;
   var persons = loc.persons;
   var message = my.messages.info_you_see;
-  var things_message = advntx.list_objects(things, advntx.state.things);
+  var things_message = advntx.list_objects(things, advntx.state.objects);
   var persons_message = advntx.list_objects(persons, advntx.state.persons);
   if (!isEmpty(persons_message) || !isEmpty(things_message)) {
     my.echo(message);
@@ -96,7 +96,7 @@ my.init_game_async = function () {
   my.term = $('#terminal').terminal(function (command) {
     var echo = my.echo;
 
-    my.term.echo(advntx.interpreter.interpret(command, my.describe_location_echo, my.add_to_inventory_echo, my.echo));
+    advntx.interpreter.interpret(command, my.describe_location_echo, my.add_to_inventory_echo, my.echo);
   }, {
       greetings: advntx.messages.greetings,
       name: advntx.messages.name,
@@ -107,8 +107,8 @@ my.init_game_async = function () {
   $('#inventory_container').css('max-height', advntx.config.console.height + 'px');
 
   advntx.vocabulary.objects = [];
-  for (var property in advntx.state.things) {
-    var item = advntx.state.things[property];
+  for (var property in advntx.state.objects) {
+    var item = advntx.state.objects[property];
     advntx.vocabulary.objects.push(item.name);
   }
 
@@ -142,7 +142,7 @@ my.init_inventory = function() {
  $('#inventory > .inventory_item').remove();
   for (var i = 0; i < advntx.state.inventory.length; i++) {
     var item = advntx.state.inventory[i];
-    var item_name = advntx.get_name(advntx.state.things, item);
+    var item_name = advntx.get_name(advntx.state.objects, item);
     $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventory_click(\''+item_name+'\')" class="btn btn-info btn-sm inventory_button">'+item_name+'</button></p>');
   }
 }

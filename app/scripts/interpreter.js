@@ -62,7 +62,7 @@ my.interpreter = {
         this.trigger_event(event);
         advntx.state.steps++;
       } else if (found_nothing) {
-        if (first_verb != undefined && objects.length>0) {
+        if (!isEmpty(first_verb) && objects.length>0) {
           var item_id = item_ids[0];
           echo(advntx.messages.error_verb_object.format(first_verb,advntx.inventoryhandler.get_name_definitive(item_id)), 'red');
         } else {
@@ -74,7 +74,6 @@ my.interpreter = {
       }
 
     }
-    return '';
   },
 
 
@@ -126,11 +125,11 @@ my.interpreter = {
 
   examine: function (objects, item_ids) {
     if (objects.length==0) {
-      this.describe_location_echo(advntx.state.location);
+      this.describe_location_echo(advntx.state.location,true);
     } else {
       var item_id = item_ids[0];
       if (!isEmpty(item_id)) {
-        var desc = advntx.get_description(advntx.state.things, item_id);
+        var desc = advntx.get_description(advntx.state.objects, item_id);
         this.echo(desc);
       } else if (!isEmpty(item)) {
         this.echo(advntx.messages.error_thing.format(item), 'red');

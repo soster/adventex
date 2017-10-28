@@ -9,7 +9,7 @@
 		"dungeon_cell": {
 			"name": "A dungeon cell",
 			"description": "A dungeon cell. It is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n\nBecause of the light you see the outlines of the few things in your cell. The door seems very massive and is locked.\n\nDirty, half rotten straw is lying on the floor.",
-			"things": [
+			"objects": [
 				"straw",
 				"bucket",
 				"bed",
@@ -25,7 +25,7 @@
 			"name": "A narrow corridor",
 			"description": "A narrow corridor. It stretches to the east and to the west, slightly curved.\n\nThe hole in the ceiling with the trap door is too high for you to climb back.\n\nYou hear a faint noise from the west!",
 			"additional_description": "There is a burning torch on a mount on the wall, it flickers and casts creepy shadows.",
-			"things": [
+			"objects": [
 				"torch"
 			],
 			"persons": [],
@@ -38,7 +38,7 @@
 		"forward_corridor": {
 			"name": "A narrow corridor",
 			"description": "A narrow corridor. It stretches further to the east, slightly curved.",
-			"things": [
+			"objects": [
 				"barrel"
 			],
 			"persons": [],
@@ -51,7 +51,7 @@
 		"backward_corridor": {
 			"name": "A narrow corridor",
 			"description": "A narrow corridor. It stretches further to the west, slightly curved.",
-			"things": [],
+			"objects": [],
 			"persons": [
 				"guard"
 			],
@@ -64,7 +64,7 @@
 		"entrance_corridor": {
 			"name": "Entrance hall",
 			"description": "An entrance hall. It stretches to the east and west, slightly curved. There is a big portal to the south.",
-			"things": [],
+			"objects": [],
 			"persons": [],
 			"color": "white",
 			"connections": {
@@ -74,14 +74,7 @@
 			}
 		}
 	},
-	"persons": {
-		"guard": {
-			"name": "armed guard",
-			"description": "A man in amrs, obviously a guard. He looks kind of dim, but also very grim.",
-			"portable": false
-		}
-	},
-	"things": {
+	"objects": {
 		"straw": {
 			"name": "straw",
 			"description": "The straw is dirty, rotten and full with vermin. But underneath you see a trap door in the floor!",
