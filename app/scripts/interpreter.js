@@ -3,6 +3,10 @@
  */
 'use strict';
 var advntx = (function (my) {
+  var help_string = undefined;
+
+
+
 my.interpreter = {
   interpret: function (command, describe_location_echo, add_to_inventory_echo, echo) {
     var original = command;
@@ -12,11 +16,10 @@ my.interpreter = {
 
     command = command.toLowerCase();
     if (command == 'help') {
-      echo(advntx.messages.help);
+      echo(this.build_help_string());
     } else if (command == 'debug' && advntx.config.debug) {
       echo(JSON.stringify(advntx.state));
     } else {
-      //var words = parser.parse(command);
       var words = advntx.parser.parse(command);
       var first_verb = advntx.get_first_of_type(words, 'verbs');
       var last_verb = advntx.get_last_of_type(words, 'verbs');
@@ -59,9 +62,9 @@ my.interpreter = {
         this.trigger_event(event);
         advntx.state.steps++;
       } else if (found_nothing) {
-        if (advntx.check_synonyms('open', first_verb) && objects.length>0) {
+        if (first_verb != undefined && objects.length>0) {
           var item_id = item_ids[0];
-          echo(advntx.messages.error_open.format(advntx.inventoryhandler.get_name_definitive(item_id)), 'red');
+          echo(advntx.messages.error_verb_object.format(first_verb,advntx.inventoryhandler.get_name_definitive(item_id)), 'red');
         } else {
           this.standard_error(command);
         }
@@ -192,6 +195,18 @@ my.interpreter = {
     }
     return false;
 
+  },
+
+  build_help_string: function() {
+    if (this.help_string!=undefined) return;
+    var verb_string = "";
+    for (var i=0;i<advntx.vocabulary.verbs.length;i++) {
+      if (i!=0)
+        verb_string+=", ";
+      verb_string+=advntx.vocabulary.verbs[i];
+    }
+    help_string = advntx.messages.help.format(verb_string);
+    return help_string;
   }
 
 }

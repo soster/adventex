@@ -7,7 +7,7 @@
 	"hints": 0,
 	"locations": {
 		"dungeon_cell": {
-			"name": "Dungeon cell",
+			"name": "A dungeon cell",
 			"description": "A dungeon cell. It is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n\nBecause of the light you see the outlines of the few things in your cell. The door seems very massive and is locked.\n\nDirty, half rotten straw is lying on the floor.",
 			"things": [
 				"straw",
@@ -37,9 +37,9 @@
 		},
 		"forward_corridor": {
 			"name": "A narrow corridor",
-			"description": "A narrow corridor. It stretches further to the east, slightly curved. There is a big scorch mark on the inner wall.",
+			"description": "A narrow corridor. It stretches further to the east, slightly curved.",
 			"things": [
-				"scorchmarks"
+				"barrel"
 			],
 			"persons": [],
 			"color": "tan",
@@ -138,12 +138,12 @@
 			"definite_article": "the",
 			"indefinite_article": "a"
 		},
-		"scorchmarks": {
-			"name": "scorch marks",
-			"description": "A fire left large, frightening scorchmarks. Bigger than expected if created by a torch.",
+		"barrel": {
+			"name": "barrel",
+			"description": "A large barrel, approx. half your height. It seems to be filled with a liquid, probably water.",
 			"portable": false,
 			"definite_article": "the",
-			"indefinite_article": "some"
+			"indefinite_article": "a"
 		}
 	},
 	"events": {
