@@ -15,6 +15,11 @@ my.interpreter = {
     this.add_to_inventory_echo = add_to_inventory_echo;
 
     command = command.toLowerCase();
+
+    if (isEmpty(command)) {
+      return;
+    }
+
     if (command == 'help') {
       echo(this.build_help_string());
     } else if (command == 'debug' && advntx.config.debug) {
@@ -31,17 +36,10 @@ my.interpreter = {
       var item_ids_from_location = advntx.locationhandler.find_item_ids_for_names_in_location(objects,advntx.state.locations[advntx.state.location]);
       var item_ids_from_inventory = advntx.inventoryhandler.find_item_ids_in_inventory(objects);
       var item_ids = [];
-      var first_item = undefined;
-      var second_item = undefined;
+
       
       var item_ids = item_ids_from_location.concat(item_ids_from_inventory);
-      
-      if (item_ids.length>0) {
-        first_item = item_ids[0];
-      }
-      if (item_ids.length>1) {
-        second_item = item_ids[1];
-      }
+
 
       if (advntx.check_synonyms('go', first_verb)) {
         var direction = advntx.get_first_of_type(words, 'directions');
@@ -60,7 +58,7 @@ my.interpreter = {
       var event = advntx.eventhandler.find_event(advntx.state.location, item_ids, first_verb, preposition);
       if (event !== undefined) {
         this.trigger_event(event);
-        advntx.state.steps++;
+        found_nothing = false;
       } else if (found_nothing) {
         if (!isEmpty(first_verb) && objects.length>0) {
           var item_id = item_ids[0];
@@ -69,7 +67,9 @@ my.interpreter = {
           this.standard_error(command);
         }
         
-      } else {
+      }
+
+      if (!found_nothing) {
         advntx.state.steps++;
       }
 

@@ -149,6 +149,7 @@
 		"trapdoor": {
 			"name": "Open trapdoor",
 			"description": "You open the trap door with its large metal ring. The opening reveals a small corridor below your cell.",
+			"trigger_once": true,
 			"prereq_verb": "open",
 			"prereq_location": "dungeon_cell",
 			"prereq_inventory_items": [],
@@ -164,11 +165,20 @@
 			"action_new_connection": "down",
 			"action_new_connection_location": "corridor"
 		},
+		"guard_trigger": {
+			"name": "",
+			"description": "You see a big guard standing in a corner of the room. He doesn't look into your direction, yet.",
+			"trigger_once": true,
+			"prereq_location": "backward_corridor"
+		},
+
 		"arest": {
 			"name": "The guard arests you!",
 			"description": "The guard points his sword into your direction. \"You! Don't move!\" he barks.\n\nYou stand still. He grabs your arm with his free hand and turns you around in a swift movement.\nAfterwards he hits you with his sword handle on the back of your head.\n\nAgain, it gets dark around you when you loose consciousness...",
 			"prereq_location": "backward_corridor",
-			"prereq_triggered_events": [],
+			"prereq_triggered_events": ["guard_trigger"],
+			"prereq_triggered_event_step_offset": 2,
+			"prereq_verb": "",
 			"prereq_inventory_items": [],
 			"prereq_visited_locations": [],
 			"action_move_to_location": "dungeon_cell"
@@ -178,6 +188,7 @@
 			"prereq_location": "corridor",
 			"prereq_verb": "take",
 			"prereq_items": ["torch"],
+			"trigger_once": true,
 			"action_new_location_description": "There is an empty mount on the wall."
 		},
 		"demo": {

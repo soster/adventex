@@ -30,7 +30,7 @@ var advntx = (function (my) {
       return true;
     },
 
-    check_triggered_events: function(prereq_triggered_events) {
+    check_triggered_events: function(prereq_triggered_events,prereq_triggered_event_step_offset) {
       if (prereq_triggered_events===undefined || prereq_triggered_events == "") {
         return true;
       }
@@ -39,6 +39,10 @@ var advntx = (function (my) {
         var event = advntx.state.events[prereq_triggered_events[i]];
         if (event.triggered===undefined || event.triggered == false) {
           return false;
+        } else if (prereq_triggered_event_step_offset!=undefined && prereq_triggered_event_step_offset>0){
+          if (advntx.state.steps-event.triggered_steps<prereq_triggered_event_step_offset) {
+            return false;
+          }
         }
       }
       return true;
@@ -58,6 +62,16 @@ var advntx = (function (my) {
       return true;
     },
 
+    check_trigger_once: function(event) {
+      if (event.triggered===undefined||event.triggered==false||event.trigger_once === undefined) {
+        return true;
+      }
+
+      if (event.triggered==true&&event.trigger_once==true) {
+        return false;
+      }
+    },
+
     find_event: function (location, used_items, verb, preposition) {
       for (var property in advntx.state.events) {
         if (advntx.state.events.hasOwnProperty(property) && property != 'start_event') {
@@ -74,8 +88,9 @@ var advntx = (function (my) {
             && this.check_event_prereq(event.prereq_preposition, preposition)
             && this.check_event_prereq_array(event.prereq_used_items, used_items)
             && this.check_event_prereq_inventory(event.prereq_inventory_items)
-            && this.check_triggered_events(event.prereq_triggered_events)
-            && this.check_visited_locations(event.prereq_visited_locations)) {
+            && this.check_triggered_events(event.prereq_triggered_events, event.prereq_triggered_event_step_offset)
+            && this.check_visited_locations(event.prereq_visited_locations)
+            && this.check_trigger_once(event)) {
             return event;
           }
         }
@@ -106,6 +121,7 @@ var advntx = (function (my) {
         place['additional_description'] = event.action_new_location_description;
       }
       event.triggered = true;
+      event.triggered_steps = advntx.state.steps;
 
     }
 
