@@ -92,7 +92,7 @@ my.interpreter = {
     if (location.connections[direction] !== undefined) {
       var new_location = location.connections[direction];
       advntx.locationhandler.set_location(new_location);
-      my.interpreter.describe_location_echo(new_location);
+      my.interpreter.describe_location_echo(new_location, false);
     } else {
       my.interpreter.echo(advntx.messages.error_movement.format(direction), 'red');
     }
@@ -169,7 +169,7 @@ my.interpreter = {
 
     if (old_location != advntx.state.location) {
       setTimeout(function () {
-        my.interpreter.describe_location_echo(advntx.state.location)
+        my.interpreter.describe_location_echo(advntx.state.location, false)
       }, advntx.config.standard_wait_eventtext);
     }
 
@@ -198,10 +198,10 @@ my.interpreter = {
 
   build_help_string: function() {
     if (this.help_string!=undefined) return;
-    var verb_string = "";
+    var verb_string = '';
     for (var i=0;i<advntx.vocabulary.verbs.length;i++) {
       if (i!=0)
-        verb_string+=", ";
+        verb_string+=', ';
       verb_string+=advntx.vocabulary.verbs[i];
     }
     help_string = advntx.messages.help.format(verb_string);

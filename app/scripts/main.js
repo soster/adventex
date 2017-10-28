@@ -16,7 +16,7 @@ my.echo = function(text, color) {
 };
 
 
-my.describe_location_echo = function(location_id, always_show_full_description = false) {
+my.describe_location_echo = function(location_id, always_show_full_description) {
   var loc = advntx.locationhandler.get_location_by_id(location_id);
   if (!advntx.locationhandler.visited(location_id) || always_show_full_description) {
     my.echo(advntx.locationhandler.get_location_description(location_id), loc.color);

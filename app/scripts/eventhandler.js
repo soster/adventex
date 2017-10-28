@@ -13,7 +13,7 @@ var advntx = (function (my) {
     },
 
     check_event_prereq_array: function (prereq, to_check) {
-      if (prereq===undefined || prereq == "") {
+      if (prereq===undefined || prereq == '') {
         return true;
       }
 
