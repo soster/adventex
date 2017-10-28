@@ -31,12 +31,15 @@ var advntx = (function (my) {
     },
 
     check_triggered_events: function(prereq_triggered_events,prereq_triggered_event_step_offset) {
-      if (prereq_triggered_events===undefined || prereq_triggered_events == "") {
+      if (isEmpty(prereq_triggered_events)||prereq_triggered_events.length==0) {
         return true;
       }
 
       for (var i=0;i<prereq_triggered_events.length;i++) {
         var event = advntx.state.events[prereq_triggered_events[i]];
+        if (event===undefined) {
+          return true;
+        }
         if (event.triggered===undefined || event.triggered == false) {
           return false;
         } else if (prereq_triggered_event_step_offset!=undefined && prereq_triggered_event_step_offset>0){
@@ -49,7 +52,7 @@ var advntx = (function (my) {
     },
 
     check_visited_locations: function(prereq_visited_locations) {
-      if (prereq_visited_locations===undefined || prereq_visited_locations == "") {
+      if (isEmpty(prereq_visited_locations)) {
         return true;
       }
 
@@ -76,6 +79,9 @@ var advntx = (function (my) {
       for (var property in advntx.state.events) {
         if (advntx.state.events.hasOwnProperty(property) && property != 'start_event') {
           var event = advntx.state.events[property];
+          if (event.disabled!=undefined && event.disabled) {
+            continue;
+          }
           if (!isEmpty(event.prereq_verb) && !isEmpty(verb)) {
             if (advntx.check_synonyms(event.prereq_verb, verb)) {
               verb = event.prereq_verb;
@@ -120,6 +126,20 @@ var advntx = (function (my) {
         var place = advntx.state.locations[advntx.state.location];
         place['additional_description'] = event.action_new_location_description;
       }
+      if (!isEmpty(event.action_disable_event)) {
+        var nevent = advntx.state.events[event.action_disable_event];
+        nevent.disabled = true;
+      }
+
+      if (!isEmpty(event.action_enable_event)) {
+        var nevent = advntx.state.events[event.action_enable_event];
+        if (nevent!= undefined) {
+          nevent.disabled = false;
+          nevent.triggered_steps = advntx.state.steps;
+        }
+        
+      }
+
       event.triggered = true;
       event.triggered_steps = advntx.state.steps;
 

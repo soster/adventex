@@ -37,7 +37,6 @@
 			"name": "A narrow corridor",
 			"description": "A narrow corridor. It stretches further to the east, slightly curved.",
 			"objects": [
-				"barrel"
 			],
 			"color": "tan",
 			"connections": {
@@ -48,7 +47,7 @@
 		"backward_corridor": {
 			"name": "A narrow corridor",
 			"description": "A narrow corridor. It stretches further to the west, slightly curved.",
-			"objects": ["guard"],
+			"objects": ["guard", "barrel"],
 			"color": "tan",
 			"connections": {
 				"east": "corridor",
@@ -172,6 +171,23 @@
 			"prereq_location": "backward_corridor"
 		},
 
+		"hide_barrel": {
+			"description": "You hide behind the barrel. The guard seems to have not yet noticed you.",
+			"prereq_location": "backward_corridor",
+			"prereq_verb": "hide",
+			"prereq_preposition": "behind",
+			"prereq_used_items": ["barrel"],
+			"action_new_location_description": "You are hidden behind the barrel.",
+			"action_disable_event": "arest"
+		},
+
+		"unhide_barrel": {
+			"description": "You managed to disappear just before the guard turns his head around.",
+			"prereq_location": "corridor",
+			"prereq_triggered_events": ["hide_barrel"],
+			"action_enable_event": "arest"
+		},
+
 		"arest": {
 			"name": "The guard arests you!",
 			"description": "The guard points his sword into your direction. \"You! Don't move!\" he barks.\n\nYou stand still. He grabs your arm with his free hand and turns you around in a swift movement.\nAfterwards he hits you with his sword handle on the back of your head.\n\nAgain, it gets dark around you when you loose consciousness...",
@@ -199,7 +215,9 @@
 			"prereq_used_items": [],
 			"prereq_inventory_items": [],
 			"prereq_preposition": "on",
-			"prereq_steps": "",
+			"prereq_min_steps": 0,
+			"prereq_max_steps": 0,
+			"prereq_triggered_event_step_offset": 0,
 			"prereq_triggered_events": [],
 			"prereq_visited_locations": [],
 			"action_add_item": "",
@@ -208,6 +226,8 @@
 			"action_new_location_description": "",
 			"action_move_to_location": "",
 			"action_new_connection": "",
+			"action_disable_event": "arest",
+			"action_enable_event": "",
 			"action_new_connection_location": ""
 		}
 	}

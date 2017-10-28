@@ -29,6 +29,7 @@
         "bribe",
         "kindle",
         "light",
+        "hide",
         "hint"
     ],
     "directions": [
@@ -61,6 +62,7 @@
         "onto",
         "over",
         "under",
+        "behind",
         "through"
     ],
     "adjectives": [
