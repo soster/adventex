@@ -159,27 +159,29 @@ var advntx = (function (my) {
       }
 
       if (!isEmpty(event.action_untrigger_events)) {
-        for (var i=0;i<event.action_untrigger_events.length;i++) {
-          var nevent = advntx.state.events[event.action_untrigger_events[i]];
-          if (nevent!= undefined) {
-            nevent.triggered = false;
-            nevent.triggered_steps = 0;
+          for (var i = 0; i < event.action_untrigger_events.length; i++) {
+              var nevent = advntx.state.events[event.action_untrigger_events[i]];
+              if (nevent != undefined) {
+                  nevent.triggered = false;
+                  nevent.triggered_steps = 0;
+              }
           }
-        }
-        
-      }
 
-
-
-      if (!isEmpty(event.action_trigger_event)) {
-        var nevent = advntx.state.events[event.action_trigger_event];
-        this.execute_event(nevent,echo);
       }
 
       echo(event.description + '\n');
 
       event.triggered = true;
       event.triggered_steps = advntx.state.steps;
+
+
+
+      if (!isEmpty(event.action_trigger_event)) {
+          var nevent = advntx.state.events[event.action_trigger_event];
+          this.execute_event(nevent, echo);
+      }
+
+
     }
 
   }
