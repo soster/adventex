@@ -116,6 +116,17 @@ var advntx = (function (my) {
         var location = advntx.state.locations[event.action_add_item_location];
         location.objects.push(event.action_add_item);
       }
+
+      if (!isEmpty(event.action_remove_item) && isEmpty(event.action_remove_item_location)) {
+        // from the inventory
+        advntx.inventoryhandler.remove_from_inventory(event.action_remove_item);
+      } else if (!isEmpty(event.action_remove_item) && !isEmpty(event.action_remove_item_location)) {
+        // from a location
+        var location = advntx.state.locations[event.action_remove_item_location];
+        location.objects.remove(event.action_remove_item);
+      }
+
+
       if (!isEmpty(event.action_new_connection)) {
         var place = advntx.state.locations[advntx.state.location];
         place.connections[event.action_new_connection] = event.action_new_connection_location;
@@ -158,9 +169,15 @@ var advntx = (function (my) {
         
       }
 
+
+
+      if (!isEmpty(event.action_trigger_event)) {
+        var nevent = advntx.state.events[event.action_trigger_event];
+        this.execute_event(nevent);
+      }
+
       event.triggered = true;
       event.triggered_steps = advntx.state.steps;
-
     }
 
   }

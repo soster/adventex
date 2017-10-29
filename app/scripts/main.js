@@ -48,7 +48,7 @@ my.add_to_inventory_echo = function(item) {
 my.init_game = function(refresh_json) {
   var jsons = 0;
   const num_requests_necessary = 4;
-  const parameter = '?a=1';
+  const parameter = '?v=3';
   if (refresh_json == true) {
     $.getJSON('json/vocabulary.json'+parameter,
     function(result) {

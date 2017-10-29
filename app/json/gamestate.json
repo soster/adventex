@@ -182,7 +182,7 @@
 		},
 
 		"get_torch": {
-			"description": "The torch makes it easier to find your way. The dungeon down here is mostly dark.",
+			"description": "The torch makes it easier to find your way. The dungeon down here is mostly dark.\nBut you will be seen immediately with the bright torch in your hands.",
 			"prereq_location": "corridor",
 			"prereq_verb": "take",
 			"prereq_items": ["torch"],
@@ -190,6 +190,15 @@
 			"action_add_item_location": "forward_corridor",
 			"prereq_only_after": true,
 			"action_new_location_description": "There is an empty mount on the wall, scorch marks around it suggest that there has been a lit torch in the mount."
+		},
+
+		"drop_torch": {
+			"description": "It is darker around you.",
+			"prereq_verb": "drop",
+			"prereq_items": ["torch"],
+			"action_remove_item": "stone",
+			"action_remove_item_location": "forward_corridor",
+			"prereq_only_after": true
 		},
 
 		"guard_trigger": {
@@ -219,7 +228,7 @@
 			"action_enable_events": ["guard_trigger"]
 		},
 
-		"throw_stone_at_guard": {
+		"throw_stone_at_guard_hidden": {
 			"description": "You throw the stone at the guard. You hit him on his head and he sinks to the ground.",
 			"prereq_location": "backward_corridor",
 			"prereq_verb": "throw",
@@ -227,6 +236,15 @@
 			"prereq_triggered_events":["hide_barrel"],
 			"action_disable_events":["arest", "arest_torch"],
 			"action_untrigger_events":["hide_barrel"]
+
+		},
+
+		"throw_stone_at_guard": {
+			"description": "You try to throw the stone. But the guard is quicker.",
+			"prereq_location": "backward_corridor",
+			"prereq_verb": "throw",
+			"prereq_used_items": ["stone","guard"],
+			"action_trigger_event": "arest"
 
 		},
 
@@ -244,13 +262,11 @@
 		},
 
 		"arest_torch": {
-			"name": "The guard immidiately turns around and arests you! He must have seen your torch.",
-			"description": "The guard points his sword into your direction. \"You! Don't move!\" he barks.\n\nYou stand still. He grabs your arm with his free hand and turns you around in a swift movement.\nAfterwards he hits you with his sword handle on the back of your head.\n\nAgain, it gets dark around you when you loose consciousness...",
+			"name": "",
+			"description": "The guard immediately turns around. He must have seen your torch!",
 			"prereq_location": "backward_corridor",
 			"prereq_inventory_items": ["torch"],
-			"prereq_visited_locations": [],
-			"action_move_to_location": "dungeon_cell",
-			"action_untrigger_events":["guard_trigger"]
+			"action_trigger_event": "arest"
 		},
 
 		"end_event": {
@@ -276,11 +292,13 @@
 			"action_add_item": "",
 			"action_add_item_location": "",
 			"action_remove_item": "",
+			"action_remove_item_location": "",
 			"action_new_location_description": "",
 			"action_move_to_location": "",
 			"action_new_connection": "",
 			"action_disable_events": ["arest"],
 			"action_untrigger_events": ["arest"],
+			"action_trigger_event": "",
 			"action_enable_events": [],
 			"action_new_connection_location": ""
 		}
