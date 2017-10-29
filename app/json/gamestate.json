@@ -216,7 +216,7 @@
 			"prereq_preposition": "behind",
 			"prereq_used_items": ["barrel"],
 			"action_new_location_description": "You are hidden behind the barrel.",
-			"action_disable_events": ["guard_trigger"]
+			"action_disable_events": ["guard_trigger","throw_stone_at_guard"]
 		},
 
 		"unhide_barrel": {
@@ -225,7 +225,7 @@
 			"prereq_triggered_events": ["hide_barrel"],
 			"prereq_only_after": true,
 			"action_untrigger_events": ["hide_barrel", "guard_trigger"],
-			"action_enable_events": ["guard_trigger"]
+			"action_enable_events": ["guard_trigger","throw_stone_at_guard"]
 		},
 
 		"throw_stone_at_guard_hidden": {
