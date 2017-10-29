@@ -115,9 +115,9 @@ my.init_game_async = function () {
 
   advntx.parser.set(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
   my.init_inventory();
-  var start_event = advntx.state.events['start_event'];
-  advntx.eventhandler.execute_event(start_event);
-  my.echo(start_event.description + '\n');
+  var startEvent = advntx.state.events['start_event'];
+  advntx.eventhandler.execute_event(startEvent);
+  my.echo(startEvent.description + '\n');
   my.describe_location_echo(advntx.state.location);
   my.async_refocus_terminal();
 }
@@ -143,8 +143,8 @@ my.init_inventory = function() {
  $('#inventory > .inventory_item').remove();
   for (var i = 0; i < advntx.state.inventory.length; i++) {
     var item = advntx.state.inventory[i];
-    var item_name = advntx.get_name(advntx.state.objects, item);
-    $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventory_click(\''+item_name+'\')" class="btn btn-info btn-sm inventory_button">'+item_name+'</button></p>');
+    var itemName = advntx.get_name(advntx.state.objects, item);
+    $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventory_click(\''+itemName+'\')" class="btn btn-info btn-sm inventory_button">'+itemName+'</button></p>');
   }
 }
 

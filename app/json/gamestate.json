@@ -35,13 +35,11 @@
 		},
 		"forward_corridor": {
 			"name": "A narrow corridor",
-			"description": "A narrow corridor. It stretches further to the east, slightly curved.",
-			"objects": [
-			],
+			"description": "A narrow corridor. It stretches further to the east, slightly curved, but ends in a solid stone wall.\nThere is some debris on the floor.",
+			"objects": [],
 			"color": "tan",
 			"connections": {
-				"west": "corridor",
-				"east": "entrance_corridor"
+				"west": "corridor"
 			}
 		},
 		"backward_corridor": {
@@ -56,13 +54,23 @@
 		},
 		"entrance_corridor": {
 			"name": "Entrance hall",
-			"description": "An entrance hall. It stretches to the east and west, slightly curved. There is a big portal to the south.",
+			"description": "An entrance hall. It stretches to the west, slightly curved. There is a big open portal to the south.\nA bright light is shining through the portal!",
 			"objects": [],
 			"color": "white",
 			"connections": {
-				"east": "forward_corridor",
 				"west": "backward_corridor",
-				"south": ""
+				"south": "outside"
+			}
+		},
+
+		"outside": {
+			"name": "The outside world",
+			"description": "A meadow! Trees! Singing birds! You are back in the outside world.",
+			"color": "aquamarine",
+			"connections": {
+				"north": "entrance_corridor",
+				"west": "backward_corridor",
+				"south": "outside"
 			}
 		}
 	},
@@ -137,6 +145,14 @@
 			"definite_article": "the",
 			"indefinite_article": "a",
 			"person": "true"
+		},
+
+		"stone": {
+			"name": "stone",
+			"description": "A stone the size of a fist.",
+			"portable": true,
+			"definite_article": "the",
+			"indefinite_article": "a"
 		}
 	},
 	"events": {
@@ -164,28 +180,54 @@
 			"action_new_connection": "down",
 			"action_new_connection_location": "corridor"
 		},
+
+		"get_torch": {
+			"description": "The torch makes it easier to find your way. The dungeon down here is mostly dark.",
+			"prereq_location": "corridor",
+			"prereq_verb": "take",
+			"prereq_items": ["torch"],
+			"action_add_item": "stone",
+			"action_add_item_location": "forward_corridor",
+			"prereq_only_after": true,
+			"action_new_location_description": "There is an empty mount on the wall, scorch marks around it suggest that there has been a lit torch in the mount."
+		},
+
 		"guard_trigger": {
 			"name": "",
 			"description": "You see a big guard standing in a corner of the room. He doesn't look into your direction, yet.",
-			"trigger_once": true,
-			"prereq_location": "backward_corridor"
+			"prereq_location": "backward_corridor",
+			"prereq_verb": "go",
+			"prereq_only_after": true
 		},
 
 		"hide_barrel": {
-			"description": "You hide behind the barrel. The guard seems to have not yet noticed you.",
+			"description": "You duck and hide behind the barrel. The guard seems to have not yet noticed you.",
 			"prereq_location": "backward_corridor",
 			"prereq_verb": "hide",
 			"prereq_preposition": "behind",
 			"prereq_used_items": ["barrel"],
 			"action_new_location_description": "You are hidden behind the barrel.",
-			"action_disable_event": "arest"
+			"action_disable_events": ["guard_trigger"]
 		},
 
 		"unhide_barrel": {
-			"description": "You managed to disappear just before the guard turns his head around.",
-			"prereq_location": "corridor",
+			"description": "You are pretty sure that the guard has not seen you.",
+			"prereq_verb": "go",
 			"prereq_triggered_events": ["hide_barrel"],
-			"action_enable_event": "arest"
+			"prereq_only_after": true,
+			"action_untrigger_events": ["hide_barrel", "guard_trigger"],
+			"action_enable_events": ["guard_trigger"]
+		},
+
+		"throw_stone_at_guard": {
+			"description": "You throw the stone at the guard. You hit him on his head and he sinks to the ground.",
+			"prereq_location": "backward_corridor",
+			"prereq_verb": "throw",
+			"prereq_used_items": ["stone","guard"],
+			"prereq_triggered_events":["hide_barrel"],
+			"action_disable_events":["arest", "arest_torch"],
+			"action_untrigger_events":["hide_barrel"]
+
 		},
 
 		"arest": {
@@ -197,15 +239,24 @@
 			"prereq_verb": "",
 			"prereq_inventory_items": [],
 			"prereq_visited_locations": [],
-			"action_move_to_location": "dungeon_cell"
+			"action_move_to_location": "dungeon_cell",
+			"action_untrigger_events":["guard_trigger"]
 		},
-		"get_torch": {
-			"description": "The mount on the wall is now empty.",
-			"prereq_location": "corridor",
-			"prereq_verb": "take",
-			"prereq_items": ["torch"],
-			"trigger_once": true,
-			"action_new_location_description": "There is an empty mount on the wall."
+
+		"arest_torch": {
+			"name": "The guard immidiately turns around and arests you! He must have seen your torch.",
+			"description": "The guard points his sword into your direction. \"You! Don't move!\" he barks.\n\nYou stand still. He grabs your arm with his free hand and turns you around in a swift movement.\nAfterwards he hits you with his sword handle on the back of your head.\n\nAgain, it gets dark around you when you loose consciousness...",
+			"prereq_location": "backward_corridor",
+			"prereq_inventory_items": ["torch"],
+			"prereq_visited_locations": [],
+			"action_move_to_location": "dungeon_cell",
+			"action_untrigger_events":["guard_trigger"]
+		},
+
+		"end_event": {
+			"description": "You managed to find out of the dungeon! Congratulations. The game is now over.",
+			"prereq_location": "outside"
+
 		},
 		"demo": {
 			"name": "Demo",
@@ -220,14 +271,17 @@
 			"prereq_triggered_event_step_offset": 0,
 			"prereq_triggered_events": [],
 			"prereq_visited_locations": [],
+			"prereq_only_before": false,
+			"prereq_only_after": false,
 			"action_add_item": "",
 			"action_add_item_location": "",
 			"action_remove_item": "",
 			"action_new_location_description": "",
 			"action_move_to_location": "",
 			"action_new_connection": "",
-			"action_disable_event": "arest",
-			"action_enable_event": "",
+			"action_disable_events": ["arest"],
+			"action_untrigger_events": ["arest"],
+			"action_enable_events": [],
 			"action_new_connection_location": ""
 		}
 	}

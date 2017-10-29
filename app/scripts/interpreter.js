@@ -26,50 +26,71 @@ my.interpreter = {
       echo(JSON.stringify(advntx.state));
     } else {
       var words = advntx.parser.parse(command);
-      var first_verb = advntx.get_first_of_type(words, 'verbs');
-      var last_verb = advntx.get_last_of_type(words, 'verbs');
+      var firstVerb = advntx.get_first_of_type(words, 'verbs');
+      var lastVerb = advntx.get_last_of_type(words, 'verbs');
       var preposition = advntx.get_first_of_type(words, 'prepositions');
       var objects = words['objects'];
       var misc = words['misc'];
-      var found_nothing = false;
+      var foundNothing = false;
 
-      var item_ids_from_location = advntx.locationhandler.find_item_ids_for_names_in_location(objects,advntx.state.locations[advntx.state.location]);
-      var item_ids_from_inventory = advntx.inventoryhandler.find_item_ids_in_inventory(objects);
-      var item_ids = [];
+      var itemIdsFromLocation = advntx.locationhandler.find_item_ids_for_names_in_location(objects,advntx.state.locations[advntx.state.location]);
+      var itemIdsFromInventory = advntx.inventoryhandler.find_item_ids_in_inventory(objects);
+      var itemIds = [];
 
       
-      var item_ids = item_ids_from_location.concat(item_ids_from_inventory);
+      var itemIds = itemIdsFromLocation.concat(itemIdsFromInventory);
 
+      var preEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, firstVerb, preposition);
+      var executedPreEvents = [];
+      var foundEvent = false;
 
-      if (advntx.check_synonyms('go', first_verb)) {
-        var direction = advntx.get_first_of_type(words, 'directions');
-        this.move(direction, item_ids_from_location);
-      } else if (advntx.check_synonyms('take', first_verb)) {
-        this.get_item(objects, item_ids_from_location);
-      } else if (advntx.check_synonyms('examine', first_verb)) {
-        this.examine(objects, item_ids);
-      } else if (advntx.check_synonyms('drop', first_verb)) {
-        this.drop(objects, item_ids_from_inventory);
-      }else {// I give up...
-        found_nothing = true;
+      for (var i=0;i<preEvents.length;i++) {
+        var event = preEvents[i];
+        if (event.prereq_only_after == true) {
+          continue;
+        }
+        this.trigger_event(event);
+        foundEvent = true;
+        executedPreEvents.push(event);
       }
 
 
-      var event = advntx.eventhandler.find_event(advntx.state.location, item_ids, first_verb, preposition);
-      if (event !== undefined) {
-        this.trigger_event(event);
-        found_nothing = false;
-      } else if (found_nothing) {
-        if (!isEmpty(first_verb) && objects.length>0) {
-          var item_id = item_ids[0];
-          echo(advntx.messages.error_verb_object.format(first_verb,advntx.inventoryhandler.get_name_definitive(item_id)), 'red');
-        } else {
-          this.standard_error(command);
+      if (!foundEvent) {
+        if (advntx.check_synonyms('go', firstVerb)) {
+          var direction = advntx.get_first_of_type(words, 'directions');
+          this.move(direction, itemIdsFromLocation);
+        } else if (advntx.check_synonyms('take', firstVerb)) {
+          this.get_item(objects, itemIdsFromLocation);
+        } else if (advntx.check_synonyms('examine', firstVerb)) {
+          this.examine(objects, itemIds);
+        } else if (advntx.check_synonyms('drop', firstVerb)) {
+          this.drop(objects, itemIdsFromInventory);
+        } else {// I give up...
+          foundNothing = true;
+        }
+      }
+
+      var postEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, firstVerb, preposition);
+
+      for (var i=0;i<postEvents.length;i++) {
+        var event = postEvents[i];
+        if (executedPreEvents.indexOf(event)!=-1 || event.prereq_only_before) {
+          // event already executed or not suitable
+          continue;
         }
         
+        this.trigger_event(event);
+        foundEvent = true;
       }
 
-      if (!found_nothing) {
+      if (!foundEvent && foundNothing && !isEmpty(firstVerb) && objects.length>0) {
+        var itemId = itemIds[0];
+        echo(advntx.messages.error_verb_object.format(firstVerb,advntx.inventoryhandler.get_name_definitive(itemId)), 'red');
+      } else if (foundNothing && !foundEvent) {
+        this.standard_error(command);
+      }
+
+      if (!foundNothing || foundEvent) {
         advntx.state.steps++;
       }
 
@@ -198,13 +219,13 @@ my.interpreter = {
 
   build_help_string: function() {
     if (this.help_string!=undefined) return;
-    var verb_string = '';
+    var verbString = '';
     for (var i=0;i<advntx.vocabulary.verbs.length;i++) {
       if (i!=0)
-        verb_string+=', ';
-      verb_string+=advntx.vocabulary.verbs[i];
+        verbString+=', ';
+      verbString+=advntx.vocabulary.verbs[i];
     }
-    help_string = advntx.messages.help.format(verb_string);
+    help_string = advntx.messages.help.format(verbString);
     return help_string;
   }
 

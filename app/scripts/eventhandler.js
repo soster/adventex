@@ -29,9 +29,10 @@ var advntx = (function (my) {
 
       return true;
     },
-
+    
+    /** checks if the events in the list are already triggered AND enabled */
     check_triggered_events: function(prereq_triggered_events,prereq_triggered_event_step_offset) {
-      if (isEmpty(prereq_triggered_events)||prereq_triggered_events.length==0) {
+      if (isEmpty(prereq_triggered_events)) {
         return true;
       }
 
@@ -40,7 +41,7 @@ var advntx = (function (my) {
         if (event===undefined) {
           return true;
         }
-        if (event.triggered===undefined || event.triggered == false) {
+        if ((event.triggered===undefined || event.triggered == false) || (event.disabled != undefined && event.disabled == true)) {
           return false;
         } else if (prereq_triggered_event_step_offset!=undefined && prereq_triggered_event_step_offset>0){
           if (advntx.state.steps-event.triggered_steps<prereq_triggered_event_step_offset) {
@@ -75,7 +76,8 @@ var advntx = (function (my) {
       }
     },
 
-    find_event: function (location, used_items, verb, preposition) {
+    find_events: function (location, used_items, verb, preposition) {
+      var events = [];
       for (var property in advntx.state.events) {
         if (advntx.state.events.hasOwnProperty(property) && property != 'start_event') {
           var event = advntx.state.events[property];
@@ -97,12 +99,12 @@ var advntx = (function (my) {
             && this.check_triggered_events(event.prereq_triggered_events, event.prereq_triggered_event_step_offset)
             && this.check_visited_locations(event.prereq_visited_locations)
             && this.check_trigger_once(event)) {
-            return event;
+            events.push(event);
           }
         }
       }
 
-      return undefined;
+      return events;
     },
 
     execute_event: function (event) {
@@ -112,7 +114,7 @@ var advntx = (function (my) {
       } else if (!isEmpty(event.action_add_item) && !isEmpty(event.action_add_item_location)) {
         // into a location
         var location = advntx.state.locations[event.action_add_item_location];
-        location.things.push(event.action_add_item);
+        location.objects.push(event.action_add_item);
       }
       if (!isEmpty(event.action_new_connection)) {
         var place = advntx.state.locations[advntx.state.location];
@@ -126,16 +128,32 @@ var advntx = (function (my) {
         var place = advntx.state.locations[advntx.state.location];
         place['additional_description'] = event.action_new_location_description;
       }
-      if (!isEmpty(event.action_disable_event)) {
-        var nevent = advntx.state.events[event.action_disable_event];
-        nevent.disabled = true;
+      if (!isEmpty(event.action_disable_events)) {
+        for (var i=0;i<event.action_disable_events.length;i++) {
+          var nevent = advntx.state.events[event.action_disable_events[i]];
+          nevent.disabled = true;
+        }
+
       }
 
-      if (!isEmpty(event.action_enable_event)) {
-        var nevent = advntx.state.events[event.action_enable_event];
-        if (nevent!= undefined) {
-          nevent.disabled = false;
-          nevent.triggered_steps = advntx.state.steps;
+      if (!isEmpty(event.action_enable_events)) {
+        for (var i=0;i<event.action_enable_events.length;i++) {
+          var nevent = advntx.state.events[event.action_enable_events[i]];
+          if (nevent!= undefined) {
+            nevent.disabled = false;
+            nevent.triggered_steps = advntx.state.steps;
+          }
+        }
+        
+      }
+
+      if (!isEmpty(event.action_untrigger_events)) {
+        for (var i=0;i<event.action_untrigger_events.length;i++) {
+          var nevent = advntx.state.events[event.action_untrigger_events[i]];
+          if (nevent!= undefined) {
+            nevent.triggered = false;
+            nevent.triggered_steps = 0;
+          }
         }
         
       }
