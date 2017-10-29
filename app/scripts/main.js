@@ -48,7 +48,7 @@ my.add_to_inventory_echo = function(item) {
 my.init_game = function(refresh_json) {
   var jsons = 0;
   const num_requests_necessary = 4;
-  const parameter = '?v=3';
+  const parameter = '?v=4';
   if (refresh_json == true) {
     $.getJSON('json/vocabulary.json'+parameter,
     function(result) {
@@ -116,8 +116,7 @@ my.init_game_async = function () {
   advntx.parser.set(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
   my.init_inventory();
   var startEvent = advntx.state.events['start_event'];
-  advntx.eventhandler.execute_event(startEvent);
-  my.echo(startEvent.description + '\n');
+  advntx.eventhandler.execute_event(startEvent,my.echo);
   my.describe_location_echo(advntx.state.location);
   my.async_refocus_terminal();
 }

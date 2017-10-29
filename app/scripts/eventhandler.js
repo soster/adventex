@@ -107,7 +107,7 @@ var advntx = (function (my) {
       return events;
     },
 
-    execute_event: function (event) {
+    execute_event: function (event, echo) {
       if (!isEmpty(event.action_add_item) && isEmpty(event.action_add_item_location)) {
         // into the inventory
         advntx.inventoryhandler.add_to_inventory(event.action_add_item);
@@ -173,8 +173,10 @@ var advntx = (function (my) {
 
       if (!isEmpty(event.action_trigger_event)) {
         var nevent = advntx.state.events[event.action_trigger_event];
-        this.execute_event(nevent);
+        this.execute_event(nevent,echo);
       }
+
+      echo(event.description + '\n');
 
       event.triggered = true;
       event.triggered_steps = advntx.state.steps;

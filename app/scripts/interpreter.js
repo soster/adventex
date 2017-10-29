@@ -185,8 +185,7 @@ my.interpreter = {
   trigger_event: function (event) {
     var old_location = advntx.state.location;
 
-    advntx.eventhandler.execute_event(event);
-    my.interpreter.echo(event.description + '\n');
+    advntx.eventhandler.execute_event(event,my.interpreter.echo);
 
     if (old_location != advntx.state.location) {
       setTimeout(function () {
@@ -196,6 +195,7 @@ my.interpreter = {
 
 
   },
+
 
   standard_error: function (command) {
     this.echo(advntx.messages.error.format(command), 'red');

@@ -263,7 +263,7 @@
 
 		"arest_torch": {
 			"name": "",
-			"description": "The guard immediately turns around. He must have seen your torch!",
+			"description": "He must have seen your torch!",
 			"prereq_location": "backward_corridor",
 			"prereq_inventory_items": ["torch"],
 			"action_trigger_event": "arest"
