@@ -138,18 +138,20 @@
 			"definite_article": "the",
 			"indefinite_article": "a"
 		},
-		"guard": {
-			"name": "guard",
-			"description": "A big, dim looking guard. Looks like he could eat you for breakfast.",
+
+		"unconscious_guard": {
+			"name": "unconscious guard",
+			"description": "A big, dim looking guard. But he can't harm you now, because he is lying on the ground, unconscious.",
+			"error_portable": "He is not your type!",
 			"portable": false,
 			"definite_article": "the",
 			"indefinite_article": "a",
 			"person": "true"
 		},
-
-		"unconscious_guard": {
-			"name": "unconscious guard",
-			"description": "A big, dim looking guard. But he can't harm you now, because he is lying on the ground, unconscious.",
+		"guard": {
+			"name": "guard",
+			"description": "A big, dim looking guard. Looks like he could eat you for breakfast.",
+			"error_portable": "He is not your type!",
 			"portable": false,
 			"definite_article": "the",
 			"indefinite_article": "a",
@@ -161,7 +163,10 @@
 			"description": "A stone the size of a fist.",
 			"portable": true,
 			"definite_article": "the",
-			"indefinite_article": "a"
+			"indefinite_article": "a",
+			"custom_errors": {
+				"throw": "Leave it, you throw like a girl. Besides, where do you wanna throw it?"
+			}
 		}
 	},
 	"events": {
