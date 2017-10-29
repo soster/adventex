@@ -135,7 +135,7 @@ var advntx = (function (my) {
       if (!isEmpty(event.action_move_to_location)) {
         advntx.locationhandler.set_location(event.action_move_to_location);
       }
-      if (!isEmpty(event.action_new_location_description)) {
+      if (event.action_new_location_description!=undefined) {
         var place = advntx.state.locations[advntx.state.location];
         place['additional_description'] = event.action_new_location_description;
       }
