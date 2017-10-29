@@ -147,6 +147,15 @@
 			"person": "true"
 		},
 
+		"unconscious_guard": {
+			"name": "unconscious guard",
+			"description": "A big, dim looking guard. But he can't harm you now, because he is lying on the ground, unconscious.",
+			"portable": false,
+			"definite_article": "the",
+			"indefinite_article": "a",
+			"person": "true"
+		},
+
 		"stone": {
 			"name": "stone",
 			"description": "A stone the size of a fist.",
@@ -233,9 +242,24 @@
 			"prereq_location": "backward_corridor",
 			"prereq_verb": "throw",
 			"prereq_used_items": ["stone","guard"],
+			"prereq_inventory_items": ["stone"],
 			"prereq_triggered_events":["hide_barrel"],
 			"action_disable_events":["arest", "arest_torch"],
-			"action_untrigger_events":["hide_barrel"]
+			"action_untrigger_events":["hide_barrel"],
+			"action_remove_item": "stone",
+			"action_add_item": "stone",
+			"action_add_item_location": "backward_corridor",
+			"action_new_location_description": "The guard lies on the ground, presumably unconscious.",
+			"action_trigger_event": "guard_is_unconscious"
+
+		},
+
+		"guard_is_unconscious": {
+			"prereq_location": "invalid",
+			"action_remove_item": "guard",
+			"action_remove_item_location":"backward_corridor",
+			"action_add_item": "unconscious_guard",
+			"action_add_item_location": "backward_corridor"
 
 		},
 
@@ -244,7 +268,11 @@
 			"prereq_location": "backward_corridor",
 			"prereq_verb": "throw",
 			"prereq_used_items": ["stone","guard"],
-			"action_trigger_event": "arest"
+			"prereq_inventory_items": ["stone"],
+			"action_trigger_event": "arest",
+			"action_remove_item": "stone",
+			"action_add_item": "stone",
+			"action_add_item_location": "backward_corridor"
 
 		},
 

@@ -114,7 +114,10 @@ var advntx = (function (my) {
       } else if (!isEmpty(event.action_add_item) && !isEmpty(event.action_add_item_location)) {
         // into a location
         var location = advntx.state.locations[event.action_add_item_location];
-        location.objects.push(event.action_add_item);
+        if (location.objects[event.action_add_item]===undefined) {
+          location.objects.push(event.action_add_item);
+        }
+        
       }
 
       if (!isEmpty(event.action_remove_item) && isEmpty(event.action_remove_item_location)) {
@@ -168,8 +171,10 @@ var advntx = (function (my) {
           }
 
       }
-
-      echo(event.description + '\n');
+      if (!isEmpty(event.description)) {
+        echo(event.description + '\n');
+      }
+      
 
       event.triggered = true;
       event.triggered_steps = advntx.state.steps;
