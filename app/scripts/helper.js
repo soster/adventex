@@ -97,14 +97,14 @@ var advntx = (function (my) {
     return false;
   }
 
-  my.find_item_ids = function (itemIds, objects, allObjects) {
+  my.find_item_ids = function (names, objects, allObjects) {
     var retItemIds = [];
-    if (itemIds===undefined || objects===undefined)
+    if (names===undefined || objects===undefined)
       return retItemIds;
 
-    for (var i=0;i<itemIds.length;i++) {
-      var name = itemIds[i];
-      var itemIds = my.find_item_ids_for_name(name,allObjects);
+    for (var i=0;i<names.length;i++) {
+      var name = names[i];
+      var itemIds = my.find_item_ids_for_name(name, allObjects);
       for (var i2=0;i2<itemIds.length;i2++) {
         var itemId = itemIds[i2];
         var index = objects.indexOf(itemId);
@@ -120,7 +120,7 @@ var advntx = (function (my) {
   my.find_item_ids_for_name = function (name,objects) {
     var itemIds = [];
     for (var property in objects) {
-      var item = objects[property];
+      var item = advntx.state.objects[property];
       if (item.name.endsWith(name) && itemIds.indexOf(item.name)==-1) {
         itemIds.push(property);
       }

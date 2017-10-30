@@ -32,23 +32,7 @@ var advntx = (function (my) {
     },
 
     find_item_ids_in_inventory: function (objects) {
-      var retItemIds = [];
-      var inv = advntx.state.inventory;
-      if (objects===undefined)
-        return retItemIds;
-
-      for (var i=0;i<objects.length;i++) {
-        var object = objects[i];
-        var itemIds = advntx.inventoryhandler.find_item_ids_for_name_anywhere(object);
-        for (var i2=0;i2<itemIds.length;i2++) {
-          var itemId = itemIds[i2];
-          var index = inv.indexOf(itemId);
-          if (index!=-1 && retItemIds.indexOf(itemId)==-1) {
-            retItemIds.push(inv[index]);
-          }
-        }
-      }
-      return retItemIds;
+      return advntx.find_item_ids(objects, advntx.state.inventory, advntx.state.objects);
     },
 
     find_item_ids_for_name_anywhere: function (name) {

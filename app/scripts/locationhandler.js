@@ -30,23 +30,7 @@ var advntx = (function (my) {
 
     //FIXME
     find_item_ids_for_names_in_location: function (objects, location) {
-      var retItemIds = [];
-      if (objects===undefined || location===undefined || location.objects===undefined)
-        return retItemIds;
-
-      for (var i=0;i<objects.length;i++) {
-        var object = objects[i];
-        var itemIds = advntx.inventoryhandler.find_item_ids_for_name_anywhere(object);
-        for (var i2=0;i2<itemIds.length;i2++) {
-          var itemId = itemIds[i2];
-          var index = location.objects.indexOf(itemId);
-          if (index!=-1 && retItemIds.indexOf(itemId)==-1) {
-            retItemIds.push(location.objects[index]);
-          }
-        }
-
-      }
-      return retItemIds;
+      return advntx.find_item_ids(objects, location.objects, advntx.state.objects);
     },
 
     set_location: function (location_id) {
