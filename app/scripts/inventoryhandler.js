@@ -47,7 +47,6 @@ var advntx = (function (my) {
             retItemIds.push(inv[index]);
           }
         }
-
       }
       return retItemIds;
     },

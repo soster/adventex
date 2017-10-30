@@ -1,46 +1,33 @@
+'use strict';
 (function () {
-  'use strict';
-
-  require('../../bower_components/jquery/dist/jquery.min.js');
-  require('../../app/scripts/parser.js');
-  require('../../app/scripts/messages.js');
-  require('../../app/scripts/functions.js');
-  require('../../app/scripts/locations.js');
-  require('../../app/scripts/things.js');
-  require('../../app/scripts/persons.js');
-  require('../../app/scripts/events.js');
-  require('../../app/scripts/synonyms.js');
-  require('../../app/scripts/helper.js');
-  require('../../app/scripts/eventhandler.js');
-  require('../../app/scripts/inventoryhandler.js');
-  require('../../app/scripts/locationhandler.js');
-  require('../../app/scripts/interpreter.js');
-  require('../../app/scripts/state.js');
 
 
+  var assert = chai.assert;
 
 
+  before(function (done) {
+    // waits until done is called (async!)
+    advntx.parse_json(done);
+  })
 
-
-  describe('Give it some context', function () {
-    describe('maybe a bit more context here', function () {
-      it('should run here few assertions', function () {
-
+   
+  describe('advntx', function() {
+      it('format string test', function() {
+        assert.equal("test: test","test: {0}".format("test"));
       });
-    });
+
+      it('vocabulary loaded', function() {
+        assert.notEqual(-1,advntx.vocabulary.verbs.indexOf('go'));
+      });
+
+      it('parser test', function() {
+        advntx.parser.set(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
+        var obj = advntx.parser.parse('throw stone');
+        assert.equal('throw',obj.verbs[0]);
+        assert.equal('stone',obj.objects[0]);
+      });
   });
 
-  describe("find item id", function () {
-    beforeEach(function () {
-      state.locations = JSON.parse(JSON.stringify(locations));
-      state.things = JSON.parse(JSON.stringify(things));
-      state.persons = JSON.parse(JSON.stringify(persons));
-      state.events = JSON.parse(JSON.stringify(events));
-      var start_event = state.events['start_event'];
-      eventhandler.execute_event(start_event);
-    });
-    it("returns the correct multiplied value", function () {
-      expect(locationhandler.find_item_id_for_name('trap door').toEqual(''));
-    });
-  });
+  
+
 })();

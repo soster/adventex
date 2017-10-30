@@ -7,7 +7,7 @@ const del = require('del');
 const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
 var version = require('gulp-version-number');
-const jasmine = require('gulp-jasmine');
+const mocha = require('gulp-mocha');
 var gutil = require('gulp-util');
 var jsonminify = require('gulp-jsonminify');
 
@@ -26,11 +26,11 @@ let dev = true;
 
 
 
-gulp.task('test', () =>
-gulp.src('test/spec/test.js')
-  // gulp-jasmine works on filepaths so you can't have any plugins before it
-  .pipe(jasmine())
-);
+gulp.task('test', function () {
+  return gulp.src(['app/scripts/**/!(main.js)','test/**/*.js'], { read: false })
+  .pipe(mocha({ reporter: 'list' }))
+  .on('error', gutil.log);
+});
 
 
 gulp.task('styles', () => {
@@ -177,10 +177,10 @@ gulp.task('serve:test', ['scripts'], () => {
     port: 9000,
     ui: false,
     server: {
-      baseDir: 'test',
+      baseDir: ['test','app'],
       routes: {
         '/scripts': '.tmp/scripts',
-        '/bower_components': 'bower_components'
+        '/bower_components': 'bower_components',
       }
     }
   });

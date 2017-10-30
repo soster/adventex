@@ -9,6 +9,10 @@ var advntx = (function (my) {
     return my.get_property(objects, 'description', id)
   }
 
+  my.test = function(echo) {
+    return echo;
+  }
+
 
   my.get_name = function(objects, id) {
     return my.get_property(objects, 'name', id);
@@ -92,5 +96,92 @@ var advntx = (function (my) {
     }
     return false;
   }
+
+  my.find_item_ids = function (itemIds, objects, allObjects) {
+    var retItemIds = [];
+    if (itemIds===undefined || objects===undefined)
+      return retItemIds;
+
+    for (var i=0;i<itemIds.length;i++) {
+      var name = itemIds[i];
+      var itemIds = my.find_item_ids_for_name(name,allObjects);
+      for (var i2=0;i2<itemIds.length;i2++) {
+        var itemId = itemIds[i2];
+        var index = objects.indexOf(itemId);
+        if (index!=-1 && retItemIds.indexOf(itemId)==-1) {
+          retItemIds.push(objects[index]);
+        }
+      }
+
+    }
+    return retItemIds;
+  },
+
+  my.find_item_ids_for_name = function (name,objects) {
+    var itemIds = [];
+    for (var property in objects) {
+      var item = objects[property];
+      if (item.name.endsWith(name) && itemIds.indexOf(item.name)==-1) {
+        itemIds.push(property);
+      }
+    }
+    return itemIds;
+  }, 
+
+  my.parse_json = function (async_init) {
+    var jsons = 0;
+    const num_requests_necessary = 4;
+    const parameter = '?v=9';
+
+    function async_init_local() {
+      advntx.vocabulary.objects = [];
+      for (var property in advntx.state.objects) {
+        var item = advntx.state.objects[property];
+        advntx.vocabulary.objects.push(item.name);
+      }
+      async_init();
+    }
+
+    $.getJSON('json/vocabulary.json' + parameter,
+      function (result) {
+        advntx.vocabulary = JSON.parse(JSON.stringify(result));
+        jsons++;
+        if (jsons == num_requests_necessary) {
+          async_init_local();
+        }
+
+      });
+
+    $.getJSON('json/messages.json' + parameter,
+      function (result) {
+        advntx.messages = JSON.parse(JSON.stringify(result));
+        jsons++;
+        if (jsons == num_requests_necessary) {
+          async_init_local();
+        }
+      });
+
+    $.getJSON('json/gamestate.json' + parameter,
+      function (result) {
+        advntx.state = JSON.parse(JSON.stringify(result));
+        jsons++;
+        if (jsons == num_requests_necessary) {
+          async_init_local();
+        }
+
+      });
+
+    $.getJSON('json/config.json' + parameter,
+      function (result) {
+        advntx.config = JSON.parse(JSON.stringify(result));
+        jsons++;
+        if (jsons == num_requests_necessary) {
+          async_init_local();
+        }
+
+      });
+
+  }
+
   return my;
 }(advntx || {}));

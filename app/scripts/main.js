@@ -46,48 +46,8 @@ my.add_to_inventory_echo = function(item) {
 }
 
 my.init_game = function(refresh_json) {
-  var jsons = 0;
-  const num_requests_necessary = 4;
-  const parameter = '?v=7';
   if (refresh_json == true) {
-    $.getJSON('json/vocabulary.json'+parameter,
-    function(result) {
-      advntx.vocabulary = JSON.parse(JSON.stringify(result));
-      jsons++;
-      if (jsons==num_requests_necessary) {
-        my.init_game_async();
-      }
-
-    });
-
-    $.getJSON('json/messages.json'+parameter,
-    function(result) {
-      advntx.messages = JSON.parse(JSON.stringify(result));
-      jsons++;
-      if (jsons==num_requests_necessary) {
-        my.init_game_async();
-      }
-    });
-
-    $.getJSON('json/gamestate.json'+parameter,
-    function(result) {
-      advntx.state = JSON.parse(JSON.stringify(result));
-      jsons++;
-      if (jsons==num_requests_necessary) {
-        my.init_game_async();
-      }
-      
-    });
-
-    $.getJSON('json/config.json'+parameter,
-    function(result) {
-      advntx.config = JSON.parse(JSON.stringify(result));
-      jsons++;
-      if (jsons==num_requests_necessary) {
-        my.init_game_async();
-      }
-      
-    });
+    my.parse_json(my.init_game_async);
   } else {
     my.init_game_async();
   }
@@ -107,11 +67,7 @@ my.init_game_async = function () {
 
   $('#inventory_container').css('max-height', advntx.config.console.height + 'px');
 
-  advntx.vocabulary.objects = [];
-  for (var property in advntx.state.objects) {
-    var item = advntx.state.objects[property];
-    advntx.vocabulary.objects.push(item.name);
-  }
+
 
   advntx.parser.set(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
   my.init_inventory();
