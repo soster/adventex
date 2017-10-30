@@ -16,8 +16,8 @@
       prereq_verb: 'open',
       prereq_location: 'room',
       prereq_used_items: ['door'],
-      action_new_connection: "east",
-			action_new_connection_location: "room_two"
+      action_new_connections: ['room:east:room_two'],
+      action_add_items: ['location:stone']
     },
 
     close_door: {
@@ -25,6 +25,11 @@
       prereq_verb: 'close',
       prereq_location: 'room',
       prereq_used_items: ['door']
+    },
+    remove_stone: {
+      name: 'remove stone',
+      prereq_location: 'undefined',
+      action_remove_items: ['room:stone']
     }
   };
 
@@ -34,14 +39,16 @@
       description: 'Testroom',
       connections: {
 
-      }
+      },
+      objects: []
     },
     room_two: {
       name: 'room 2',
       description: 'second testroom',
       connections: {
         west: "room",
-      }
+      },
+      objects: []
     }
 
   };
@@ -97,6 +104,12 @@
 
       advntx.eventhandler.execute_event(events['open_door'], echo);
       assert.equal(1, Object.keys(locations['room'].connections).length);
+      assert.equal('stone', locations['room'].objects[0]);
+      advntx.eventhandler.execute_event(events['remove_stone'], echo);
+      assert.equal(0, locations['room'].objects.length);
+      advntx.state.location = 'room_two';
+      advntx.eventhandler.execute_event(events['open_door'], echo);
+      assert.equal(1, locations['room_two'].objects.length);
       advntx.state = save;
     });
 

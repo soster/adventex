@@ -108,31 +108,53 @@ var advntx = (function (my) {
     },
 
     execute_event: function (event, echo) {
-      if (!isEmpty(event.action_add_item) && isEmpty(event.action_add_item_location)) {
+      if (!isEmpty(event.action_add_items)) {
         // into the inventory
-        advntx.inventoryhandler.add_to_inventory(event.action_add_item);
-      } else if (!isEmpty(event.action_add_item) && !isEmpty(event.action_add_item_location)) {
-        // into a location
-        var location = advntx.state.locations[event.action_add_item_location];
-        if (location.objects[event.action_add_item]===undefined) {
-          location.objects.push(event.action_add_item);
-        }
-        
+        for (var i=0;i<event.action_add_items.length;i++) {
+          var temp = event.action_add_items[i].split(":");
+          if (temp.length==1) {//inventory
+            advntx.inventoryhandler.add_to_inventory(temp[0]);
+          } else if (temp.length==2) {//location
+            var location;
+            if (temp[0]=='location') {
+              location = advntx.state.locations[advntx.state.location];
+            } else {
+              location = advntx.state.locations[temp[0]];
+            }
+            if (location.objects[temp[1]]===undefined) {
+              location.objects.push(temp[1]);
+            }
+          }
+        } 
       }
 
-      if (!isEmpty(event.action_remove_item) && isEmpty(event.action_remove_item_location)) {
+      if (!isEmpty(event.action_remove_items)) {
         // from the inventory
-        advntx.inventoryhandler.remove_from_inventory(event.action_remove_item);
-      } else if (!isEmpty(event.action_remove_item) && !isEmpty(event.action_remove_item_location)) {
-        // from a location
-        var location = advntx.state.locations[event.action_remove_item_location];
-        location.objects.remove(event.action_remove_item);
+        for (var i=0;i<event.action_remove_items.length;i++) {
+          var temp = event.action_remove_items[i].split(":");
+          if (temp.length==1) {//inventory
+            advntx.inventoryhandler.remove_from_inventory(temp[0]);
+          } else if (temp.length==2) {
+            var location;
+            if (temp[0]=='location') {
+              location = advntx.state.locations[advntx.state.location];
+            } else {
+              location = advntx.state.locations[temp[0]];
+            }
+            location.objects.remove(temp[1]);
+          } 
+        }
       }
 
 
-      if (!isEmpty(event.action_new_connection)) {
-        var place = advntx.state.locations[advntx.state.location];
-        place.connections[event.action_new_connection] = event.action_new_connection_location;
+      if (!isEmpty(event.action_new_connections)) {
+        for (var i=0;i<event.action_new_connections.length;i++) {
+          var temp = event.action_new_connections[i].split(":");
+          var place = advntx.state.locations[temp[0]];
+          var direction = temp[1];
+          var to = temp[2];
+          place.connections[direction] = to;
+        }
       }
 
       if (!isEmpty(event.action_move_to_location)) {

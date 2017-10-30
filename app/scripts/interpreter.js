@@ -123,7 +123,7 @@ my.interpreter = {
       advntx.locationhandler.set_location(new_location);
       my.interpreter.describe_location_echo(new_location, false);
     } else {
-      my.interpreter.echo(advntx.messages.error_movement.format(direction), 'red');
+      my.interpreter.echo(advntx.messages.error_movement_direction.format(direction), 'red');
     }
   },
 

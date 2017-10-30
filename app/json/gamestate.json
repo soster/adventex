@@ -181,18 +181,11 @@
 			"trigger_once": true,
 			"prereq_verb": "open",
 			"prereq_location": "dungeon_cell",
-			"prereq_inventory_items": [],
 			"prereq_preposition": "",
 			"prereq_used_items": ["trap_door"],
-			"prereq_steps": "",
-			"prereq_triggered_event": "",
-			"action_add_item": "",
-			"action_add_item_location": "",
-			"action_remove_item": "",
 			"action_new_location_description": "An open trap door leads down.",
 			"action_move_to_location": "",
-			"action_new_connection": "down",
-			"action_new_connection_location": "corridor"
+			"action_new_connections": ["dungeon_cell:down:corridor"]
 		},
 
 		"get_torch": {
@@ -200,8 +193,7 @@
 			"prereq_location": "corridor",
 			"prereq_verb": "take",
 			"prereq_items": ["torch"],
-			"action_add_item": "stone",
-			"action_add_item_location": "forward_corridor",
+			"action_add_items": ["forward_corridor:stone"],
 			"prereq_only_after": true,
 			"action_new_location_description": "There is an empty mount on the wall, scorch marks around it suggest that there has been a lit torch in the mount."
 		},
@@ -210,9 +202,9 @@
 			"description": "It is darker around you.",
 			"prereq_verb": "drop",
 			"prereq_items": ["torch"],
-			"action_remove_item": "stone",
-			"action_remove_item_location": "forward_corridor",
-			"prereq_only_after": true
+			"prereq_inventory_items": ["torch"],
+			"action_remove_items": ["torch","forward_corridor:stone"],
+			"action_add_items": ["location:torch"]
 		},
 
 		"guard_trigger": {
@@ -251,9 +243,8 @@
 			"prereq_triggered_events":["hide_barrel"],
 			"action_disable_events":["arest", "arest_torch"],
 			"action_untrigger_events":["hide_barrel"],
-			"action_remove_item": "stone",
-			"action_add_item": "stone",
-			"action_add_item_location": "backward_corridor",
+			"action_remove_items": ["stone"],
+			"action_add_items": ["backward_corridor:stone"],
 			"action_new_location_description": "The guard lies on the ground, presumably unconscious.",
 			"action_trigger_event": "guard_is_unconscious"
 
@@ -261,10 +252,8 @@
 
 		"guard_is_unconscious": {
 			"prereq_location": "invalid",
-			"action_remove_item": "guard",
-			"action_remove_item_location":"backward_corridor",
-			"action_add_item": "unconscious_guard",
-			"action_add_item_location": "backward_corridor"
+			"action_remove_items": ["backward_corridor:guard"],
+			"action_add_items": ["backward_corridor:unconscious_guard"]
 
 		},
 
@@ -275,10 +264,8 @@
 			"prereq_used_items": ["stone","guard"],
 			"prereq_inventory_items": ["stone"],
 			"action_trigger_event": "arest",
-			"action_remove_item": "stone",
-			"action_add_item": "stone",
-			"action_add_item_location": "backward_corridor"
-
+			"action_remove_item": ["stone"],
+			"action_add_items": ["backward_corridor:stone"]
 		},
 
 		"arest": {
@@ -322,18 +309,15 @@
 			"prereq_visited_locations": [],
 			"prereq_only_before": false,
 			"prereq_only_after": false,
-			"action_add_item": "",
-			"action_add_item_location": "",
-			"action_remove_item": "",
-			"action_remove_item_location": "",
+			"action_add_items": "",
+			"action_remove_items": "",
 			"action_new_location_description": "",
 			"action_move_to_location": "",
-			"action_new_connection": "",
+			"action_new_connections": "",
 			"action_disable_events": ["arest"],
 			"action_untrigger_events": ["arest"],
 			"action_trigger_event": "",
-			"action_enable_events": [],
-			"action_new_connection_location": ""
+			"action_enable_events": []
 		}
 	}
 }
