@@ -29,49 +29,38 @@ var advntx = (function (my) {
     remove_from_inventory:function (item) {
       advntx.state.inventory.remove(item); 
       advntx.init_inventory(); 
-    }, 
+    },
 
-    find_item_id_for_name:function (name) {
-      for (var i = 0; i < advntx.state.inventory.length; i++ ) {
-        var item_id = advntx.state.inventory[i]; 
-        var item = advntx.state.objects[item_id]; 
-        if (item.name.endsWith(name)) {
-          return item_id; 
-        }
-      }
-      return ''; 
-    }, 
+    find_item_ids_in_inventory: function (objects) {
+      var retItemIds = [];
+      var inv = advntx.state.inventory;
+      if (objects===undefined)
+        return retItemIds;
 
-    find_item_ids_in_inventory:function (objects) {
-      var item_ids = []; 
-      if (objects.length > 0) {
-      for (var i = 0; i < advntx.state.inventory.length; i++ ) {
-        for (var i2 = 0; i2 < objects.length; i2++) {
-          var object = objects[i2]; 
-          var item_id = advntx.inventoryhandler.find_item_id_for_name_anywhere(object); 
-          if (item_id == advntx.state.inventory[i]) {
-            item_ids.push(item_id); 
+      for (var i=0;i<objects.length;i++) {
+        var object = objects[i];
+        var itemIds = advntx.inventoryhandler.find_item_ids_for_name_anywhere(object);
+        for (var i2=0;i2<itemIds.length;i2++) {
+          var itemId = itemIds[i2];
+          var index = inv.indexOf(itemId);
+          if (index!=-1 && retItemIds.indexOf(itemId)==-1) {
+            retItemIds.push(inv[index]);
           }
         }
-      }
-    }
-      return item_ids; 
-    }, 
 
-    find_item_id_for_name_anywhere:function (name, first_misc) {
+      }
+      return retItemIds;
+    },
+
+    find_item_ids_for_name_anywhere: function (name) {
+      var itemIds = [];
       for (var property in advntx.state.objects) {
-        var item = advntx.state.objects[property]; 
-        if (item.name.endsWith(name)) {
-          if (isEmpty(first_misc)) {
-            return property; 
-          }else {
-            if (item.name.includes(first_misc)) {
-              return property; 
-            }
-          }
+        var item = advntx.state.objects[property];
+        if (item.name.endsWith(name) && itemIds.indexOf(item.name)==-1) {
+          itemIds.push(property);
         }
       }
-      return ''; 
+      return itemIds;
     }, 
 
     get_name_definitive:function (item_id) {

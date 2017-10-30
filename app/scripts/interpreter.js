@@ -85,9 +85,17 @@ my.interpreter = {
 
       if (!foundEvent && foundNothing && !isEmpty(firstVerb) && objects.length>0) {
         var itemId = itemIds[0];
-        echo(advntx.messages.error_verb_object.format(firstVerb,advntx.inventoryhandler.get_name_definitive(itemId)), 'red');
+        var obj = advntx.state.objects[itemId];
+        
+        var error = obj.custom_errors;
+        if (error!=undefined) {
+          var errorMessage = error[firstVerb];
+          echo(errorMessage, 'coral');
+        } else {
+          echo(advntx.messages.error_verb_object.format(firstVerb,advntx.inventoryhandler.get_name_definitive(itemId)), 'red');
+        }
       } else if (foundNothing && !foundEvent) {
-        this.standard_error(command);
+          this.standard_error(command); 
       }
 
       if (!foundNothing || foundEvent) {
@@ -149,11 +157,12 @@ my.interpreter = {
       this.describe_location_echo(advntx.state.location,true);
     } else {
       var item_id = item_ids[0];
+      var object = objects[0];
       if (!isEmpty(item_id)) {
         var desc = advntx.get_description(advntx.state.objects, item_id);
         this.echo(desc);
-      } else if (!isEmpty(item)) {
-        this.echo(advntx.messages.error_thing.format(item), 'red');
+      } else if (!isEmpty(object)) {
+        this.echo(advntx.messages.error_thing.format(object), 'red');
       } else {
         this.standard_error(command);
       }

@@ -28,20 +28,25 @@ var advntx = (function (my) {
 
     },
 
+    //FIXME
     find_item_ids_for_names_in_location: function (objects, location) {
-      var item_ids = [];
+      var retItemIds = [];
       if (objects===undefined || location===undefined || location.objects===undefined)
-        return item_ids;
-      for (var i = 0; i < location.objects.length; i++) {
-        for (var i2 = 0;i2 < objects.length; i2++) {
-          var object = objects[i2];
-          var item_id = advntx.inventoryhandler.find_item_id_for_name_anywhere(object);
-          if (item_id == location.objects[i]) {
-            item_ids.push(item_id);
+        return retItemIds;
+
+      for (var i=0;i<objects.length;i++) {
+        var object = objects[i];
+        var itemIds = advntx.inventoryhandler.find_item_ids_for_name_anywhere(object);
+        for (var i2=0;i2<itemIds.length;i2++) {
+          var itemId = itemIds[i2];
+          var index = location.objects.indexOf(itemId);
+          if (index!=-1 && retItemIds.indexOf(itemId)==-1) {
+            retItemIds.push(location.objects[index]);
           }
         }
+
       }
-      return item_ids;
+      return retItemIds;
     },
 
     set_location: function (location_id) {
