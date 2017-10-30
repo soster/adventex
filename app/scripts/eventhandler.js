@@ -76,11 +76,11 @@ var advntx = (function (my) {
       }
     },
 
-    find_events: function (location, used_items, verb, preposition) {
-      var events = [];
-      for (var property in advntx.state.events) {
-        if (advntx.state.events.hasOwnProperty(property) && property != 'start_event') {
-          var event = advntx.state.events[property];
+    find_events: function (location, used_items, verb, preposition, events) {
+      var retEvents = [];
+      for (var property in events) {
+        if (events.hasOwnProperty(property) && property != 'start_event') {
+          var event = events[property];
           if (event.disabled!=undefined && event.disabled) {
             continue;
           }
@@ -99,12 +99,12 @@ var advntx = (function (my) {
             && this.check_triggered_events(event.prereq_triggered_events, event.prereq_triggered_event_step_offset)
             && this.check_visited_locations(event.prereq_visited_locations)
             && this.check_trigger_once(event)) {
-            events.push(event);
+              retEvents.push(event);
           }
         }
       }
 
-      return events;
+      return retEvents;
     },
 
     execute_event: function (event, echo) {

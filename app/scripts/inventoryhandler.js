@@ -31,8 +31,8 @@ var advntx = (function (my) {
       advntx.init_inventory(); 
     },
 
-    find_item_ids_in_inventory: function (objects) {
-      return advntx.find_item_ids(objects, advntx.state.inventory, advntx.state.objects);
+    find_item_ids_in_inventory: function (names) {
+      return advntx.find_item_ids(names, advntx.state.inventory, advntx.state.objects);
     },
 
     find_item_ids_for_name_anywhere: function (name) {

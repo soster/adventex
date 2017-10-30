@@ -33,14 +33,14 @@ my.interpreter = {
       var misc = words['misc'];
       var foundNothing = false;
 
-      var itemIdsFromLocation = advntx.locationhandler.find_item_ids_for_names_in_location(objects,advntx.state.locations[advntx.state.location]);
+      var itemIdsFromLocation = advntx.locationhandler.find_item_ids_in_location(objects,advntx.state.locations[advntx.state.location]);
       var itemIdsFromInventory = advntx.inventoryhandler.find_item_ids_in_inventory(objects);
       var itemIds = [];
 
       
       var itemIds = itemIdsFromLocation.concat(itemIdsFromInventory);
 
-      var preEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, firstVerb, preposition);
+      var preEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, firstVerb, preposition, advntx.state.events);
       var executedPreEvents = [];
       var foundEvent = false;
 
@@ -70,7 +70,7 @@ my.interpreter = {
         }
       }
 
-      var postEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, firstVerb, preposition);
+      var postEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, firstVerb, preposition, advntx.state.events);
 
       for (var i=0;i<postEvents.length;i++) {
         var event = postEvents[i];

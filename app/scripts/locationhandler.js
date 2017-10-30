@@ -29,8 +29,8 @@ var advntx = (function (my) {
     },
 
     //FIXME
-    find_item_ids_for_names_in_location: function (objects, location) {
-      return advntx.find_item_ids(objects, location.objects, advntx.state.objects);
+    find_item_ids_in_location: function (names, location) {
+      return advntx.find_item_ids(names, location.objects, advntx.state.objects);
     },
 
     set_location: function (location_id) {
