@@ -8,63 +8,100 @@
   before(function (done) {
     // waits until done is called (async!)
     advntx.parse_json(done);
-  })
+  });
 
-   
-  describe('advntx test suite', function() {
-      it('format string test', function() {
-        assert.equal("test: test","test: {0}".format("test"));
-      });
+  var events = {
+    open_door: {
+      name: 'open door',
+      prereq_verb: 'open',
+      prereq_location: 'room',
+      prereq_used_items: ['door'],
+      action_new_connection: "east",
+			action_new_connection_location: "room_two"
+    },
 
-      it('vocabulary loaded', function() {
-        assert.notEqual(-1,advntx.vocabulary.verbs.indexOf('go'));
-        assert.notEqual(-1,advntx.vocabulary.verbs.indexOf('throw'));
-        assert.notEqual(-1,advntx.vocabulary.adjectives.indexOf('big'));
-        assert.notEqual(-1,advntx.vocabulary.objects.indexOf('stone'));
-        assert.notEqual(-1,advntx.vocabulary.directions.indexOf('north'));
-      });
+    close_door: {
+      name: 'close door',
+      prereq_verb: 'close',
+      prereq_location: 'room',
+      prereq_used_items: ['door']
+    }
+  };
 
-      it('parse command', function() {
-        advntx.parser.set(['go','throw'], [], [], [], ['something','barrel','stone']);
-        var obj = advntx.parser.parse('throw stone');
-        assert.equal('throw',obj.verbs[0]);
-        assert.equal('stone',obj.objects[0]);
-      });
+  var locations = {
+    room: {
+      name: 'room',
+      description: 'Testroom',
+      connections: {
 
-      it('find objects', function() {
-        var names = ['guard','sugar'];
-        var room_item_ids = ['unconscious_guard','barrel','stone'];
-        var all_objects = {guard:{name:'guard'},unconscious_guard:{name:'unconscious guard'},barrel:{name:'barrel'}};
-        assert.equal('unconscious_guard',advntx.find_item_ids(names, room_item_ids, all_objects)[0]);
-      });
+      }
+    },
+    room_two: {
+      name: 'room 2',
+      description: 'second testroom',
+      connections: {
+        west: "room",
+      }
+    }
 
-      it('find event', function() {
-        var event = {		open_door: {
-          name: 'open door',
-          prereq_verb: 'open',
-          prereq_location: 'room',
-          prereq_used_items: ['door'],
-        },};
+  };
 
-        var event2 = {		close_door: {
-          name: 'close door',
-          prereq_verb: 'close',
-          prereq_location: 'room',
-          prereq_used_items: ['door'],
-        },};
-        
-        var location = { room: {
-          name: 'room'
-        }
-        };
+  var objects = { guard: { name: 'guard' }, unconscious_guard: { name: 'unconscious guard' }, barrel: { name: 'barrel' } };
 
-        var events = [event];
 
-        assert.equal(event,advntx.eventhandler.find_events(location, ['door','stone'], 'open', undefined, events)[0]);
-      });
+  describe('advntx test suite', function () {
+    it('format string test', function () {
+      assert.equal("test: test", "test: {0}".format("test"));
+    });
+
+    it('vocabulary loaded', function () {
+      assert.notEqual(-1, advntx.vocabulary.verbs.indexOf('go'));
+      assert.notEqual(-1, advntx.vocabulary.verbs.indexOf('throw'));
+      assert.notEqual(-1, advntx.vocabulary.adjectives.indexOf('big'));
+      assert.notEqual(-1, advntx.vocabulary.objects.indexOf('stone'));
+      assert.notEqual(-1, advntx.vocabulary.directions.indexOf('north'));
+    });
+
+    it('parse command', function () {
+      advntx.parser.set(['go', 'throw'], [], [], [], ['something', 'barrel', 'stone']);
+      var obj = advntx.parser.parse('throw stone');
+      assert.equal('throw', obj.verbs[0]);
+      assert.equal('stone', obj.objects[0]);
+    });
+
+    it('find objects', function () {
+      var names = ['guard', 'sugar'];
+      var room_item_ids = ['unconscious_guard', 'barrel', 'stone'];
+
+      assert.equal('unconscious_guard', advntx.find_item_ids(names, room_item_ids, objects)[0]);
+    });
+
+    it('find event', function () {
+      assert.equal(events[0], advntx.eventhandler.find_events(location, ['door', 'stone'], 'open', undefined, events)[0]);
+    });
+
+    it('execute event', function () {
+
+      function echo(string) {
+
+      };
+
+      var save = advntx.state;
+      advntx.state = {
+        steps: 0
+      };
+      advntx.state.inventory = ['stone'];
+      advntx.state.objects = objects;
+      advntx.state.locations = locations;
+      advntx.state.location = 'room';
+
+      advntx.eventhandler.execute_event(events['open_door'], echo);
+      assert.equal(1, Object.keys(locations['room'].connections).length);
+      advntx.state = save;
+    });
 
   });
 
-  
 
-})();
+
+})(); 
