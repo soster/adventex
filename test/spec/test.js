@@ -34,6 +34,18 @@
       name: 'remove stone',
       prereq_location: 'undefined',
       action_remove_items: ['room:stone']
+    },
+    not_inventory: {
+      name:'',
+      prereq_verb: 'take',
+      prereq_items: ["torch"],
+      prereq_not_inventory_items: ['torch']
+    },
+
+    drop_torch: {
+      name: 'drop torch',
+      prereq_verb: 'drop',
+      prereq_used_items: ['torch']
     }
   };
 
@@ -50,14 +62,27 @@
       name: 'room 2',
       description: 'second testroom',
       connections: {
-        west: "room",
+        west: "room"
       },
       objects: []
+    },
+    room_three: {
+      name: 'room 3',
+      description: 'Room with torch in it',
+      connections: {
+        east: 'room_two'
+      },
+      objects:['torch']
     }
 
   };
 
-  var objects = { guard: { name: 'guard' }, unconscious_guard: { name: 'unconscious guard' }, barrel: { name: 'barrel' }, door: { name: 'door' } };
+  var objects = { 
+    guard: { name: 'guard' }, 
+    unconscious_guard: { name: 'unconscious guard' }, 
+    barrel: { name: 'barrel' }, 
+    door: { name: 'door' },
+    torch: { name: 'torch' } };
 
 
   describe('advntx test suite', function () {
@@ -91,11 +116,9 @@
       assert.equal(events[0], advntx.eventhandler.find_events(location, ['door', 'stone'], 'open', undefined, events)[0]);
     });
 
-    it('execute event', function () {
+    it('execute some events', function () {
 
-      function echo(string) {
-
-      };
+      function echo(string) {};
 
       var save = advntx.state;
       advntx.state = {
@@ -116,6 +139,28 @@
       advntx.eventhandler.execute_event(events['add_stone'], echo);
       assert.equal(1, locations['room_two'].objects.length);
       advntx.state = save;
+    });
+
+    it('find not in inventory event', function () {
+      function echo(string) { };
+
+      var save = advntx.state;
+      advntx.state = {
+        steps: 0
+      };
+      advntx.state.inventory = ['torch','stone'];
+      advntx.state.objects = objects;
+      advntx.state.locations = locations;
+      advntx.state.location = 'room_three';
+      
+
+      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], 'take', undefined, events);
+      assert.equal(0,foundEvents.length);
+      advntx.state.inventory = [];
+      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], 'take', undefined, events);
+      assert.equal(1,foundEvents.length);
+      assert.equal(events['not_inventory'],foundEvents[0])
+
     });
 
   });

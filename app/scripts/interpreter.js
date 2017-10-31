@@ -44,18 +44,19 @@ my.interpreter = {
       var executedPreEvents = [];
       var foundEvent = false;
 
+      var doContinue = true;
       for (var i=0;i<preEvents.length;i++) {
         var event = preEvents[i];
         if (event.prereq_only_after == true) {
           continue;
         }
-        this.trigger_event(event);
+        doContinue = doContinue & this.trigger_event(event);
         foundEvent = true;
         executedPreEvents.push(event);
       }
 
 
-      if (!foundEvent) {
+      if (!foundEvent || doContinue) {
         if (advntx.check_synonyms('go', firstVerb)) {
           var direction = advntx.get_first_of_type(words, 'directions');
           this.move(direction, itemIdsFromLocation);
@@ -72,16 +73,19 @@ my.interpreter = {
 
       var postEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, firstVerb, preposition, advntx.state.events);
 
-      for (var i=0;i<postEvents.length;i++) {
-        var event = postEvents[i];
-        if (executedPreEvents.indexOf(event)!=-1 || event.prereq_only_before) {
-          // event already executed or not suitable
-          continue;
+      if (doContinue) {
+        for (var i=0;i<postEvents.length;i++) {
+          var event = postEvents[i];
+          if (executedPreEvents.indexOf(event)!=-1 || event.prereq_only_before) {
+            // event already executed or not suitable
+            continue;
+          }
+          
+          this.trigger_event(event);
+          foundEvent = true;
         }
-        
-        this.trigger_event(event);
-        foundEvent = true;
       }
+
 
       if (!foundEvent && foundNothing && !isEmpty(firstVerb) && objects.length>0) {
         var itemId = itemIds[0];
@@ -194,7 +198,7 @@ my.interpreter = {
   trigger_event: function (event) {
     var old_location = advntx.state.location;
 
-    advntx.eventhandler.execute_event(event,my.interpreter.echo);
+    var doContinue = advntx.eventhandler.execute_event(event,my.interpreter.echo);
 
     if (old_location != advntx.state.location) {
       setTimeout(function () {
@@ -202,7 +206,7 @@ my.interpreter = {
       }, advntx.config.standard_wait_eventtext);
     }
 
-
+    return doContinue;
   },
 
 

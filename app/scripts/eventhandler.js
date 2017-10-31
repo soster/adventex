@@ -12,6 +12,10 @@ var advntx = (function (my) {
       return this.check_event_prereq_array(prereq, advntx.state.inventory);
     },
 
+    check_event_prereq_not_inventory: function (prereq) {
+      return this.check_event_prereq_not_array(prereq, advntx.state.inventory);
+    },
+
     check_event_prereq_array: function (prereq, to_check) {
       if (prereq===undefined || prereq == '') {
         return true;
@@ -23,6 +27,24 @@ var advntx = (function (my) {
       
       for (var i=0;i<prereq.length;i++) {
         if (to_check.indexOf(prereq[i])==-1) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+
+    check_event_prereq_not_array: function (prereq, to_check) {
+      if (prereq===undefined || prereq == '') {
+        return true;
+      }
+
+      if (to_check===undefined) {
+        return true;
+      }
+      
+      for (var i=0;i<prereq.length;i++) {
+        if (to_check.indexOf(prereq[i])!=-1) {
           return false;
         }
       }
@@ -96,6 +118,7 @@ var advntx = (function (my) {
             && this.check_event_prereq(event.prereq_preposition, preposition)
             && this.check_event_prereq_array(event.prereq_used_items, used_items)
             && this.check_event_prereq_inventory(event.prereq_inventory_items)
+            && this.check_event_prereq_not_inventory(event.prereq_not_inventory_items)
             && this.check_triggered_events(event.prereq_triggered_events, event.prereq_triggered_event_step_offset)
             && this.check_visited_locations(event.prereq_visited_locations)
             && this.check_trigger_once(event)) {
@@ -205,8 +228,13 @@ var advntx = (function (my) {
 
       if (!isEmpty(event.action_trigger_event)) {
           var nevent = advntx.state.events[event.action_trigger_event];
-          this.execute_event(nevent, echo);
+          return this.execute_event(nevent, echo);
       }
+
+      if (!isEmpty(event.action_continue)&&event.action_continue) {
+        return true;
+      }
+      return false;
 
 
     }

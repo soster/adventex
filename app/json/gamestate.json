@@ -190,21 +190,21 @@
 
 		"get_torch": {
 			"description": "The torch makes it easier to find your way. The dungeon down here is mostly dark.\nBut you will be seen immediately with the bright torch in your hands.",
-			"prereq_location": "corridor",
 			"prereq_verb": "take",
-			"prereq_items": ["torch"],
+			"prereq_used_items": ["torch"],
+			"prereq_not_inventory_items": ["torch"],
 			"action_add_items": ["forward_corridor:stone"],
-			"prereq_only_after": true,
-			"action_new_location_description": "There is an empty mount on the wall, scorch marks around it suggest that there has been a lit torch in the mount."
+			"action_new_location_description": "There is an empty mount on the wall, scorch marks around it suggest that there has been a lit torch in the mount.",
+			"action_continue": true
 		},
 
 		"drop_torch": {
 			"description": "It is darker around you.",
 			"prereq_verb": "drop",
-			"prereq_items": ["torch"],
+			"prereq_used_items": ["torch"],
 			"prereq_inventory_items": ["torch"],
 			"action_remove_items": ["torch","forward_corridor:stone"],
-			"action_add_items": ["location:torch"]
+			"action_continue": true
 		},
 
 		"guard_trigger": {
