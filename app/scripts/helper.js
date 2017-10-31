@@ -120,7 +120,7 @@ var advntx = (function (my) {
   my.find_item_ids_for_name = function (name,objects) {
     var itemIds = [];
     for (var property in objects) {
-      var item = advntx.state.objects[property];
+      var item = objects[property];
       if (item.name.endsWith(name) && itemIds.indexOf(item.name)==-1) {
         itemIds.push(property);
       }

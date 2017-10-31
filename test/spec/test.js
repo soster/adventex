@@ -16,8 +16,7 @@
       prereq_verb: 'open',
       prereq_location: 'room',
       prereq_used_items: ['door'],
-      action_new_connections: ['room:east:room_two'],
-      action_add_items: ['location:stone']
+      action_new_connections: ['room:east:room_two']
     },
 
     close_door: {
@@ -25,6 +24,11 @@
       prereq_verb: 'close',
       prereq_location: 'room',
       prereq_used_items: ['door']
+    },
+    add_stone: {
+      name: 'add stone',
+      prereq_location: 'undefined',
+      action_add_items: ['location:stone']
     },
     remove_stone: {
       name: 'remove stone',
@@ -40,7 +44,7 @@
       connections: {
 
       },
-      objects: []
+      objects: ['door']
     },
     room_two: {
       name: 'room 2',
@@ -53,7 +57,7 @@
 
   };
 
-  var objects = { guard: { name: 'guard' }, unconscious_guard: { name: 'unconscious guard' }, barrel: { name: 'barrel' } };
+  var objects = { guard: { name: 'guard' }, unconscious_guard: { name: 'unconscious guard' }, barrel: { name: 'barrel' }, door: { name: 'door' } };
 
 
   describe('advntx test suite', function () {
@@ -104,11 +108,12 @@
 
       advntx.eventhandler.execute_event(events['open_door'], echo);
       assert.equal(1, Object.keys(locations['room'].connections).length);
-      assert.equal('stone', locations['room'].objects[0]);
+      advntx.eventhandler.execute_event(events['add_stone'], echo);
+      assert.equal('stone', locations['room'].objects[1]);
       advntx.eventhandler.execute_event(events['remove_stone'], echo);
-      assert.equal(0, locations['room'].objects.length);
+      assert.equal(1, locations['room'].objects.length);
       advntx.state.location = 'room_two';
-      advntx.eventhandler.execute_event(events['open_door'], echo);
+      advntx.eventhandler.execute_event(events['add_stone'], echo);
       assert.equal(1, locations['room_two'].objects.length);
       advntx.state = save;
     });
