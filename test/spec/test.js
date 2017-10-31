@@ -10,6 +10,8 @@
     advntx.parse_json(done);
   });
 
+  function echo(string) { };
+
   var events = {
     open_door: {
       name: 'open door',
@@ -46,7 +48,30 @@
       name: 'drop torch',
       prereq_verb: 'drop',
       prereq_used_items: ['torch']
-    }
+    },
+
+    kindle_torch: {
+      name:'kindle torch',
+      prereq_verb: 'kindle',
+      prereq_used_items: ['torch'],
+      prereq_inventory_items: ['torch|none'],
+      action_set_state_items: ['torch|burning']
+    },
+
+    burn_on_torch: {
+      name: 'burned on torch',
+      prereq_verb: 'examine',
+      prereq_location_items: ['torch|burning'],
+    },
+
+    extinguish_torch: {
+      name:'extinguish torch',
+      prereq_verb: 'extinguish',
+      prereq_used_items: ['torch'],
+      prereq_inventory_items: ['torch|burning'],
+      action_set_state_items: ['torch|none']
+    },
+
   };
 
   var locations = {
@@ -82,7 +107,12 @@
     unconscious_guard: { name: 'unconscious guard' }, 
     barrel: { name: 'barrel' }, 
     door: { name: 'door' },
-    torch: { name: 'torch' } };
+    torch: { name: 'torch',
+             states:{'burning': {
+               name: 'burniiiiing'
+             }},
+             state:'burning'
+             } };
 
 
   describe('advntx test suite', function () {
@@ -117,9 +147,6 @@
     });
 
     it('execute some events', function () {
-
-      function echo(string) {};
-
       var save = advntx.state;
       advntx.state = {
         steps: 0
@@ -142,7 +169,7 @@
     });
 
     it('find not in inventory event', function () {
-      function echo(string) { };
+      
 
       var save = advntx.state;
       advntx.state = {
@@ -152,15 +179,46 @@
       advntx.state.objects = objects;
       advntx.state.locations = locations;
       advntx.state.location = 'room_three';
+      var locationObjects = locations[advntx.state.location].objects;
       
 
-      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], 'take', undefined, events);
+      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], locationObjects,'take', undefined, events);
       assert.equal(0,foundEvents.length);
       advntx.state.inventory = [];
-      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], 'take', undefined, events);
+      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], locationObjects,'take', undefined, events);
       assert.equal(1,foundEvents.length);
       assert.equal(events['not_inventory'],foundEvents[0])
 
+    });
+
+    it('check events with state', function() {
+      var save = advntx.state;
+      advntx.state = {
+        steps: 0
+      };
+      advntx.state.inventory = ['torch','stone'];
+      advntx.state.objects = objects;
+      advntx.state.locations = locations;
+      advntx.state.location = 'room_three';
+      var locationObjects = locations[advntx.state.location].objects;
+      
+      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], locationObjects,'kindle', undefined, events);
+      assert.equal(0,foundEvents.length);
+      objects['torch'].state = 'none';
+      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], locationObjects,'kindle', undefined, events);
+      assert.equal(events['kindle_torch'],foundEvents[0])
+      advntx.eventhandler.execute_event(events['kindle_torch'], echo);
+      assert.equal('burning',objects['torch'].state);
+      assert.equal('burniiiiing',advntx.inventoryhandler.get_name_of_state('torch','burning'));
+      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], locationObjects,'extinguish', undefined, events);
+      advntx.eventhandler.execute_event(foundEvents[0], echo);
+      assert.equal('none',objects['torch'].state);
+      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], locationObjects,'examine', undefined, events);
+      assert.equal(0,foundEvents.length);
+      objects['torch'].state = 'burning';
+      var foundEvents = advntx.eventhandler.find_events(location, ['torch'], locationObjects,'examine', undefined, events);
+      assert.equal(1,foundEvents.length);
+      advntx.eventhandler.execute_event(foundEvents[0], echo);
     });
 
   });

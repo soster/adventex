@@ -39,8 +39,9 @@ my.interpreter = {
 
       
       var itemIds = itemIdsFromLocation.concat(itemIdsFromInventory);
-
-      var preEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, firstVerb, preposition, advntx.state.events);
+      var locationObject = advntx.state.locations[advntx.state.location];
+      
+      var preEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, advntx.state.events);
       var executedPreEvents = [];
       var foundEvent = false;
 
@@ -70,8 +71,9 @@ my.interpreter = {
           foundNothing = true;
         }
       }
-
-      var postEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, firstVerb, preposition, advntx.state.events);
+      
+      locationObject = advntx.state.locations[advntx.state.location];
+      var postEvents = advntx.eventhandler.find_events(advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, advntx.state.events);
 
       if (doContinue) {
         for (var i=0;i<postEvents.length;i++) {

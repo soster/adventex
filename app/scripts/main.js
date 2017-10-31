@@ -99,7 +99,8 @@ my.init_inventory = function() {
   for (var i = 0; i < advntx.state.inventory.length; i++) {
     var item = advntx.state.inventory[i];
     var itemName = advntx.get_name(advntx.state.objects, item);
-    $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventory_click(\''+itemName+'\')" class="btn btn-info btn-sm inventory_button">'+itemName+'</button></p>');
+    var stateString = ' '+advntx.inventoryhandler.get_state_string(item);
+    $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventory_click(\''+itemName+'\')" class="btn btn-info btn-sm inventory_button">'+itemName+stateString+'</button></p>');
   }
 }
 

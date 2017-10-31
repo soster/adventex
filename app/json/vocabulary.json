@@ -28,6 +28,7 @@
         "conjure",
         "bribe",
         "kindle",
+        "extinguish",
         "light",
         "hide",
         "emerge",
@@ -126,6 +127,9 @@
         ],
         "push": [
             "press"
+        ],
+        "extinguish": [
+            "delete"
         ]
     }
 }

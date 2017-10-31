@@ -59,6 +59,7 @@
 			"color": "white",
 			"connections": {
 				"west": "backward_corridor",
+				"east": "backward_corridor",
 				"south": "outside"
 			}
 		},
@@ -125,9 +126,13 @@
 			"indefinite_article": "a"
 		},
 		"torch": {
-			"name": "burning torch",
+			"name": "torch",
 			"description": "The torch is quite bright!",
 			"portable": true,
+			"state": "burning",
+			"states":  { "burning": {
+				"name": "burning"
+			}},
 			"definite_article": "the",
 			"indefinite_article": "a"
 		},
@@ -153,6 +158,11 @@
 			"description": "A big, dim looking guard. Looks like he could eat you for breakfast.",
 			"error_portable": "He is not your type!",
 			"portable": false,
+			"states": {
+				"unconscious": {
+					"name":"unconscious"
+				}
+			},
 			"definite_article": "the",
 			"indefinite_article": "a",
 			"person": "true"
@@ -210,8 +220,7 @@
 		"guard_trigger": {
 			"name": "",
 			"description": "You see a big guard standing in a corner of the room. He doesn't look into your direction, yet.",
-			"prereq_location": "backward_corridor",
-			"prereq_verb": "go",
+			"prereq_location_items": ["guard|none"],
 			"prereq_only_after": true
 		},
 
@@ -246,16 +255,10 @@
 			"action_remove_items": ["stone"],
 			"action_add_items": ["backward_corridor:stone"],
 			"action_new_location_description": "The guard lies on the ground, presumably unconscious.",
-			"action_trigger_event": "guard_is_unconscious"
+			"action_set_state_items": ["guard|unconscious"]
 
 		},
 
-		"guard_is_unconscious": {
-			"prereq_location": "invalid",
-			"action_remove_items": ["backward_corridor:guard"],
-			"action_add_items": ["backward_corridor:unconscious_guard"]
-
-		},
 
 		"throw_stone_at_guard": {
 			"description": "You try to throw the stone. But the guard is quicker.",
@@ -274,9 +277,7 @@
 			"prereq_location": "backward_corridor",
 			"prereq_triggered_events": ["guard_trigger"],
 			"prereq_triggered_event_step_offset": 2,
-			"prereq_verb": "",
-			"prereq_inventory_items": [],
-			"prereq_visited_locations": [],
+			"prereq_location_items": ["guard|none"],
 			"action_move_to_location": "dungeon_cell",
 			"action_untrigger_events":["guard_trigger"]
 		},
@@ -300,6 +301,7 @@
 			"prereq_verb": "switch",
 			"prereq_location": "",
 			"prereq_used_items": [],
+			"prereq_location_items": [],
 			"prereq_inventory_items": [],
 			"prereq_preposition": "on",
 			"prereq_min_steps": 0,

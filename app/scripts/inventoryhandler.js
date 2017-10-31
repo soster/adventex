@@ -55,7 +55,46 @@ var advntx = (function (my) {
       }else {
         return name; 
       }
-    }, 
+    },
+
+    get_state_of_object:function(itemId) {
+      var object = advntx.state.objects[itemId];
+      if (object===undefined) {
+        return 'none';
+      }
+      if (isEmpty(object.state)) {
+        return 'none';
+      }
+      return object.state;
+    },
+
+    set_state_of_object:function(itemId,state) {
+      var object = advntx.state.objects[itemId];
+      if (state!='none'&&object.states[state]===undefined) {
+        throw state+' is not an allowed state for '+itemId;
+      }
+      return object.state=state;
+    },
+
+    get_name_of_state:function(itemId, state) {
+      var object = advntx.state.objects[itemId];
+      if (state!='none'&&object.states[state]===undefined) {
+        throw state+' is not an allowed state for '+itemId;
+      }
+      if (state=='none') {
+        return '';
+      }
+      return object.states[state].name;
+    },
+
+    get_state_string:function(itemId) {
+      var stateName = this.get_name_of_state(itemId, this.get_state_of_object(itemId));
+      var stateString = '';
+      if (!isEmpty(stateName)) {
+        stateString = '('+stateName+')';
+      }
+      return stateString;
+    },
 
     get_name_indefinitive:function (item_id) {
       var item = advntx.state.objects[item_id]; 

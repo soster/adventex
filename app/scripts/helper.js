@@ -77,6 +77,10 @@ var advntx = (function (my) {
           message += ', ';
         }
         message += my.get_name(list_of_all, list[i]);
+        var stateString = advntx.inventoryhandler.get_state_string(list[i]);
+        if (!isEmpty(stateString)) {
+          message += ' '+stateString;
+        }
       }
       message += '\n';
     }

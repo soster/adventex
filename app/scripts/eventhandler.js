@@ -26,8 +26,20 @@ var advntx = (function (my) {
       }
       
       for (var i=0;i<prereq.length;i++) {
-        if (to_check.indexOf(prereq[i])==-1) {
+        var arr = prereq[i].split('|');
+        if (to_check.indexOf(arr[0])==-1) {
           return false;
+        } else {
+          if (arr.length>1) {
+            var state = advntx.inventoryhandler.get_state_of_object(arr[0]);
+            if (state==arr[1]) {
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            return true;
+          }
         }
       }
 
@@ -44,9 +56,17 @@ var advntx = (function (my) {
       }
       
       for (var i=0;i<prereq.length;i++) {
-        if (to_check.indexOf(prereq[i])!=-1) {
-          return false;
-        }
+        var arr = prereq[i].split('|');
+        if (to_check.indexOf(arr[0])!=-1) {
+          if (arr.length>1) {
+            var state = advntx.inventoryhandler.get_state_of_object(arr[0]);
+            if (state==arr[1]) {
+              return false;
+            }
+          } else {
+            return false;
+          }
+        } 
       }
 
       return true;
@@ -98,7 +118,7 @@ var advntx = (function (my) {
       }
     },
 
-    find_events: function (location, used_items, verb, preposition, events) {
+    find_events: function (location, used_items, location_items, verb, preposition, events) {
       var retEvents = [];
       for (var property in events) {
         if (events.hasOwnProperty(property) && property != 'start_event') {
@@ -117,6 +137,7 @@ var advntx = (function (my) {
             && this.check_event_prereq(event.prereq_verb, verb)
             && this.check_event_prereq(event.prereq_preposition, preposition)
             && this.check_event_prereq_array(event.prereq_used_items, used_items)
+            && this.check_event_prereq_array(event.prereq_location_items, location_items)
             && this.check_event_prereq_inventory(event.prereq_inventory_items)
             && this.check_event_prereq_not_inventory(event.prereq_not_inventory_items)
             && this.check_triggered_events(event.prereq_triggered_events, event.prereq_triggered_event_step_offset)
@@ -218,6 +239,13 @@ var advntx = (function (my) {
       }
       if (!isEmpty(event.description)) {
         echo(event.description + '\n');
+      }
+
+      if (!isEmpty(event.action_set_state_items)) {
+        for (var i=0;i<event.action_set_state_items.length;i++) {
+          var arr = event.action_set_state_items[i].split('|');
+          advntx.inventoryhandler.set_state_of_object(arr[0],arr[1]);
+        }
       }
       
 
