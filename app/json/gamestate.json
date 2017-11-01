@@ -61,13 +61,11 @@
 		},
 		"entrance_corridor": {
 			"name": "Entrance hall",
-			"description": "An entrance hall. It stretches to the west, slightly curved. There is a big open portal to the south.\nA bright light is shining through the portal!",
-			"objects": [],
+			"description": "An entrance hall. The corridor from the east ends here. There is a big portal to the south.",
+			"objects": ["portal"],
 			"color": "white",
 			"connections": {
-				"west": "backward_corridor",
-				"east": "backward_corridor",
-				"south": "outside"
+				"east": "backward_corridor"
 			}
 		},
 
@@ -76,9 +74,7 @@
 			"description": "A meadow! Trees! Singing birds! You are back in the outside world.",
 			"color": "aquamarine",
 			"connections": {
-				"north": "entrance_corridor",
-				"west": "backward_corridor",
-				"south": "outside"
+				"north": "entrance_corridor"
 			}
 		}
 	},
@@ -172,7 +168,7 @@
 			"states": {
 				"unconscious": {
 					"name":"unconscious",
-					"description":"A big, dim looking guard. But he is harmless now, due to his unconciousness."
+					"description":"A big, dim looking guard. But he is harmless now, due to his unconciousness.\nIt might be a good idea to search him."
 				}
 			},
 			"definite_article": "the",
@@ -188,6 +184,25 @@
 			"indefinite_article": "a",
 			"custom_errors": {
 				"throw": "Leave it, you throw like a girl. Besides, where do you wanna throw it?"
+			}
+		},
+		"key": {
+			"name": "key",
+			"description": "A large, slightly rusty key.",
+			"portable": true,
+			"definite_article": "the",
+			"indefinite_article": "a"
+		},
+		"portal": {
+			"name": "portal",
+			"description": "A large portal with two door leafs. The left one has a large keyhole. The doors are locked.",
+			"portable": true,
+			"definite_article": "the",
+			"indefinite_article": "a",
+			"states": {
+				"open": {
+					"description": "A large portal with two door leafs. The left leaf is open."
+				}
 			}
 		}
 	},
@@ -205,7 +220,8 @@
 			"prereq_location": "dungeon_cell",
 			"prereq_used_items": ["trap_door"],
 			"action_new_connections": ["dungeon_cell:down:corridor"],
-			"action_set_state_locations": ["dungeon_cell|trapdoor_open"]
+			"action_set_state_locations": ["dungeon_cell|trapdoor_open"],
+			"action_points": 5
 		},
 
 		"get_torch": {
@@ -214,7 +230,6 @@
 			"prereq_used_items": ["torch"],
 			"prereq_not_inventory_items": ["torch"],
 			"action_add_items": ["forward_corridor:stone"],
-			"action_new_location_description": "There is an empty mount on the wall, scorch marks around it suggest that there has been a lit torch in the mount.",
 			"action_continue": true
 		},
 
@@ -265,7 +280,8 @@
 			"action_untrigger_events":["hide_barrel"],
 			"action_remove_items": ["stone"],
 			"action_add_items": ["backward_corridor:stone"],
-			"action_set_state_items": ["guard|unconscious"]
+			"action_set_state_items": ["guard|unconscious"],
+			"action_points": 10
 
 		},
 
@@ -278,6 +294,15 @@
 			"action_trigger_event": "arest",
 			"action_remove_items": ["stone"],
 			"action_add_items": ["backward_corridor:stone"]
+		},
+
+		"search_guard": {
+			"description": "The guard has a key chained on his belt.",
+			"prereq_verb": "search",
+			"prereq_used_items": ["guard|unconscious"],
+			"trigger_once": true,
+			"action_add_items":["location:key"],
+			"action_points": 5
 		},
 
 		"arest": {
@@ -307,6 +332,17 @@
 			"prereq_location_items": ["guard|none"],
 			"prereq_only_before": true,
 			"action_trigger_event": "arest"
+		},
+
+		"open_portal": {
+			"description": "You open the left door leaf with the key from the guard.",
+			"prereq_location_items": ["portal|none"],
+			"prereq_verb": "open",
+			"prereq_used_items": ["portal|none"],
+			"action_set_state_items": ["portal|open"],
+			"action_new_connections": ["entrance_corridor:south:outside"],
+			"action_points": 5
+
 		},
 
 		"win_event": {
