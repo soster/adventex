@@ -204,16 +204,12 @@ var advntx = (function (my) {
       if (!isEmpty(event.action_move_to_location)) {
         advntx.locationhandler.set_location(event.action_move_to_location);
       }
-      if (event.action_new_location_description!=undefined) {
-        var place = advntx.state.locations[advntx.state.location];
-        place['additional_description'] = event.action_new_location_description;
-      }
+
       if (!isEmpty(event.action_disable_events)) {
         for (var i=0;i<event.action_disable_events.length;i++) {
           var nevent = advntx.state.events[event.action_disable_events[i]];
           nevent.disabled = true;
         }
-
       }
 
       if (!isEmpty(event.action_enable_events)) {
@@ -244,7 +240,14 @@ var advntx = (function (my) {
       if (!isEmpty(event.action_set_state_items)) {
         for (var i=0;i<event.action_set_state_items.length;i++) {
           var arr = event.action_set_state_items[i].split('|');
-          advntx.inventoryhandler.set_state_of_object(arr[0],arr[1]);
+          advntx.set_state_of_object(arr[0],arr[1],advntx.state.objects);
+        }
+      }
+
+      if (!isEmpty(event.action_set_state_locations)) {
+        for (var i=0;i<event.action_set_state_locations.length;i++) {
+          var arr = event.action_set_state_locations[i].split('|');
+          advntx.set_state_of_object(arr[0],arr[1],advntx.state.locations);
         }
       }
       

@@ -68,14 +68,6 @@ var advntx = (function (my) {
       return object.state;
     },
 
-    set_state_of_object:function(itemId,state) {
-      var object = advntx.state.objects[itemId];
-      if (state!='none'&&object.states[state]===undefined) {
-        throw state+' is not an allowed state for '+itemId;
-      }
-      return object.state=state;
-    },
-
     get_name_of_state:function(itemId, state) {
       var object = advntx.state.objects[itemId];
       if (state!='none'&&object.states[state]===undefined) {

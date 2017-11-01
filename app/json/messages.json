@@ -1,6 +1,6 @@
 {
     "name": "adventex",
-    "help": "Possible verbs: {0}",
+    "help": "Most of the time, typing something like <verb object> works. Example: <open door>.\nYou can go to a possible direction typing <go (direction)>.\nYou can examine the room or any object typing <examine (object)>.\nMore complex sentences are possible, example: <open box with crowbar>.\nPossible verbs: {0}",
     "error_movement": "You can't go there!",
     "error_movement_direction": "You can't go {0} from here!",
     "error_movement_thing": "You don't need to go to {0}, you are already in reach!",

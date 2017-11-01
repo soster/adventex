@@ -33,6 +33,8 @@
         "hide",
         "emerge",
         "throw",
+        "empty",
+        "fill",
         "hint"
     ],
     "directions": [

@@ -8,7 +8,7 @@
 	"locations": {
 		"dungeon_cell": {
 			"name": "A dungeon cell",
-			"description": "A dungeon cell. It is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n\nBecause of the light you see the outlines of the few things in your cell. The door seems very massive and is locked.\n\nDirty, half rotten straw is lying on the floor.",
+			"description": "A dungeon cell. It is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n\nBecause of the light you see the outlines of the few things in your cell. The door seems very massive.\n\nDirty, half rotten straw is lying on the floor.",
 			"objects": [
 				"straw",
 				"bucket",
@@ -17,7 +17,11 @@
 				"cell_door",
 				"trap_door"
 			],
-			"color": "steelblue",
+			"states": {
+				"trapdoor_open": {
+					"description":"Your dungeon cell. It is moist and dark. In the weak light of the small barred window, you see an open trap door in the ground among some other things."
+				}
+			},
 			"connections": {}
 		},
 		"corridor": {
@@ -27,29 +31,31 @@
 			"objects": [
 				"torch"
 			],
-			"color": "tan",
 			"connections": {
 				"east": "forward_corridor",
 				"west": "backward_corridor"
 			}
 		},
 		"forward_corridor": {
-			"name": "A narrow corridor",
-			"description": "A narrow corridor. It stretches further to the east, slightly curved, but ends in a solid stone wall.\nThere is some debris on the floor.",
+			"name": "A narrow, dark corridor",
+			"description": "A narrow corridor. Comming from the west, it stretches further to the east but ends in a solid stone wall.\nThere is some debris on the floor, but it is to dark to see any details.",
 			"objects": [],
-			"color": "tan",
 			"connections": {
 				"west": "corridor"
 			}
 		},
 		"backward_corridor": {
-			"name": "A narrow corridor",
-			"description": "A narrow corridor. It stretches further to the west, slightly curved.",
+			"name": "A narrow, guarded corridor",
+			"description": "A narrow, guarded corridor. Comming from the east, it stretches further to the west, slightly curved.",
 			"objects": ["guard", "barrel"],
-			"color": "tan",
 			"connections": {
 				"east": "corridor",
 				"west": "entrance_corridor"
+			},
+			"states": {
+				"hidden": {
+					"description":"A narrow corridor. It stretches further to the west. You are hidden behind the barrel."
+				}
 			}
 		},
 		"entrance_corridor": {
@@ -83,7 +89,13 @@
 			"error_portable": "While touching the rotten straw you feel an iron ring which belongs to a hidden trap door!\nBut it makes no sense to fill your pockets with the straw, so you leave it where it is.",
 			"hidden": false,
 			"definite_article": "the",
-			"indefinite_article": "some"
+			"indefinite_article": "some",
+			"state":"rotten",
+			"states": {
+				"rotten":{
+					"name":"half rotten"
+				}
+			}
 		},
 		"bucket": {
 			"name": "wooden bucket",
@@ -92,7 +104,13 @@
 			"error_portable": "Trust me, you DON'T want to carry THAT around! It is nearly full with... you know.",
 			"hidden": false,
 			"definite_article": "the",
-			"indefinite_article": "a"
+			"indefinite_article": "a",
+			"state":"full",
+			"states": {
+				"full":{
+					"name":"full"
+				}
+			}
 		},
 		"bed": {
 			"name": "bunk bed",
@@ -112,7 +130,8 @@
 		},
 		"cell_door": {
 			"name": "cell door",
-			"description": "Very sturdy and locked.",
+			"description": "The door is very sturdy. As expected, it is locked.",
+			"error_portable": "I can't imagine a reason to carry around a door down here!",
 			"portable": false,
 			"hidden": false,
 			"definite_article": "the",
@@ -138,21 +157,12 @@
 		},
 		"barrel": {
 			"name": "barrel",
-			"description": "A large barrel, approx. half your height. It seems to be filled with a liquid, probably water.",
+			"description": "A large barrel, approx. half your height. It is very heavy, it seems to be filled with water.",
 			"portable": false,
 			"definite_article": "the",
 			"indefinite_article": "a"
 		},
 
-		"unconscious_guard": {
-			"name": "unconscious guard",
-			"description": "A big, dim looking guard. But he can't harm you now, because he is lying on the ground, unconscious.",
-			"error_portable": "He is not your type!",
-			"portable": false,
-			"definite_article": "the",
-			"indefinite_article": "a",
-			"person": "true"
-		},
 		"guard": {
 			"name": "guard",
 			"description": "A big, dim looking guard. Looks like he could eat you for breakfast.",
@@ -160,7 +170,8 @@
 			"portable": false,
 			"states": {
 				"unconscious": {
-					"name":"unconscious"
+					"name":"unconscious",
+					"description":"A big, dim looking guard. But he is harmless now, due to his unconciousness."
 				}
 			},
 			"definite_article": "the",
@@ -191,11 +202,9 @@
 			"trigger_once": true,
 			"prereq_verb": "open",
 			"prereq_location": "dungeon_cell",
-			"prereq_preposition": "",
 			"prereq_used_items": ["trap_door"],
-			"action_new_location_description": "An open trap door leads down.",
-			"action_move_to_location": "",
-			"action_new_connections": ["dungeon_cell:down:corridor"]
+			"action_new_connections": ["dungeon_cell:down:corridor"],
+			"action_set_state_locations": ["dungeon_cell|trapdoor_open"]
 		},
 
 		"get_torch": {
@@ -230,8 +239,8 @@
 			"prereq_verb": "hide",
 			"prereq_preposition": "behind",
 			"prereq_used_items": ["barrel"],
-			"action_new_location_description": "You are hidden behind the barrel.",
-			"action_disable_events": ["guard_trigger","throw_stone_at_guard"]
+			"action_disable_events": ["guard_trigger","throw_stone_at_guard"],
+			"action_set_state_locations": ["backward_corridor|hidden"]
 		},
 
 		"unhide_barrel": {
@@ -240,7 +249,8 @@
 			"prereq_triggered_events": ["hide_barrel"],
 			"prereq_only_after": true,
 			"action_untrigger_events": ["hide_barrel", "guard_trigger"],
-			"action_enable_events": ["guard_trigger","throw_stone_at_guard"]
+			"action_enable_events": ["guard_trigger","throw_stone_at_guard"],
+			"action_set_state_locations": ["backward_corridor|none"]
 		},
 
 		"throw_stone_at_guard_hidden": {
@@ -254,7 +264,6 @@
 			"action_untrigger_events":["hide_barrel"],
 			"action_remove_items": ["stone"],
 			"action_add_items": ["backward_corridor:stone"],
-			"action_new_location_description": "The guard lies on the ground, presumably unconscious.",
 			"action_set_state_items": ["guard|unconscious"]
 
 		},
@@ -284,9 +293,18 @@
 
 		"arest_torch": {
 			"name": "",
-			"description": "He must have seen your torch!",
+			"description": "The guard looks at your burning torch, baffled.",
 			"prereq_location": "backward_corridor",
 			"prereq_inventory_items": ["torch"],
+			"action_trigger_event": "arest"
+		},
+
+		"arest_go_west": {
+			"name": "",
+			"prereq_verb": "go",
+			"prereq_location": "backward_corridor",
+			"description": "You try to sneak away...",
+			"prereq_only_before": true,
 			"action_trigger_event": "arest"
 		},
 
@@ -296,7 +314,8 @@
 
 		},
 		"demo": {
-			"name": "Demo",
+			"name": "Demo event to demonstrate the event system.",
+			"comment": "This comment is for describing this object, it is not displayed in the game.",
 			"description": "This is the demo event! Just for testing purposes...",
 			"prereq_verb": "switch",
 			"prereq_location": "",
@@ -313,11 +332,11 @@
 			"prereq_only_after": false,
 			"action_add_items": [""],
 			"action_remove_items": [""],
-			"action_new_location_description": "",
+			"action_set_state_locations": [],
 			"action_move_to_location": "",
 			"action_new_connections": "",
-			"action_disable_events": ["arest"],
-			"action_untrigger_events": ["arest"],
+			"action_disable_events": [],
+			"action_untrigger_events": [],
 			"action_trigger_event": "",
 			"action_enable_events": []
 		}

@@ -39,7 +39,7 @@ var advntx = (function (my) {
 
     get_location_description: function (location_id) {
       var loc = advntx.state.locations[location_id];
-      var description = loc.description;
+      var description = my.get_description(advntx.state.locations, location_id);
       if (!isEmpty(loc.additional_description)) {
         description += '\n\n';
         description += loc.additional_description;

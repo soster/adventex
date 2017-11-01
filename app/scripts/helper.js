@@ -6,6 +6,14 @@
 var advntx = (function (my) {
 
   my.get_description = function(objects, id) {
+    var obj = objects[id];
+    if (obj!=undefined && !isEmpty(obj['state']) && obj['states'] != undefined) {
+      var state = obj.states[obj.state];
+      var desc = state['description'];
+      if (!isEmpty(desc)) {
+        return desc;
+      }
+    }
     return my.get_property(objects, 'description', id)
   }
 
@@ -121,6 +129,14 @@ var advntx = (function (my) {
     return retItemIds;
   },
 
+  my.set_state_of_object = function(id,state,objects) {
+    var object = objects[id];
+    if (state!='none'&&object.states[state]===undefined) {
+      throw state+' is not an allowed state for '+id;
+    }
+    return object.state=state;
+  },
+
   my.find_item_ids_for_name = function (name,objects) {
     var itemIds = [];
     for (var property in objects) {
@@ -135,7 +151,7 @@ var advntx = (function (my) {
   my.parse_json = function (async_init) {
     var jsons = 0;
     const num_requests_necessary = 4;
-    const parameter = '?v=9';
+    const parameter = '?v=10';
 
     function async_init_local() {
       advntx.vocabulary.objects = [];
