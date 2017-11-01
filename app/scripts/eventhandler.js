@@ -155,7 +155,7 @@ var advntx = (function (my) {
       if (!isEmpty(event.action_add_items)) {
         // into the inventory
         for (var i=0;i<event.action_add_items.length;i++) {
-          var temp = event.action_add_items[i].split(":");
+          var temp = event.action_add_items[i].split(':');
           if (temp.length==1) {//inventory
             advntx.inventoryhandler.add_to_inventory(temp[0]);
           } else if (temp.length==2) {//location
@@ -175,7 +175,7 @@ var advntx = (function (my) {
       if (!isEmpty(event.action_remove_items)) {
         // from the inventory
         for (var i=0;i<event.action_remove_items.length;i++) {
-          var temp = event.action_remove_items[i].split(":");
+          var temp = event.action_remove_items[i].split(':');
           if (temp.length==1) {//inventory
             advntx.inventoryhandler.remove_from_inventory(temp[0]);
           } else if (temp.length==2) {
@@ -193,7 +193,7 @@ var advntx = (function (my) {
 
       if (!isEmpty(event.action_new_connections)) {
         for (var i=0;i<event.action_new_connections.length;i++) {
-          var temp = event.action_new_connections[i].split(":");
+          var temp = event.action_new_connections[i].split(':');
           var place = advntx.state.locations[temp[0]];
           var direction = temp[1];
           var to = temp[2];
