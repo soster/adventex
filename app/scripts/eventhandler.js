@@ -248,6 +248,10 @@ var advntx = (function (my) {
           advntx.set_state_of_object(arr[0],arr[1],advntx.state.locations);
         }
       }
+
+      if (!isEmpty(event.action_points)) {
+        advntx.state.points+=event.action_points;
+      }
       
 
       event.triggered = true;

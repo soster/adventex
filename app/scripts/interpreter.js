@@ -104,6 +104,12 @@ my.interpreter = {
           this.standard_error(command); 
       }
 
+      var allEvents = preEvents.concat(postEvents);
+      if (this.check_winning_condition(allEvents)) {
+        echo(advntx.messages.info_you_win.format(advntx.state.steps,advntx.state.points),'yellow');
+      }
+
+
       if (!foundNothing || foundEvent) {
         advntx.state.steps++;
       }
@@ -242,6 +248,15 @@ my.interpreter = {
     }
     help_string = advntx.messages.help.format(verbString);
     return help_string;
+  },
+
+  check_winning_condition: function(events) {
+    for (var i=0;i<events.length;i++) {
+      if (advntx.state.events['win_event']===events[i]) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

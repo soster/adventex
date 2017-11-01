@@ -5,6 +5,7 @@
 	"seconds": 0,
 	"steps": 0,
 	"hints": 0,
+	"points": 0,
 	"locations": {
 		"dungeon_cell": {
 			"name": "A dungeon cell",
@@ -268,7 +269,6 @@
 
 		},
 
-
 		"throw_stone_at_guard": {
 			"description": "You try to throw the stone. But the guard is quicker.",
 			"prereq_location": "backward_corridor",
@@ -309,9 +309,10 @@
 			"action_trigger_event": "arest"
 		},
 
-		"end_event": {
-			"description": "You managed to find out of the dungeon! Congratulations. The game is now over.",
-			"prereq_location": "outside"
+		"win_event": {
+			"description": "You managed to find out of the dungeon!",
+			"prereq_location": "outside",
+			"action_points": 10
 
 		},
 		"demo": {
