@@ -339,6 +339,7 @@
 			"prereq_location_items": ["portal|none"],
 			"prereq_verb": "open",
 			"prereq_used_items": ["portal|none"],
+			"prereq_inventory_items": ["key"],
 			"action_set_state_items": ["portal|open"],
 			"action_new_connections": ["entrance_corridor:south:outside"],
 			"action_points": 5
