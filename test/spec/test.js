@@ -72,6 +72,12 @@
       action_set_state_items: ['torch|none']
     },
 
+    throw_stone_at_guard: {
+			description: '',
+			prereq_verb: 'throw',
+			prereq_used_items: ['torch','guard']
+		},
+
   };
 
   var locations = {
@@ -142,8 +148,12 @@
       assert.equal('unconscious_guard', advntx.find_item_ids(names, room_item_ids, objects)[0]);
     });
 
-    it('find event', function () {
+    it('find events', function () {
       assert.equal(events[0], advntx.eventhandler.find_events(location, ['door', 'stone'], 'open', undefined, events)[0]);
+      assert.equal(0, advntx.eventhandler.find_events(location, ['torch'], [],'throw', undefined, events).length);
+      assert.equal(1, advntx.eventhandler.find_events(location, ['torch','guard'], [], 'throw', undefined, events).length);
+      
+
     });
 
     it('execute some events', function () {

@@ -37,8 +37,6 @@ var advntx = (function (my) {
             } else {
               return false;
             }
-          } else {
-            return true;
           }
         }
       }
