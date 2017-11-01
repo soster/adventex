@@ -304,6 +304,7 @@
 			"prereq_verb": "go",
 			"prereq_location": "backward_corridor",
 			"description": "You try to sneak away...",
+			"prereq_location_items": ["guard|none"],
 			"prereq_only_before": true,
 			"action_trigger_event": "arest"
 		},
