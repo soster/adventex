@@ -20,7 +20,7 @@
 			],
 			"states": {
 				"trapdoor_open": {
-					"description":"Your dungeon cell. It is moist and dark. In the weak light of the small barred window, you see an open trap door in the ground among some other things.",
+					"description":"A dungeon cell. It is moist and dark. In the weak light of the small barred window, you see an open trap door in the ground among some other things.",
 					"connections": {
 						"down":"lower_cell"
 					}
@@ -30,12 +30,19 @@
 		},
 		"lower_cell": {
 			"name": "A deep dungeon cell",
-			"description": "A deep dungeon cell.\nIt is moist and dark, but a weak light shines through the small open trap door in the ceiling.\nThe hole in the ceiling with the trap door is too high for you to climb back.\nThe door in the north seems very massive.\n\nThe cell is deserted and has not seen a cell dweller in a while.",
+			"description": "A deep dungeon cell.\nIt is moist and dark, but a weak light shines through the small open trap door in the ceiling.\nThe hole in the ceiling is too high for you to climb back.\nThe cell door in the north seems very massive.\n\nThe cell is deserted and has not seen a cell dweller in a while.",
 			"objects": [
 				"bed",
 				"unlocked_cell_door"
 			],
 			"connections": {
+			},
+			"states": {
+				"celldoor_open": {
+					"connections": {
+						"north":"corridor"
+					}
+				}
 			}
 		},
 		
@@ -80,7 +87,8 @@
 			"objects": [],
 			"connections": {
 				"west": "forward_corridor",
-				"north": "upper_corridor"
+				"north": "upper_corridor",
+				"up": "upper_corridor"
 			}
 
 		},
@@ -91,6 +99,7 @@
 			"objects": [],
 			"connections": {
 				"south": "staircase",
+				"down": "staircase",
 				"west": "todo"
 			}
 		},
@@ -389,7 +398,7 @@
 			"prereq_verb": "open",
 			"prereq_used_items": ["unlocked_cell_door"],
 			"action_set_state_items": ["unlocked_cell_door|open"],
-			"action_new_connections": ["lower_cell:north:corridor"],
+			"action_set_state_locations": ["lower_cell|celldoor_open"],
 			"action_points": 5
 		},
 

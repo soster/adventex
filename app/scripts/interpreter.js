@@ -92,9 +92,9 @@ my.interpreter = {
       if (!foundEvent && foundNothing && !isEmpty(firstVerb) && objects.length>0) {
         var itemId = itemIds[0];
         var obj = advntx.state.objects[itemId];
-        
-        var error = obj.custom_errors;
-        if (error!=undefined) {
+           
+        if (obj!=undefined&&obj.custom_errors!=undefined) {
+          var error = obj.custom_errors;
           var errorMessage = error[firstVerb];
           echo(errorMessage, 'coral');
         } else {
