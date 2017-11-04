@@ -104,6 +104,21 @@
         east: 'room_two'
       },
       objects:['torch']
+    },
+    room_connections: {
+      name: 'room with connections',
+      state: 'con',
+      connections: {
+
+      },
+      states: {
+        con: {
+          name: 'con',
+          connections: {
+            north:['room_two']
+          }
+        }
+      }
     }
 
   };
@@ -142,10 +157,21 @@
     });
 
     it('find objects', function () {
+
       var names = ['guard', 'sugar'];
       var room_item_ids = ['unconscious_guard', 'barrel', 'stone'];
 
       assert.equal('unconscious_guard', advntx.find_item_ids(names, room_item_ids, objects)[0]);
+    });
+
+    it('locations and connections', function() {
+      advntx.state.inventory = ['stone'];
+      advntx.state.objects = objects;
+      advntx.state.locations = locations;
+      advntx.state.location = 'room';
+
+      var location = advntx.state.locations['room_connections'];
+      assert.equal('room_two',advntx.locationhandler.find_connection_for_direction(location,'north'));
     });
 
     it('find events', function () {

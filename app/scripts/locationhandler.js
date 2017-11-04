@@ -40,15 +40,25 @@ var advntx = (function (my) {
     get_location_description: function (location_id) {
       var loc = advntx.state.locations[location_id];
       var description = my.get_description(advntx.state.locations, location_id);
-      if (!isEmpty(loc.additional_description)) {
-        description += '\n\n';
-        description += loc.additional_description;
-      }
       return description += '\n';
     },
 
     get_location_by_id: function (location_id) {
       return advntx.state.locations[location_id];
+    },
+
+    find_connection_for_direction: function(location, direction) {
+      var state = location.state;
+      if (!isEmpty(state)&&location.states!=undefined) {
+        var stateObj = location.states[state];
+        if (stateObj!=undefined && stateObj.connections!=undefined) {
+          return stateObj.connections[direction];
+        }
+      }
+      if (location.connections[direction] !== undefined) {
+        return (location.connections[direction]);
+      }
+      return undefined;
     },
 
     visited: function(location_id) {

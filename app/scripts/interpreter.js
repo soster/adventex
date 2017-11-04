@@ -130,8 +130,10 @@ my.interpreter = {
       return;
     }
     var location = advntx.state.locations[advntx.state.location];
-    if (location.connections[direction] !== undefined) {
-      var new_location = location.connections[direction];
+
+    var new_location = advntx.locationhandler.find_connection_for_direction(location,direction);
+
+    if (new_location!=undefined) {
       advntx.locationhandler.set_location(new_location);
       my.interpreter.describe_location_echo(new_location, false);
     } else {
