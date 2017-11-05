@@ -151,7 +151,7 @@ var advntx = (function (my) {
   my.parse_json = function (async_init) {
     var jsons = 0;
     const num_requests_necessary = 4;
-    const parameter = '?v=11';
+    const parameter = '?v=12';
 
     function async_init_local() {
       advntx.vocabulary.objects = [];
@@ -159,7 +159,7 @@ var advntx = (function (my) {
         var item = advntx.state.objects[property];
         advntx.vocabulary.objects.push(item.name);
       }
-      async_init();
+      async_init(true);
     }
 
     $.getJSON('json/vocabulary.json' + parameter,

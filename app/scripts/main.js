@@ -49,11 +49,11 @@ my.init_game = function(refresh_json) {
   if (refresh_json == true) {
     my.parse_json(my.init_game_async);
   } else {
-    my.init_game_async();
+    my.init_game_async(false);
   }
 }
 
-my.init_game_async = function () {
+my.init_game_async = function (reset) {
   my.term = $('#terminal').terminal(function (command) {
     var echo = my.echo;
 
@@ -71,8 +71,11 @@ my.init_game_async = function () {
 
   advntx.parser.set(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
   my.init_inventory();
-  var startEvent = advntx.state.events['start_event'];
-  advntx.eventhandler.execute_event(startEvent,my.echo);
+  if (reset) {
+    var startEvent = advntx.state.events['start_event'];
+    advntx.eventhandler.execute_event(startEvent,my.echo);
+  }
+
   my.describe_location_echo(advntx.state.location);
   my.async_refocus_terminal();
 }
