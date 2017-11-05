@@ -8,11 +8,12 @@ var advntx = (function (my) {
 
 
 my.interpreter = {
-  interpret: function (command, describe_location_echo, init_inventory, echo) {
+  interpret: function (command, describe_location_echo, init_inventory, echo, init_game) {
     var original = command;
     this.echo = echo;
     this.describe_location_echo = describe_location_echo;
     this.init_inventory = init_inventory;
+    this.init_game = init_game;
 
     command = command.toLowerCase();
 
@@ -67,6 +68,9 @@ my.interpreter = {
           this.examine(objects, itemIds);
         } else if (advntx.check_synonyms('drop', firstVerb)) {
           this.drop(objects, itemIdsFromInventory);
+        } else if (advntx.check_synonyms('restart', firstVerb)) {
+          this.echo('\n');
+          this.init_game(true);
         } else {// I give up...
           foundNothing = true;
         }

@@ -59,7 +59,7 @@ my.init_game_async = function (reset) {
   my.term = $('#terminal').terminal(function (command) {
     var echo = my.echo;
 
-    advntx.interpreter.interpret(command, my.describe_location_echo, my.init_inventory, my.echo);
+    advntx.interpreter.interpret(command, my.describe_location_echo, my.init_inventory, my.echo, my.init_game);
   }, {
       greetings: advntx.messages.greetings.format(my.version),
       name: advntx.messages.name,
@@ -155,6 +155,11 @@ $(function() {
     advntx.state = $.parseJSON($('#game_state').val());
     advntx.term.exec('clear');
     advntx.init_game(false);
+    
+  });
+
+  $('#btn_restart').click(function () {
+    advntx.init_game(true);
     
   });
   window.setInterval('advntx.periodic_updates()',1000);

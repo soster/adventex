@@ -39,7 +39,8 @@
         "wash",
         "drink",
         "eat", 
-        "hint"
+        "hint",
+        "restart"
     ],
     "directions": [
         "north",

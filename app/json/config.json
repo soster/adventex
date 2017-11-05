@@ -4,5 +4,5 @@
     "prompt": "advntx> "
   },
   "standard_wait_eventtext": 1000,
-  "debug": true
+  "debug": false
 }
