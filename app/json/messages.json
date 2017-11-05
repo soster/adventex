@@ -6,7 +6,7 @@
     "error_movement_thing": "You don't need to go to {0}, you are already in reach!",
     "error_get": "You can't get {0}!",
     "error_specific_get": "You can't take {0}, here!",
-    "error_portable": "{0} is to heavy, you can't pick that up!",
+    "error_portable": "{0} is too heavy, you can't pick that up!",
     "error_thing": "You don't carry or see {0}!",
     "error_drop": "You don't carry {0}!",
     "error_verb_object": "You can't {0} {1}!",

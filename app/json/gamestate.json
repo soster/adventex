@@ -29,8 +29,8 @@
 			"connections": {}
 		},
 		"lower_cell": {
-			"name": "A deep dungeon cell",
-			"description": "A deep dungeon cell.\nIt is moist and dark, but a weak light shines through the small open trap door in the ceiling.\nThe hole in the ceiling is too high for you to climb back.\nThe cell door in the north seems very massive.\n\nThe cell is deserted and has not seen a cell dweller in a while.",
+			"name": "Another dungeon cell",
+			"description": "Another dungeon cell.\nIt is moist and dark, but a weak light shines through the small open trap door in the ceiling.\nThe hole in the ceiling is too high for you to climb back.\nThe cell door in the north seems very massive.\n\nThe cell is deserted and has not seen a cell dweller in a while.",
 			"objects": [
 				"bed",
 				"unlocked_cell_door"
@@ -59,8 +59,8 @@
 			}
 		},
 		"forward_corridor": {
-			"name": "A narrow, dark corridor",
-			"description": "A narrow corridor.\nComming from the west, it stretches further to the east, leading to a staircase.\nThere is some debris on the floor, but it is to dark to see any details.",
+			"name": "A narrow, dark and dirty corridor",
+			"description": "A narrow, dark and dirty corridor.\nComing from the west, it stretches further to the east, leading to a staircase.\nThere is some debris on the floor, but it is to dark to see any details.",
 			"objects": [],
 			"connections": {
 				"west": "corridor",
@@ -69,7 +69,7 @@
 		},
 		"backward_corridor": {
 			"name": "A narrow, guarded corridor",
-			"description": "A narrow, guarded corridor.\nComming from the east, it stretches further to the west, slightly curved.",
+			"description": "A narrow, guarded corridor.\nComing from the east, it stretches further to the west, slightly curved.",
 			"objects": ["guard", "barrel"],
 			"connections": {
 				"east": "corridor",
@@ -83,7 +83,7 @@
 		},
 		"staircase": {
 			"name": "A dark staircase",
-			"description": "A dark staircase\nThe steps lead up to the north.",
+			"description": "A dark staircase.\nThe steps lead up to the north.",
 			"objects": [],
 			"connections": {
 				"west": "forward_corridor",
@@ -110,8 +110,8 @@
 		},
 
 		"upper_corridor": {
-			"name": "A narrow, upper corridor",
-			"description": "A narrow, upper corridor.\nIn the south, it leads down a staircase.\nThe corridor stretches further to the west.",
+			"name": "A narrow corridor on the second floor",
+			"description": "A narrow corridor on the second floor.\nTo the south, it leads down a staircase.\nThe corridor stretches further to the west.",
 			"objects": [],
 			"connections": {
 				"south": "staircase",
@@ -225,7 +225,8 @@
 		},
 		"barred_window": {
 			"name": "barred window",
-			"description": "It is to high for you, you can't reach it!",
+			"description": "It is too high for you, you can't reach it!",
+			"error_portable": "It is too high for you, you can't reach it!\nBesides, carrying a window around? Seriously?",
 			"portable": false,
 			"definite_article": "the",
 			"indefinite_article": "a"
@@ -243,7 +244,7 @@
 		},
 		"barrel": {
 			"name": "barrel",
-			"description": "A large barrel, approx. half your height. It is very heavy, it seems to be filled with water.",
+			"description": "A large barrel, approx. half your height. It is very heavy, but you can't look inside because it is closed.",
 			"portable": false,
 			"definite_article": "the",
 			"indefinite_article": "a",
@@ -368,11 +369,26 @@
 			"action_set_state_items":["bucket|empty"]
 		},
 
+		"open_cell_door": {
+			"description": "You try to open the cell door, but it is locked.\nYou hear someone shout from the other side of the door:\n- \"Don't you dare breaking out!\"",
+			"prereq_verb": "open",
+			"prereq_used_items": ["cell_door"],
+			"prereq_location": "dungeon_cell"
+		},
+
+		"open_barred_window": {
+			"description": "The window is too high, you can't reach it!",
+			"prereq_verb": "open",
+			"prereq_used_items": ["barred_window"],
+			"prereq_location": "dungeon_cell"
+		},
+
 		"empty_barrel": {
-			"description": "The barrel is to heavy for that!",
+			"description": "The barrel is too heavy for that!",
 			"prereq_verb": "empty",
 			"prereq_used_items":["barrel"]
 		},
+
 		"trapdoor": {
 			"name": "Open trapdoor",
 			"description": "You open the trap door with its large metal ring. The opening reveals a small corridor below your cell.",
@@ -607,7 +623,7 @@
 		},
 
 		"merchant_ring": {
-			"description": "You give her the ring you found.\nShe says:\n- \"Hmm. Ok boy, I keep my mouth shut. Now leave befor I change my mind!\"\nShe quickly disappears into the building.",
+			"description": "You give her the ring you found.\nShe says:\n- \"Hmm. Ok boy, I keep my mouth shut. Now leave before I change my mind!\"\nShe quickly disappears into the building.",
 			"prereq_location_items": ["merchant"],
 			"prereq_verb": "give",
 			"prereq_used_items": ["ring|none"],
@@ -624,8 +640,9 @@
 		"merchant_alarm": {
 			"prereq_location_items": ["merchant"],
 			"prereq_verb": "go",
-			"description": "The old woman blocks your way with her large backpack.\nShe screams for help and before you manage to overwhealm her, two guards are running towards you.\nThey hit you on your head.\nThe last thing you think about before it gets dark around you is \"not again!\"",
-			"action_move_to_location": "dungeon_cell"
+			"description": "The old woman blocks your way with her large backpack.\nShe screams for help and before you manage to overwhelm her, two guards are running towards you.\nThey hit you on your head.\nThe last thing you think about before it gets dark around you is \"not again!\"",
+			"action_move_to_location": "dungeon_cell",
+			"prereq_only_before": true
 		},
 
 		"win_event": {
