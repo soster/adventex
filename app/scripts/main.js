@@ -15,6 +15,8 @@ my.echo = function(text, color) {
   });
 };
 
+my.version = 14;
+
 
 my.describe_location_echo = function(location_id, always_show_full_description) {
   var loc = advntx.locationhandler.get_location_by_id(location_id);
@@ -59,7 +61,7 @@ my.init_game_async = function (reset) {
 
     advntx.interpreter.interpret(command, my.describe_location_echo, my.init_inventory, my.echo);
   }, {
-      greetings: advntx.messages.greetings,
+      greetings: advntx.messages.greetings.format(my.version),
       name: advntx.messages.name,
       prompt: advntx.config.console.prompt,
       height: advntx.config.console.height
@@ -129,7 +131,7 @@ $(function() {
     var retrievedObject = localStorage.getItem('advntx');
     if (retrievedObject!=undefined) {
       advntx.state = JSON.parse(retrievedObject);
-      advntx.echo("game loaded.");
+      advntx.echo('game loaded.');
       advntx.term.exec('clear');
       advntx.init_game(false);
     }
@@ -138,7 +140,7 @@ $(function() {
 
   $('#btn_save_storage').click(function () {
     localStorage.setItem('advntx', JSON.stringify(advntx.state));
-    advntx.echo("game saved.");
+    advntx.echo('game saved.');
     advntx.init_inventory();
     advntx.async_refocus_terminal();
   });

@@ -151,7 +151,7 @@ var advntx = (function (my) {
   my.parse_json = function (async_init) {
     var jsons = 0;
     const num_requests_necessary = 4;
-    const parameter = '?v=13';
+    const parameter = '?v='+advntx.version;
 
     function async_init_local() {
       advntx.vocabulary.objects = [];
