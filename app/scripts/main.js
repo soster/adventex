@@ -124,6 +124,24 @@ $(function() {
     advntx.init_inventory();
     advntx.async_refocus_terminal();
   });
+
+  $('#btn_load_storage').click(function () {
+    var retrievedObject = localStorage.getItem('advntx');
+    if (retrievedObject!=undefined) {
+      advntx.state = JSON.parse(retrievedObject);
+      advntx.echo("game loaded.");
+      advntx.term.exec('clear');
+      advntx.init_game(false);
+    }
+
+  });
+
+  $('#btn_save_storage').click(function () {
+    localStorage.setItem('advntx', JSON.stringify(advntx.state));
+    advntx.echo("game saved.");
+    advntx.init_inventory();
+    advntx.async_refocus_terminal();
+  });
   
   $('#btn_save').click(function () {
     $('#game_state').val(JSON.stringify(advntx.state));

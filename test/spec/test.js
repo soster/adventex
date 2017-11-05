@@ -7,7 +7,10 @@
 
   before(function (done) {
     // waits until done is called (async!)
-    advntx.parse_json(done);
+    function async_done(bool) {
+      done();
+    };
+    advntx.parse_json(async_done);
   });
 
   function echo(string) { };

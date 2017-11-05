@@ -9,7 +9,7 @@
 	"locations": {
 		"dungeon_cell": {
 			"name": "A dungeon cell",
-			"description": "A dungeon cell.\nIt is moist and dark, but a weak light shines through a small barred window just below the ceiling.\n\nBecause of the light you see the outlines of the few things in your cell. The door in the north seems very massive.\n\nDirty, half rotten straw is lying on the floor.",
+			"description": "A dungeon cell.\nA weak light shines through a small barred window just below the ceiling.\nYou see the outlines of the few things in your cell.\nThere is a door north from you.\nDirty, half rotten straw is lying on the floor.",
 			"objects": [
 				"straw",
 				"bucket",
@@ -83,13 +83,13 @@
 		},
 		"staircase": {
 			"name": "A dark staircase",
-			"description": "A dark staircase.\nThe steps lead up to the north.",
+			"description": "A dark staircase.\nNorth from you, the steps lead up.",
 			"objects": [],
 			"connections": {
 				"west": "forward_corridor",
 				"north": "upper_corridor",
 				"up": "upper_corridor",
-				"east": "latrine"
+				"east": "latrine_room"
 			},
 			"states": {
 				"torch": {
@@ -100,7 +100,7 @@
 
 		},
 
-		"latrine": {
+		"latrine_room": {
 			"name": "The latrine.",
 			"description": "A small, smelly room, the latrine.\nIn the end of the room is a wooden board with a hole in it.",
 			"objects": ["latrine"],
@@ -111,7 +111,7 @@
 
 		"upper_corridor": {
 			"name": "A narrow corridor on the second floor",
-			"description": "A narrow corridor on the second floor.\nTo the south, it leads down a staircase.\nThe corridor stretches further to the west.",
+			"description": "A narrow corridor on the second floor.\nSouth from you, the stairs lead down.\nThe corridor stretches further to the west.\nYou hear voices from the west.",
 			"objects": [],
 			"connections": {
 				"south": "staircase",
@@ -311,7 +311,7 @@
 			"indefinite_article": "a"
 		},
 		"latrine": {
-			"name": "latrine hole",
+			"name": "latrine",
 			"description": "Ugh, the cesspool of the latrine is not very deep but very full.\nMaybe you can find something in there?"
 		},
 
@@ -358,7 +358,7 @@
 	"events": {
 		"start_event": {
 			"name": "Awake",
-			"description": "It begins as soon as you wake up, with a searing pain piercing your temples and spreading across your entire head.\nThen comes the sickness, the dry mouth and the sudden panic - all accompanied alongside that phrase, \"never again\".\n\nAs soon as you open your eyes you realize: This is no hangover. Something terrible must have happened.\nYou are not in your bedroom, but in a dark, moist and cold room lying on a hard wooden bunk.\nYou have lost your memories of yesterday, the last thing you remember is... you are not sure WHAT you remember.",
+			"description": "It begins as soon as you wake up, with a searing pain piercing your temples and spreading across your head.\nThen comes the sickness, the dry mouth and the sudden panic -\nall accompanied alongside that phrase, \"never again\".\n\nAs soon as you open your eyes you realize: This is no hangover.\nYou are not in your bedroom.\nYou have lost your memories of yesterday, the last thing you remember is...\nwell, you are not sure WHAT you remember.",
 			"action_move_to_location": "dungeon_cell"
 		},
 
@@ -575,13 +575,19 @@
 		},
 
 		"search_latrine": {
-			"description": "Searching through fecies is no fun.\nHowever, your fingers feel something small and solid.\nIt is a ring!",
+			"description": "Searching through fecies is no fun.\nHowever, your fingers feel something small and solid.\nIt is a (albeit dirty) ring!\nYou manage to fetch it from the latrine.",
 			"prereq_verb": "search",
-			"prereq_location": "latrine",
+			"prereq_location": "latrine_room",
 			"prereq_used_items": ["latrine"],
 			"action_add_items": ["ring|dirty"],
 			"action_points": 10
-			
+		},
+
+		"use_latrine": {
+			"description": "You feel relieved.",
+			"prereq_verb": "use",
+			"prereq_location": "latrine_room",
+			"prereq_used_items": ["latrine"]
 		},
 
 		"arest_go_west": {
