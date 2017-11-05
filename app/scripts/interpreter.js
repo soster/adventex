@@ -8,11 +8,11 @@ var advntx = (function (my) {
 
 
 my.interpreter = {
-  interpret: function (command, describe_location_echo, add_to_inventory_echo, echo) {
+  interpret: function (command, describe_location_echo, init_inventory, echo) {
     var original = command;
     this.echo = echo;
     this.describe_location_echo = describe_location_echo;
-    this.add_to_inventory_echo = add_to_inventory_echo;
+    this.init_inventory = init_inventory;
 
     command = command.toLowerCase();
 
@@ -112,6 +112,7 @@ my.interpreter = {
 
       if (!foundNothing || foundEvent) {
         advntx.state.steps++;
+        my.init_inventory();
       }
 
     }
@@ -160,7 +161,8 @@ my.interpreter = {
 
       } else {
         this.echo(advntx.messages.info_you_took.format(advntx.inventoryhandler.get_name_definitive(item_id)));
-        this.add_to_inventory_echo(item_id);
+        advntx.inventoryhandler.add_to_inventory(item_id);
+        my.init_inventory();
         advntx.locationhandler.remove_item_from_location(advntx.state.location, item_id);
       }
     }

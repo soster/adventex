@@ -88,9 +88,25 @@
 			"connections": {
 				"west": "forward_corridor",
 				"north": "upper_corridor",
-				"up": "upper_corridor"
+				"up": "upper_corridor",
+				"east": "latrine"
+			},
+			"states": {
+				"torch": {
+					"description": "A staircase\nThe steps lead up to the north.\nIn a dark corner half way up the light of the torch reveals a small passage to the east."
+				}
 			}
 
+
+		},
+
+		"latrine": {
+			"name": "The latrine.",
+			"description": "A small, smelly room, the latrine.\nIn the end of the room is a wooden board with a hole in it.",
+			"objects": ["latrine"],
+			"connections": {
+				"west":"staircase"
+			}
 		},
 
 		"upper_corridor": {
@@ -217,8 +233,15 @@
 			"description": "A large barrel, approx. half your height. It is very heavy, it seems to be filled with water.",
 			"portable": false,
 			"definite_article": "the",
-			"indefinite_article": "a"
+			"indefinite_article": "a",
+			"states": {
+				"open": {
+					"name": "open",
+					"description": "A large barrel, approx. half your height. The lid is open and you see that it is filled with water."
+				}
+			}
 		},
+
 
 		"guard": {
 			"name": "guard",
@@ -253,6 +276,26 @@
 			"definite_article": "the",
 			"indefinite_article": "a"
 		},
+		"latrine": {
+			"name": "latrine hole",
+			"description": "Ugh, the cesspool of the latrine is not very deep but very full.\nMaybe you can find something in there?"
+		},
+
+		"ring": {
+			"name": "ring",
+			"description": "A golden ring.\nIt looks very valuable!",
+			"state":"dirty",
+			"definite_article": "the",
+			"indefinite_article": "a",
+			"states": {
+				"dirty": {
+					"name":"dirty",
+					"description":"A ring.\nIt is very dirty and should be cleaned."
+				}
+			}
+			
+		},
+
 		"portal": {
 			"name": "portal",
 			"description": "A large portal with two door leafs. The left one has a large keyhole. The doors are locked.",
@@ -319,13 +362,33 @@
 		},
 
 		"unhide_barrel": {
-			"description": "You are pretty sure that the guard has not seen you.",
 			"prereq_verb": "go",
-			"prereq_triggered_events": ["hide_barrel"],
+			"prereq_location_state": "backward_corridor|hidden",
 			"prereq_only_after": true,
 			"action_untrigger_events": ["hide_barrel", "guard_trigger"],
 			"action_enable_events": ["guard_trigger","throw_stone_at_guard"],
 			"action_set_state_locations": ["backward_corridor|none"]
+		},
+
+		"open_barrel": {
+			"description": "You open the barrel. It is filled with water.",
+			"prereq_verb": "open",
+			"prereq_used_items": ["barrel|none"],
+			"action_set_state_items": ["barrel|open"]
+		},
+
+		"close_barrel": {
+			"description": "You close the barrel.",
+			"prereq_verb": "close",
+			"prereq_used_items": ["barrel|open"],
+			"action_set_state_items": ["barrel|none"]
+		},
+
+		"clean_ring": {
+			"description": "You clean the ring. It looks like it is pure gold!",
+			"prereq_verb": "clean",
+			"prereq_used_items": ["ring|dirty","barrel|open"],
+			"action_set_state_items": ["ring|none"]
 		},
 
 		"throw_stone_at_guard_hidden": {
@@ -379,8 +442,32 @@
 			"name": "",
 			"description": "The guard looks at your burning torch, baffled.",
 			"prereq_location": "backward_corridor",
-			"prereq_inventory_items": ["torch"],
+			"prereq_inventory_items": ["torch|burning"],
 			"action_trigger_event": "arest"
+		},
+
+		"staircase_torch": {
+			"description": "The light of the torch reveals a small passage to the east.",
+			"prereq_location": "staircase",
+			"prereq_inventory_items": ["torch|burning"],
+			"prereq_location_state": "staircase|none",
+			"action_set_state_locations": ["staircase|torch"]		
+		}, 
+
+		"staircase_no_torch": {
+			"prereq_location": "staircase",
+			"prereq_not_inventory_items": ["torch"],
+			"prereq_location_state": "staircase|torch",
+			"action_set_state_locations": ["staircase|none"]		
+		},
+
+		"search_latrine": {
+			"description": "Searching through fecies is no fun.\nHowever, your fingers feel something small and solid.\nIt is a ring!",
+			"prereq_verb": "search",
+			"prereq_location": "latrine",
+			"prereq_used_items": ["latrine"],
+			"action_add_items": ["ring|dirty"]
+			
 		},
 
 		"arest_go_west": {
@@ -436,6 +523,7 @@
 			"prereq_visited_locations": [],
 			"prereq_only_before": false,
 			"prereq_only_after": false,
+			"prereq_location_state": "",
 			"action_add_items": [""],
 			"action_remove_items": [""],
 			"action_set_state_locations": [],

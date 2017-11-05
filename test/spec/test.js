@@ -40,7 +40,7 @@
     not_inventory: {
       name:'',
       prereq_verb: 'take',
-      prereq_items: ["torch"],
+      prereq_items: ['torch'],
       prereq_not_inventory_items: ['torch']
     },
 
@@ -76,7 +76,14 @@
 			description: '',
 			prereq_verb: 'throw',
 			prereq_used_items: ['torch','guard']
-		},
+    },
+    
+    clean_ring: {
+        description: 'You clean the ring. It looks like it is pure gold!',
+        prereq_verb: 'clean',
+        prereq_used_items: ['ring|dirty','barrel|open'],
+        action_set_state_items: ['ring|none']
+    }
 
   };
 
@@ -93,7 +100,7 @@
       name: 'room 2',
       description: 'second testroom',
       connections: {
-        west: "room"
+        west: 'room'
       },
       objects: []
     },
@@ -123,22 +130,51 @@
 
   };
 
-  var objects = { 
-    guard: { name: 'guard' }, 
-    unconscious_guard: { name: 'unconscious guard' }, 
-    barrel: { name: 'barrel' }, 
+  var objects = {
+    guard: { name: 'guard' },
+    unconscious_guard: { name: 'unconscious guard' },
+    barrel: {
+			name: 'barrel',
+			description: 'A large barrel, approx. half your height. It is very heavy, it seems to be filled with water.',
+			portable: false,
+			definite_article: 'the',
+			indefinite_article: 'a',
+			states: {
+				open: {
+					name: 'open',
+					description: 'A large barrel, approx. half your height. The lid is open and you see that it is filled with water.'
+				}
+			}
+    },
+    ring: {
+			name: 'ring',
+			description: 'A golden ring.\nIt looks very valuable!',
+			state:'dirty',
+			definite_article: 'the',
+			indefinite_article: 'a',
+			states: {
+				dirty: {
+					name:'dirty',
+					description:'A ring.\nIt is very dirty and should be cleaned.'
+				}
+			}
+		},
     door: { name: 'door' },
-    torch: { name: 'torch',
-             states:{'burning': {
-               name: 'burniiiiing'
-             }},
-             state:'burning'
-             } };
+    torch: {
+      name: 'torch',
+      states: {
+        'burning': {
+          name: 'burniiiiing'
+        }
+      },
+      state: 'burning'
+    }
+  };
 
 
   describe('advntx test suite', function () {
     it('format string test', function () {
-      assert.equal("test: test", "test: {0}".format("test"));
+      assert.equal('test: test', 'test: {0}'.format('test'));
     });
 
     it('vocabulary loaded', function () {
@@ -255,6 +291,9 @@
       var foundEvents = advntx.eventhandler.find_events(location, ['torch'], locationObjects,'examine', undefined, events);
       assert.equal(1,foundEvents.length);
       advntx.eventhandler.execute_event(foundEvents[0], echo);
+
+      var foundEvents = advntx.eventhandler.find_events(location, ['ring'], ['ring','barrel'], 'clean', undefined, events);
+      assert.equal(0,foundEvents.length);
     });
 
   });

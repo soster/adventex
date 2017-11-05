@@ -7,7 +7,7 @@ var advntx = (function (my) {
 
   my.get_description = function(objects, id) {
     var obj = objects[id];
-    if (obj!=undefined && !isEmpty(obj['state']) && obj['states'] != undefined) {
+    if (obj!=undefined && !isEmpty(obj.state) && obj.state!='none' && obj.states != undefined) {
       var state = obj.states[obj.state];
       var desc = state['description'];
       if (!isEmpty(desc)) {

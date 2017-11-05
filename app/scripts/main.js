@@ -57,7 +57,7 @@ my.init_game_async = function () {
   my.term = $('#terminal').terminal(function (command) {
     var echo = my.echo;
 
-    advntx.interpreter.interpret(command, my.describe_location_echo, my.add_to_inventory_echo, my.echo);
+    advntx.interpreter.interpret(command, my.describe_location_echo, my.init_inventory, my.echo);
   }, {
       greetings: advntx.messages.greetings,
       name: advntx.messages.name,

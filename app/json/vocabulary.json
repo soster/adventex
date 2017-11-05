@@ -35,6 +35,8 @@
         "throw",
         "empty",
         "fill",
+        "clean",
+        "wash",
         "hint"
     ],
     "directions": [
@@ -132,6 +134,9 @@
         ],
         "extinguish": [
             "delete"
+        ],
+        "clean": [
+            "wash"
         ]
     }
 }
