@@ -116,7 +116,16 @@
 			"connections": {
 				"south": "staircase",
 				"down": "staircase",
-				"west": "todo"
+				"west": "guard_room"
+			}
+		},
+
+		"guard_room": {
+			"name": "A guard room",
+			"description": "This is the guard room.\nYou manage to hide behind a ledge before anyone could see you.\nYou hear a fire cracking in a fireplace.",
+			"objects": ["small_guard","big_guard", "cell_door", "fireplace"],
+			"connections": {
+				"east": "upper_corridor"
 			}
 		},
 
@@ -157,7 +166,7 @@
 		},
 		"bucket": {
 			"name": "wooden bucket",
-			"description": "A wooden bucket. It appears to be used for... well you can imagine. No other facilities here.",
+			"description": "A wooden bucket.\nIt appears to be used for... well you can imagine. No other facilities here.",
 			"portable": false,
 			"error_portable": "Trust me, you DON'T want to carry THAT around! It is nearly full with... you know.",
 			"hidden": false,
@@ -167,6 +176,10 @@
 			"states": {
 				"full":{
 					"name":"full"
+				},
+				"empty": {
+					"name":"empty",
+					"description":"A wooden bucket.\nIt appears to be used for... well you can imagine. No other facilities here.\nIt is now empty."
 				}
 			}
 		},
@@ -259,6 +272,26 @@
 			"person": "true"
 		},
 
+		"small_guard": {
+			"name": "small guard",
+			"description": "A small, grim looking guard with a ferret face.",
+			"error_portable": "He is not your type!",
+			"portable": false,
+			"definite_article": "the",
+			"indefinite_article": "a",
+			"person": "true"
+		},
+
+		"big_guard": {
+			"name": "big guard",
+			"description": "A hefty guard with broad shoulders.",
+			"error_portable": "He is not your type!",
+			"portable": false,
+			"definite_article": "the",
+			"indefinite_article": "a",
+			"person": "true"
+		},
+
 		"stone": {
 			"name": "stone",
 			"description": "A stone the size of a fist.",
@@ -279,6 +312,11 @@
 		"latrine": {
 			"name": "latrine hole",
 			"description": "Ugh, the cesspool of the latrine is not very deep but very full.\nMaybe you can find something in there?"
+		},
+
+		"fireplace": {
+			"name": "fireplace",
+			"description": "An open fireplace, the fire is cracking and radiates a cosy warmth."
 		},
 
 		"ring": {
@@ -307,6 +345,13 @@
 					"description": "A large portal with two door leafs. The left leaf is open."
 				}
 			}
+		},
+
+		"merchant": {
+			"name": "merchant woman",
+			"description": "An old woman with a large backpack.\nShe appears to be a merchant.",
+			"portable": false,
+			"person": true
 		}
 	},
 	"events": {
@@ -314,6 +359,19 @@
 			"name": "Awake",
 			"description": "It begins as soon as you wake up, with a searing pain piercing your temples and spreading across your entire head.\nThen comes the sickness, the dry mouth and the sudden panic - all accompanied alongside that phrase, \"never again\".\n\nAs soon as you open your eyes you realize: This is no hangover. Something terrible must have happened.\nYou are not in your bedroom, but in a dark, moist and cold room lying on a hard wooden bunk.\nYou have lost your memories of yesterday, the last thing you remember is... you are not sure WHAT you remember.",
 			"action_move_to_location": "dungeon_cell"
+		},
+
+		"empty_bucket": {
+			"description": "You empty the bucket in your cell.\nNot very wise from you!\nThe floor is now covered with what was in the bucket before.",
+			"prereq_verb": "empty",
+			"prereq_used_items":["bucket|full"],
+			"action_set_state_items":["bucket|empty"]
+		},
+
+		"empty_barrel": {
+			"description": "The barrel is to heavy for that!",
+			"prereq_verb": "empty",
+			"prereq_used_items":["barrel"]
 		},
 		"trapdoor": {
 			"name": "Open trapdoor",
@@ -348,6 +406,7 @@
 			"name": "",
 			"description": "You see a big guard standing in a corner of the room. He doesn't look into your direction, yet.",
 			"prereq_location_items": ["guard|none"],
+			"trigger_once": true,
 			"prereq_only_after": true
 		},
 
@@ -391,6 +450,12 @@
 			"action_set_state_items": ["ring|none"]
 		},
 
+		"drink_barrel": {
+			"description": "You drink some water from the barrel. Refreshing!",
+			"prereq_verb": "drink",
+			"prereq_used_items": ["barrel|open"]
+		},
+
 		"throw_stone_at_guard_hidden": {
 			"description": "You throw the stone at the guard. You hit him on his head and he sinks to the ground.",
 			"prereq_location": "backward_corridor",
@@ -432,7 +497,7 @@
 			"description": "The guard points his sword into your direction. \"You! Don't move!\" he barks.\n\nYou stand still. He grabs your arm with his free hand and turns you around in a swift movement.\nAfterwards he hits you with his sword handle on the back of your head.\n\nAgain, it gets dark around you when you loose consciousness...",
 			"prereq_location": "backward_corridor",
 			"prereq_triggered_events": ["guard_trigger"],
-			"prereq_triggered_event_step_offset": 2,
+			"prereq_triggered_event_step_offset": 3,
 			"prereq_location_items": ["guard|none"],
 			"action_move_to_location": "dungeon_cell",
 			"action_untrigger_events":["guard_trigger"]
@@ -444,6 +509,38 @@
 			"prereq_location": "backward_corridor",
 			"prereq_inventory_items": ["torch|burning"],
 			"action_trigger_event": "arest"
+		},
+
+		"two_guards_trigger_eavedrop": {
+			"name": "",
+			"description": "After a quick glance around the ledge you hear two guards talking to each other.\nYou can eavedrop some of their talk:\n- \"..But where did you loose it?\"\n- \"I don't know, I still had the f*'$! ring this morning!\n  Must have lost it somewhere..\"",
+			"prereq_location": "guard_room",
+			"trigger_once": true,
+			"prereq_only_after": true,
+			"action_trigger_event": "two_guards_trigger"
+		},
+
+		"two_guards_trigger": {
+			"prereq_location": "guard_room",
+			"trigger_once": true,
+			"prereq_only_after": true
+		},
+
+		"two_guards_untrigger": {
+			"prereq_location": "upper_corridor",
+			"action_untrigger_events":["two_guards_trigger"],
+			"action_continue": true
+		},
+
+		"two_guards_arest": {
+			"name": "",
+			"description": "Both guards turn around simultanously and attack you.\nIt all happens very quickly, you have no chance against them.\nAfter getting hit on your head, you loose conscioiusness (again)...",
+			"prereq_location": "guard_room",
+			"prereq_only_before": true,
+			"prereq_triggered_events": ["two_guards_trigger"],
+			"prereq_triggered_event_step_offset": 3,
+			"action_untrigger_events":["two_guards_trigger"],
+			"action_move_to_location": "dungeon_cell"
 		},
 
 		"staircase_torch": {
@@ -466,7 +563,8 @@
 			"prereq_verb": "search",
 			"prereq_location": "latrine",
 			"prereq_used_items": ["latrine"],
-			"action_add_items": ["ring|dirty"]
+			"action_add_items": ["ring|dirty"],
+			"action_points": 10
 			
 		},
 
@@ -497,7 +595,37 @@
 			"prereq_inventory_items": ["key"],
 			"action_set_state_items": ["portal|open"],
 			"action_new_connections": ["entrance_corridor:south:outside"],
+			"trigger_once": true,
+			"action_trigger_event": "merchant",
 			"action_points": 5
+		},
+
+		"merchant": {
+			"prereq_location": "none",
+			"description": "Directly after opening the portal an old woman comes through the opening.\nShe does not wear the clothes of a guard but a large backpack, she appears to be a traveling merchant.\nShe says:\n- \"Who are you? You look like a prisoner.\n  do you know a reason why I should not alarm the guards right away?\"",
+			"action_add_items":["location:merchant"]
+		},
+
+		"merchant_ring": {
+			"description": "You give her the ring you found.\nShe says:\n- \"Hmm. Ok boy, I keep my mouth shut. Now leave befor I change my mind!\"\nShe quickly disappears into the building.",
+			"prereq_location_items": ["merchant"],
+			"prereq_verb": "give",
+			"prereq_used_items": ["ring|none"],
+			"action_remove_items": ["entrance_corridor:merchant"]
+		},
+
+		"merchant_ring_dirty": {
+			"description": "You give her the dirty ring you found.\nShe says:\n- \"Oh boy, what will I do with this dirty, useless crap?\"",
+			"prereq_location_items": ["merchant"],
+			"prereq_verb": "give",
+			"prereq_used_items": ["ring|dirty"]
+		},
+
+		"merchant_alarm": {
+			"prereq_location_items": ["merchant"],
+			"prereq_verb": "go",
+			"description": "The old woman blocks your way with her large backpack.\nShe screams for help and before you manage to overwhealm her, two guards are running towards you.\nThey hit you on your head.\nThe last thing you think about before it gets dark around you is \"not again!\"",
+			"action_move_to_location": "dungeon_cell"
 		},
 
 		"win_event": {

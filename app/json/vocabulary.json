@@ -37,6 +37,8 @@
         "fill",
         "clean",
         "wash",
+        "drink",
+        "eat", 
         "hint"
     ],
     "directions": [

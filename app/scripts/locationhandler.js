@@ -30,6 +30,9 @@ var advntx = (function (my) {
 
     //FIXME
     find_item_ids_in_location: function (names, location) {
+      if (location==undefined) {
+        return [];
+      }
       return advntx.find_item_ids(names, location.objects, advntx.state.objects);
     },
 

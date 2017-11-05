@@ -60,7 +60,7 @@ my.interpreter = {
       if (!foundEvent || doContinue) {
         if (advntx.check_synonyms('go', firstVerb)) {
           var direction = advntx.get_first_of_type(words, 'directions');
-          this.move(direction, itemIdsFromLocation);
+          this.move(direction, itemIdsFromLocation, misc);
         } else if (advntx.check_synonyms('take', firstVerb)) {
           this.get_item(objects, itemIdsFromLocation);
         } else if (advntx.check_synonyms('examine', firstVerb)) {
@@ -120,19 +120,30 @@ my.interpreter = {
 
 
 
-  move: function (direction, item_ids) {
+  move: function (direction, item_ids, misc) {
+    var new_location = undefined;
     if (isEmpty(direction)) {
       if (item_ids.length>0) {
         var item_id = item_ids[0];
           my.interpreter.echo(advntx.messages.error_movement_thing.format(advntx.inventoryhandler.get_name_definitive(item_id)), 'coral');
           return;
+      } 
+      if (advntx.config.debug && misc.length>0) {
+        var loc = advntx.state.locations[misc[0]];
+        if (loc!=undefined) {
+            new_location = misc[0];
+        }
       }
-      my.interpreter.echo(advntx.messages.error_movement, 'red');
-      return;
+      if (new_location==undefined) {
+        my.interpreter.echo(advntx.messages.error_movement, 'red');
+        return;
+      }
     }
     var location = advntx.state.locations[advntx.state.location];
 
-    var new_location = advntx.locationhandler.find_connection_for_direction(location,direction);
+    if (new_location==undefined) {
+      new_location = advntx.locationhandler.find_connection_for_direction(location,direction);
+    } 
 
     if (new_location!=undefined) {
       advntx.locationhandler.set_location(new_location);
