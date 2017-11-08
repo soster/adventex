@@ -2,9 +2,9 @@
  * Interpret commands.
  */
 'use strict';
-var advntx = (function (my) {
+export default function interpreter(my) {
   var help_string = undefined;
-
+  var advntx = my;
 
 
 my.interpreter = {
@@ -280,4 +280,4 @@ my.interpreter = {
 
 }
 return my;
-}(advntx || {}));
+}

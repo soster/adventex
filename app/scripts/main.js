@@ -1,7 +1,19 @@
+import Parser from 'parser.js';
+import parse_json from 'json.js';
+import helper from 'helper.js'
+import eventhandler from 'eventhandler.js'
+import inventoryhandler from 'inventoryhandler.js'
+import locationhandler from 'locationhandler.js'
+import interpreter from 'interpreter.js'
 
-'use strict';
 var advntx = (function (my) {
-
+  var parser;
+  helper(my);
+  eventhandler(my);
+  locationhandler(my);
+  inventoryhandler(my);
+  interpreter(my);
+  
 
 
 my.echo = function(text, color) {
@@ -49,7 +61,7 @@ my.add_to_inventory_echo = function(item) {
 
 my.init_game = function(refresh_json) {
   if (refresh_json == true) {
-    my.parse_json(my.init_game_async);
+    parse_json(my.init_game_async, advntx);
   } else {
     my.init_game_async(false);
   }
@@ -69,9 +81,8 @@ my.init_game_async = function (reset) {
 
   $('#inventory_container').css('max-height', advntx.config.console.height + 'px');
 
+  advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
 
-
-  advntx.parser.set(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
   my.init_inventory();
   if (reset) {
     var startEvent = advntx.state.events['start_event'];

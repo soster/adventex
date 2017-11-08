@@ -1,5 +1,6 @@
 'use strict'; 
-var advntx = (function (my) {
+export default function inventoryhandler(my) {
+  var advntx = my;
   my.inventoryhandler =  {
     in_inventory:function (item_id) {
       if (advntx.state.inventory.indexOf(item_id) != -1) {
@@ -101,4 +102,4 @@ var advntx = (function (my) {
 
   }
   return my; 
-}(advntx ||  {}))
+}

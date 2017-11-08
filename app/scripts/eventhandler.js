@@ -1,5 +1,7 @@
 'use strict';
-var advntx = (function (my) {
+export default function eventhandler(my) {
+  var advntx = my;
+
   my.eventhandler = {
     check_event_prereq: function (prereq, to_check) {
       if (isEmpty(prereq) || prereq == to_check) {
@@ -304,4 +306,4 @@ var advntx = (function (my) {
 
   }
   return my;
-}(advntx || {}));
+}

@@ -140,7 +140,8 @@ gulp.task('serve', () => {
       server: {
         baseDir: ['.tmp', 'app'],
         routes: {
-          '/bower_components': 'bower_components'
+          '/bower_components': 'bower_components',
+          '/node_modules': 'node_modules'
         }
       }
     });

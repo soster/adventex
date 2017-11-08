@@ -1,5 +1,6 @@
 'use strict';
-var advntx = (function (my) {
+export default function locationhandler(my) {
+  var advntx = my;
   my.locationhandler = {
     remove_item_from_location: function (location, item) {
       var place = advntx.state.locations[location];
@@ -74,4 +75,4 @@ var advntx = (function (my) {
     }
   }
   return my;
-}(advntx || {}));
+}
