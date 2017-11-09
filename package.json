@@ -32,9 +32,7 @@
     "gulp-util": "^3.0.8",
     "gulp-jsonminify": "1.0.0",
     "run-sequence": "^1.2.2",
-    "wiredep": "^4.0.0",
-    "systemjs":"0.20.19" ,
-    "systemjs-plugin-babel":"0.0.25"
+    "wiredep": "^4.0.0"
   },
   "eslintConfig": {
     "env": {
@@ -47,6 +45,27 @@
         2,
         "single"
       ]
+    }
+  },
+  "jspm": {
+    "dependencies": {
+      "bootstrap": "github:twbs/bootstrap@4.0.0-beta",
+      "jquery": "npm:jquery@^3.2.1",
+      "jquery.terminal": "npm:jquery.terminal@^1.10.1",
+      "popper.js": "npm:popper.js@^1.12.6"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    },
+    "overrides": {
+      "npm:jquery.terminal@1.10.1": {
+        "format": "global"
+      },
+      "github:twbs/bootstrap@4.0.0-beta": {
+        "format": "global"
+      }
     }
   }
 }

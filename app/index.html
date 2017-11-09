@@ -89,46 +89,18 @@
     </div>
 
 
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src="/bower_components/tether/dist/js/tether.js"></script>
-    <script src="/bower_components/jquery.terminal/js/jquery.terminal.min.js"></script>
-    <script src="/bower_components/jquery.terminal/js/jquery.mousewheel-min.js"></script>
-    <script src="/bower_components/babel-polyfill/browser-polyfill.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
 
-    
-    <!-- build:js scripts/plugins.js -->
-    <script src="/bower_components/bootstrap/js/dist/util.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/alert.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/button.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/carousel.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/collapse.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/dropdown.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/modal.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/scrollspy.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/tab.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/tooltip.js"></script>
-    <script src="/bower_components/bootstrap/js/dist/popover.js"></script>
-    <!-- endbuild -->
     
     <!-- build:js scripts/main.js -->
     <script src="scripts/functions.js"></script>
     <!-- endbuild -->
 
-    <script src="node_modules/systemjs/dist/system.js"></script>
+    <script src="jspm_packages/system.js"></script>
+    <script src="config/config.js"></script>
     <script>
         System.config({
-          baseURL: './scripts',
-          transpiler: 'plugin-babel',
-          map: {
-            'plugin-babel': '/node_modules/systemjs-plugin-babel/plugin-babel.js',
-            'systemjs-babel-build': '/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js'
-        }
         });
-        System.import('main.js')
+        System.import('scripts/main.js')
       </script>
 
   </body>

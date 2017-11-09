@@ -1,10 +1,13 @@
-import Parser from 'parser.js';
-import parse_json from 'json.js';
-import helper from 'helper.js'
-import eventhandler from 'eventhandler.js'
-import inventoryhandler from 'inventoryhandler.js'
-import locationhandler from 'locationhandler.js'
-import interpreter from 'interpreter.js'
+import $ from 'jquery';
+import terminal from 'jquery.terminal';
+import Parser from 'scripts/parser.js';
+import parse_json from 'scripts/json.js';
+import helper from 'scripts/helper.js'
+import eventhandler from 'scripts/eventhandler.js'
+import inventoryhandler from 'scripts/inventoryhandler.js'
+import locationhandler from 'scripts/locationhandler.js'
+import interpreter from 'scripts/interpreter.js'
+
 
 var advntx = (function (my) {
   var parser;
