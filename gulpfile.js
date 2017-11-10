@@ -10,6 +10,7 @@ var version = require('gulp-version-number');
 const mocha = require('gulp-mocha');
 var gutil = require('gulp-util');
 var jsonminify = require('gulp-jsonminify');
+var gulp_jspm = require('gulp-jspm'); // npm install gulp-jspm 
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -30,6 +31,16 @@ gulp.task('test', function () {
   return gulp.src(['app/scripts/**/!(main.js)','test/**/*.js'], { read: false })
   .pipe(mocha({ reporter: 'list' }))
   .on('error', gutil.log);
+});
+
+gulp.task('jspm', function(){
+    return gulp.src('app/scripts/**/*.js')
+    .pipe($.plumber())
+    .pipe($.sourcemaps.init())
+    .pipe(gulp_jspm())
+    .pipe($.sourcemaps.write('.'))
+    .pipe(gulp.dest('.tmp/scripts'))
+      .pipe(reload({stream: true}));
 });
 
 
@@ -83,7 +94,7 @@ gulp.task('lint:test', () => {
     .pipe(gulp.dest('test/spec'));
 });
 
-gulp.task('html', ['styles', 'scripts', 'json'], () => {
+gulp.task('html', ['styles', 'jspm', 'json'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if(/\.js$/, $.uglify({compress: {drop_console: true}})))
@@ -139,7 +150,7 @@ gulp.task('serve', () => {
       port: 9000,
       server: {
 
-        baseDir: ['.tmp', 'app', ''],
+        baseDir: ['.tmp', '.', ''],
         routes: {
           '/bower_components': 'bower_components',
           '/jspm_packages': 'jspm_packages',
@@ -210,7 +221,7 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', ['lint', 'json', 'html', 'images', 'fonts', 'extras'], () => {
+gulp.task('build', ['json', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 

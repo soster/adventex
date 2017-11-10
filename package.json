@@ -71,5 +71,8 @@
         "format": "global"
       }
     }
+  },
+  "dependencies": {
+    "gulp-jspm": "^0.5.13"
   }
 }

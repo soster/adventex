@@ -1,17 +1,17 @@
 
 import 'bootstrap/css/bootstrap.css!';
 import 'jquery.terminal/css/jquery.terminal.min.css!';
-import 'styles/main.css!';
+import 'app/styles/main.css!';
 
 import $ from 'jquery';
 import terminal from 'jquery.terminal';
-import Parser from 'scripts/parser.js';
-import parse_json from 'scripts/json.js';
-import helper from 'scripts/helper.js'
-import eventhandler from 'scripts/eventhandler.js'
-import inventoryhandler from 'scripts/inventoryhandler.js'
-import locationhandler from 'scripts/locationhandler.js'
-import interpreter from 'scripts/interpreter.js'
+import Parser from 'app/scripts/parser.js';
+import parse_json from 'app/scripts/json.js';
+import helper from 'app/scripts/helper.js'
+import eventhandler from 'app/scripts/eventhandler.js'
+import inventoryhandler from 'app/scripts/inventoryhandler.js'
+import locationhandler from 'app/scripts/locationhandler.js'
+import interpreter from 'app/scripts/interpreter.js'
 
 
 
