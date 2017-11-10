@@ -18,6 +18,7 @@ System.config({
     "babel-runtime": "npm:babel-runtime@5.8.38",
     "bootstrap": "github:twbs/bootstrap@4.0.0-beta",
     "core-js": "npm:core-js@1.2.7",
+    "css": "github:systemjs/plugin-css@0.1.36",
     "jquery": "npm:jquery@3.2.1",
     "jquery.terminal": "npm:jquery.terminal@1.10.1",
     "popper.js": "npm:popper.js@1.12.6",

@@ -50,6 +50,7 @@
   "jspm": {
     "dependencies": {
       "bootstrap": "github:twbs/bootstrap@4.0.0-beta",
+      "css": "github:systemjs/plugin-css@^0.1.16",
       "jquery": "npm:jquery@^3.2.1",
       "jquery.terminal": "npm:jquery.terminal@^1.10.1",
       "popper.js": "npm:popper.js@^1.12.6"
@@ -64,6 +65,9 @@
         "format": "global"
       },
       "github:twbs/bootstrap@4.0.0-beta": {
+        "format": "global"
+      },
+      "npm:popper.js@^1.12.6": {
         "format": "global"
       }
     }

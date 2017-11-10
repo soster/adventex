@@ -1,3 +1,8 @@
+
+import 'bootstrap/css/bootstrap.css!';
+import 'jquery.terminal/css/jquery.terminal.min.css!';
+import 'styles/main.css!';
+
 import $ from 'jquery';
 import terminal from 'jquery.terminal';
 import Parser from 'scripts/parser.js';
@@ -7,6 +12,8 @@ import eventhandler from 'scripts/eventhandler.js'
 import inventoryhandler from 'scripts/inventoryhandler.js'
 import locationhandler from 'scripts/locationhandler.js'
 import interpreter from 'scripts/interpreter.js'
+
+
 
 
 var advntx = (function (my) {
@@ -134,7 +141,7 @@ return my;
 
 
 /** Global Initializations */
-$(function() {
+$(document).ready(function() {
   $('#btn_help').click(function () {
     advntx.term.exec('help', false);
     advntx.init_inventory();
