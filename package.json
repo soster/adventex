@@ -31,8 +31,9 @@
     "gulp-mocha": "^4.3.1",
     "gulp-util": "^3.0.8",
     "gulp-jsonminify": "1.0.0",
-    "run-sequence": "^1.2.2",
-    "wiredep": "^4.0.0"
+    "gulp-jspm": "^0.5.13",
+    "gulp-remove-code": "^1.0.2",
+    "run-sequence": "^1.2.2"
   },
   "eslintConfig": {
     "env": {
@@ -65,9 +66,6 @@
         "format": "global"
       },
       "github:twbs/bootstrap@4.0.0-beta": {
-        "format": "global"
-      },
-      "npm:popper.js@^1.12.6": {
         "format": "global"
       }
     }

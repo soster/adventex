@@ -7,7 +7,7 @@
     <title>adventex</title>
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-
+    <link rel="stylesheet" media="all" href="styles/main.css">
     
   </head>
   <body>
@@ -81,17 +81,25 @@
 
 
     
-    <!-- build:js scripts/main.js -->
-    <script src="app/scripts/functions.js"></script>
+    <!-- build:js scripts/app.js -->
+    <script src="scripts/functions.js"></script>
     <!-- endbuild -->
 
+
+     <!--removeIf(production)-->
     <script src="jspm_packages/system.js"></script>
     <script src="config/config.js"></script>
+    <!--endRemoveIf(production)-->
+
+    <!-- System.js bundle: -->
+    <script src="scripts/main.bundle.js"></script>
+    
+    <!--removeIf(production)-->
     <script>
         System.config({
         });
-        System.import('app/scripts/main.js')
+        System.import('scripts/main.js')
       </script>
-
+    <!--endRemoveIf(production)-->
   </body>
 </html>
