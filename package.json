@@ -51,6 +51,7 @@
   "jspm": {
     "dependencies": {
       "bootstrap": "github:twbs/bootstrap@4.0.0-beta",
+      "buffer": "github:jspm/nodelibs-buffer@^0.1.1",
       "css": "github:systemjs/plugin-css@^0.1.16",
       "jquery": "npm:jquery@^3.2.1",
       "jquery.terminal": "npm:jquery.terminal@^1.10.1",
@@ -59,7 +60,9 @@
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.24",
       "babel-runtime": "npm:babel-runtime@^5.8.24",
-      "core-js": "npm:core-js@^1.1.4"
+      "chai": "npm:chai@^4.1.2",
+      "core-js": "npm:core-js@^1.1.4",
+      "mocha": "npm:mocha@^4.0.1"
     },
     "overrides": {
       "npm:jquery.terminal@1.10.1": {

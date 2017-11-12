@@ -124,7 +124,6 @@ gulp.task('serve', () => {
 
         baseDir: ['.tmp', '.', 'app'],
         routes: {
-          '/bower_components': 'bower_components',
           '/jspm_packages': 'jspm_packages',
           '/config': '.'
         }
@@ -156,16 +155,17 @@ gulp.task('serve:dist', ['default'], () => {
   });
 });
 
-gulp.task('serve:test', ['scripts'], () => {
+gulp.task('serve:test', [], () => {
   browserSync.init({
     notify: false,
     port: 9000,
     ui: false,
     server: {
-      baseDir: ['test','app'],
+      baseDir: ['test','app', '.', '.tmp'],
       routes: {
-        '/scripts': '.tmp/scripts',
-        '/bower_components': 'bower_components',
+        '/jspm_packages': 'jspm_packages',
+        '/test': 'test',
+        '/config': '.'
       }
     }
   });

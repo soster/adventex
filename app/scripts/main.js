@@ -1,7 +1,6 @@
 
 import 'bootstrap/css/bootstrap.css!';
 import 'jquery.terminal/css/jquery.terminal.min.css!';
-//import 'app/styles/main.css!';
 
 import $ from 'jquery';
 import terminal from 'jquery.terminal';

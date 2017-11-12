@@ -1,30 +1,32 @@
-
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Mocha Spec Runner</title>
   <link rel="stylesheet" href="../bower_components/mocha/mocha.css">
 </head>
+
 <body>
   <div id="mocha"></div>
-  <script src="../bower_components/mocha/mocha.js"></script>
-  <script src="../bower_components/chai/chai.js"></script>
-  <script src="/bower_components/jquery/dist/jquery.js"></script>
-  <script>mocha.setup('bdd');</script>
 
-  <!-- include source files here... -->
-  <script src="/scripts/functions.js"></script>
-  <script src="/scripts/helper.js"></script>
-  <script src="/scripts/parser.js"></script>
-  <script src="/scripts/interpreter.js"></script>
-  <script src="/scripts/inventoryhandler.js"></script>
-  <script src="/scripts/locationhandler.js"></script>
-  <script src="/scripts/eventhandler.js"></script>
-  <!-- include spec files here... -->
-  <script src="spec/test.js"></script>
+  <!-- build:js scripts/app.js -->
+  <script src="scripts/functions.js"></script>
+  <!-- endbuild -->
+
+
+  <script src="jspm_packages/system.js"></script>
+  <script src="config/config.js"></script>
+
   <script>
-      mocha.run();
+    System.import('test/spec/test.js').then(function() {
+
+  });
+  </script>
+
+  <script>
+
   </script>
 </body>
+
 </html>
