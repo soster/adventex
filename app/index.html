@@ -95,7 +95,9 @@
     <script>
         System.config({
         });
-        System.import('scripts/main.js')
+        System.import('scripts/main.js').then(function() {
+          
+        });
     </script>
     <!--endRemoveIf(production)-->
   </body>

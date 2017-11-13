@@ -31,7 +31,7 @@ import Interpreter from 'app/scripts/interpreter.js'
 
 
 
-var advntx = (function (my) {
+window.advntx = (function (my) {
   var parser;
   var inventoryHandler;
 
@@ -145,14 +145,15 @@ var advntx = (function (my) {
     }
   }
 
-  my.periodic_updates = function () {
-    advntx.state.seconds++;
-    $('#time_element').text(advntx.state.seconds);
-  }
 
   return my;
-}(advntx || {}));
+}(window.advntx || {}));
 
+
+window.periodicUpdates = function periodicUpdates() {
+  advntx.state.seconds++;
+  $('#time_element').text(advntx.state.seconds);
+}
 
 
 /** Global Initializations */
@@ -198,7 +199,7 @@ $(document).ready(function () {
     advntx.init_game(true);
 
   });
-  window.setInterval('advntx.periodic_updates()', 1000);
+  window.setInterval('window.periodicUpdates()', 1000);
   advntx.init_game(true);
 });
 
