@@ -6,26 +6,32 @@ import {
 } from 'app/scripts/helper.js'
 
 
-export default function eventhandler(my) {
-  var advntx = my;
+export default class EventHandler {
 
-  my.eventhandler = {
-    check_event_prereq: function (prereq, to_check) {
+  constructor(state, vocabulary, inventoryHandler, locationHandler) {
+    this.state = state;
+    this.vocabulary = vocabulary;
+    this.inventoryHandler = inventoryHandler;
+    this.locationHandler = locationHandler;
+
+  }
+
+    check_event_prereq (prereq, to_check) {
       if (isEmpty(prereq) || prereq == to_check) {
         return true;
       }
       return false;
-    },
+    }
 
-    check_event_prereq_inventory: function (prereq) {
-      return this.check_event_prereq_array(prereq, advntx.state.inventory);
-    },
+    check_event_prereq_inventory (prereq) {
+      return this.check_event_prereq_array(prereq, this.state.inventory);
+    }
 
-    check_event_prereq_not_inventory: function (prereq) {
-      return this.check_event_prereq_not_array(prereq, advntx.state.inventory);
-    },
+    check_event_prereq_not_inventory (prereq) {
+      return this.check_event_prereq_not_array(prereq, this.state.inventory);
+    }
 
-    check_event_prereq_array: function (prereq, to_check) {
+    check_event_prereq_array (prereq, to_check) {
       if (prereq===undefined || prereq == '') {
         return true;
       }
@@ -40,7 +46,7 @@ export default function eventhandler(my) {
           return false;
         } else {
           if (arr.length>1) {
-            var state = advntx.inventoryHandler.get_state_of_object(arr[0]);
+            var state = this.inventoryHandler.get_state_of_object(arr[0]);
             if (state==undefined && arr[1]=='none') {
               continue;
             }
@@ -52,9 +58,9 @@ export default function eventhandler(my) {
       }
 
       return true;
-    },
+    }
 
-    check_event_prereq_not_array: function (prereq, to_check) {
+    check_event_prereq_not_array (prereq, to_check) {
       if (prereq===undefined || prereq == '') {
         return true;
       }
@@ -67,7 +73,7 @@ export default function eventhandler(my) {
         var arr = prereq[i].split('|');
         if (to_check.indexOf(arr[0])!=-1) {
           if (arr.length>1) {
-            var state = advntx.inventoryHandler.get_state_of_object(arr[0]);
+            var state = this.inventoryHandler.get_state_of_object(arr[0]);
             if (state==arr[1]) {
               return false;
             }
@@ -78,51 +84,51 @@ export default function eventhandler(my) {
       }
 
       return true;
-    },
+    }
     
     /** checks if the events in the list are already triggered AND enabled */
-    check_triggered_events: function(prereq_triggered_events,prereq_triggered_event_step_offset) {
+    check_triggered_events (prereq_triggered_events,prereq_triggered_event_step_offset) {
       if (isEmpty(prereq_triggered_events)) {
         return true;
       }
 
       for (var i=0;i<prereq_triggered_events.length;i++) {
-        var event = advntx.state.events[prereq_triggered_events[i]];
+        var event = this.state.events[prereq_triggered_events[i]];
         if (event===undefined) {
           return true;
         }
         if ((event.triggered===undefined || event.triggered == false) || (event.disabled != undefined && event.disabled == true)) {
           return false;
         } else if (prereq_triggered_event_step_offset!=undefined && prereq_triggered_event_step_offset>0){
-          if (advntx.state.steps-event.triggered_steps<prereq_triggered_event_step_offset) {
+          if (this.state.steps-event.triggered_steps<prereq_triggered_event_step_offset) {
             return false;
           }
         }
       }
       return true;
-    },
+    }
 
-    check_visited_locations: function(prereq_visited_locations) {
+    check_visited_locations(prereq_visited_locations) {
       if (isEmpty(prereq_visited_locations)) {
         return true;
       }
 
       for (var i=0;i<prereq_visited_locations.length;i++) {
-        var loc = advntx.state.locations[prereq_visited_locations[i]];
+        var loc = this.state.locations[prereq_visited_locations[i]];
         if (loc.visited===undefined || loc.visited == false) {
           return false;
         }
       }
       return true;
-    },
+    }
 
-    check_event_prereq_location_state: function(prereq) {
+    check_event_prereq_location_state(prereq) {
       if (isEmpty(prereq)) {
         return true;
       }
       var arr = prereq.split('|');
       if (arr.length==2) {
-        var location = advntx.state.locations[arr[0]];
+        var location = this.state.locations[arr[0]];
         if (location.state==arr[1]) {
           return true;
         } else if (location.state===undefined&&arr[1]=='none') {
@@ -132,9 +138,9 @@ export default function eventhandler(my) {
         throw 'location and state for prereq not set!';
       }
       return false;
-    },
+    }
 
-    check_trigger_once: function(event) {
+    check_trigger_once(event) {
       if (event.triggered===undefined||event.triggered==false||event.trigger_once === undefined) {
         return true;
       }
@@ -142,9 +148,9 @@ export default function eventhandler(my) {
       if (event.triggered==true&&event.trigger_once==true) {
         return false;
       }
-    },
+    }
 
-    find_events: function (location, used_items, location_items, verb, preposition, events) {
+    find_events (location, used_items, location_items, verb, preposition, events) {
       var retEvents = [];
       for (var property in events) {
         if (events.hasOwnProperty(property) && property != 'start_event') {
@@ -153,7 +159,7 @@ export default function eventhandler(my) {
             continue;
           }
           if (!isEmpty(event.prereq_verb) && !isEmpty(verb)) {
-            if (check_synonyms(event.prereq_verb, verb, advntx.vocabulary.synonyms)) {
+            if (check_synonyms(event.prereq_verb, verb, this.vocabulary.synonyms)) {
               verb = event.prereq_verb;
             }
           }
@@ -176,9 +182,9 @@ export default function eventhandler(my) {
       }
 
       return retEvents;
-    },
+    }
 
-    execute_event: function (event, echo) {
+    execute_event (event, echo) {
       if (!isEmpty(event.action_add_items)) {
         // into the inventory
         for (var i=0;i<event.action_add_items.length;i++) {
@@ -186,20 +192,20 @@ export default function eventhandler(my) {
           if (temp.length==1) {//inventory
             var stateSplit = temp[0].split('|');
             if (stateSplit.length==2) {
-              advntx.state.objects[stateSplit[0]].state = stateSplit[1];
+              this.state.objects[stateSplit[0]].state = stateSplit[1];
             }
-            advntx.inventoryHandler.add_to_inventory(stateSplit[0]);
+            this.inventoryHandler.add_to_inventory(stateSplit[0]);
           } else if (temp.length==2) {//location
             var location;
             if (temp[0]=='location') {
-              location = advntx.state.locations[advntx.state.location];
+              location = this.state.locations[this.state.location];
             } else {
-              location = advntx.state.locations[temp[0]];
+              location = this.state.locations[temp[0]];
             }
 
             var stateSplit = temp[1].split('|');
             if (stateSplit.length==2) {
-              advntx.state.objects[stateSplit[0]].state = stateSplit[1];
+              this.state.objects[stateSplit[0]].state = stateSplit[1];
             }
 
             if (location.objects[stateSplit[0]]===undefined) {
@@ -214,13 +220,13 @@ export default function eventhandler(my) {
         for (var i=0;i<event.action_remove_items.length;i++) {
           var temp = event.action_remove_items[i].split(':');
           if (temp.length==1) {//inventory
-            advntx.inventoryHandler.remove_from_inventory(temp[0]);
+            this.inventoryHandler.remove_from_inventory(temp[0]);
           } else if (temp.length==2) {
             var location;
             if (temp[0]=='location') {
-              location = advntx.state.locations[advntx.state.location];
+              location = this.state.locations[this.state.location];
             } else {
-              location = advntx.state.locations[temp[0]];
+              location = this.state.locations[temp[0]];
             }
             location.objects.remove(temp[1]);
           } 
@@ -231,7 +237,7 @@ export default function eventhandler(my) {
       if (!isEmpty(event.action_new_connections)) {
         for (var i=0;i<event.action_new_connections.length;i++) {
           var temp = event.action_new_connections[i].split(':');
-          var place = advntx.state.locations[temp[0]];
+          var place = this.state.locations[temp[0]];
           var direction = temp[1];
           var to = temp[2];
           place.connections[direction] = to;
@@ -239,22 +245,22 @@ export default function eventhandler(my) {
       }
 
       if (!isEmpty(event.action_move_to_location)) {
-        advntx.locationhandler.set_location(event.action_move_to_location);
+        this.locationHandler.set_location(event.action_move_to_location);
       }
 
       if (!isEmpty(event.action_disable_events)) {
         for (var i=0;i<event.action_disable_events.length;i++) {
-          var nevent = advntx.state.events[event.action_disable_events[i]];
+          var nevent = this.state.events[event.action_disable_events[i]];
           nevent.disabled = true;
         }
       }
 
       if (!isEmpty(event.action_enable_events)) {
         for (var i=0;i<event.action_enable_events.length;i++) {
-          var nevent = advntx.state.events[event.action_enable_events[i]];
+          var nevent = this.state.events[event.action_enable_events[i]];
           if (nevent!= undefined) {
             nevent.disabled = false;
-            nevent.triggered_steps = advntx.state.steps;
+            nevent.triggered_steps = this.state.steps;
           }
         }
         
@@ -262,7 +268,7 @@ export default function eventhandler(my) {
 
       if (!isEmpty(event.action_untrigger_events)) {
           for (var i = 0; i < event.action_untrigger_events.length; i++) {
-              var nevent = advntx.state.events[event.action_untrigger_events[i]];
+              var nevent = this.state.events[event.action_untrigger_events[i]];
               if (nevent != undefined) {
                   nevent.triggered = false;
                   nevent.triggered_steps = 0;
@@ -277,29 +283,29 @@ export default function eventhandler(my) {
       if (!isEmpty(event.action_set_state_items)) {
         for (var i=0;i<event.action_set_state_items.length;i++) {
           var arr = event.action_set_state_items[i].split('|');
-          set_state_of_object(arr[0],arr[1],advntx.state.objects);
+          set_state_of_object(arr[0],arr[1],this.state.objects);
         }
       }
 
       if (!isEmpty(event.action_set_state_locations)) {
         for (var i=0;i<event.action_set_state_locations.length;i++) {
           var arr = event.action_set_state_locations[i].split('|');
-          set_state_of_object(arr[0],arr[1],advntx.state.locations);
+          set_state_of_object(arr[0],arr[1],this.state.locations);
         }
       }
 
       if (!isEmpty(event.action_points)) {
-        advntx.state.points+=event.action_points;
+        this.state.points+=event.action_points;
       }
       
 
       event.triggered = true;
-      event.triggered_steps = advntx.state.steps;
+      event.triggered_steps = this.state.steps;
 
 
 
       if (!isEmpty(event.action_trigger_event)) {
-          var nevent = advntx.state.events[event.action_trigger_event];
+          var nevent = this.state.events[event.action_trigger_event];
           return this.execute_event(nevent, echo);
       }
 
@@ -311,6 +317,4 @@ export default function eventhandler(my) {
 
     }
 
-  }
-  return my;
 }

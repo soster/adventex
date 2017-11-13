@@ -22,19 +22,17 @@ import {
   list_objects,
   set_state_of_object
 } from 'app/scripts/helper.js'
-import eventhandler from 'app/scripts/eventhandler.js'
+
 import InventoryHandler from 'app/scripts/inventoryhandler.js'
-import locationhandler from 'app/scripts/locationhandler.js'
-import interpreter from 'app/scripts/interpreter.js'
+import LocationHandler from 'app/scripts/locationhandler.js'
+import EventHandler from 'app/scripts/eventhandler.js'
+import Interpreter from 'app/scripts/interpreter.js'
 
 
 
 
 var advntx = (function (my) {
   var parser;
-  eventhandler(my);
-  locationhandler(my);
-  interpreter(my);
   var inventoryHandler;
 
 
@@ -54,9 +52,9 @@ var advntx = (function (my) {
 
 
   my.describe_location_echo = function (location_id, always_show_full_description) {
-    var loc = advntx.locationhandler.get_location_by_id(location_id);
-    if (!advntx.locationhandler.visited(location_id) || always_show_full_description) {
-      my.echo(advntx.locationhandler.get_location_description(location_id), loc.color);
+    var loc = advntx.locationHandler.get_location_by_id(location_id);
+    if (!advntx.locationHandler.visited(location_id) || always_show_full_description) {
+      my.echo(advntx.locationHandler.get_location_description(location_id), loc.color);
     } else {
       my.echo(get_name(advntx.state.locations, location_id), loc.color);
     }
@@ -106,11 +104,14 @@ var advntx = (function (my) {
 
     advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
     advntx.inventoryHandler = new InventoryHandler(advntx.state, advntx.init_inventory);
+    advntx.interpreter = new Interpreter(advntx);
+    advntx.locationHandler = new LocationHandler(advntx.state);
+    advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, advntx.inventoryHandler, advntx.locationHandler);
 
     my.init_inventory();
     if (reset) {
       var startEvent = advntx.state.events['start_event'];
-      advntx.eventhandler.execute_event(startEvent, my.echo);
+      advntx.eventHandler.execute_event(startEvent, my.echo);
     }
 
     my.describe_location_echo(advntx.state.location);

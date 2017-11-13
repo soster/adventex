@@ -17,26 +17,30 @@ import {
   set_state_of_object
 } from 'app/scripts/helper.js'
 
-export default function locationhandler(my) {
-  var advntx = my;
-  my.locationhandler = {
-    remove_item_from_location: function (location, item) {
-      var place = advntx.state.locations[location];
+export default class LocationHandler {
+
+  constructor(state) {
+    this.state = state;
+  }
+
+
+    remove_item_from_location (location, item) {
+      var place = this.state.locations[location];
       if (place !== undefined) {
         var loc = place.objects.indexOf(item);
         if (loc != -1) {
           place.objects.splice(loc, 1);
         }
       }
-    },
+    }
 
-    add_item_to_location: function (location, item) {
-      var place = advntx.state.locations[location];
+    add_item_to_location (location, item) {
+      var place = this.state.locations[location];
       place.objects.push(item);
-    },
+    }
 
-    in_location: function (itemOrPerson) {
-      var olocation = advntx.state.locations[advntx.state.location];
+    in_location (itemOrPerson) {
+      var olocation = this.state.locations[this.state.location];
       if (olocation.objects.indexOf(itemOrPerson.toLowerCase()) != -1) {
         return true;
       }
@@ -45,31 +49,31 @@ export default function locationhandler(my) {
       }
       return false;
 
-    },
+    }
 
     //FIXME
-    find_item_ids_in_location: function (names, location) {
+    find_item_ids_in_location (names, location) {
       if (location==undefined) {
         return [];
       }
-      return find_item_ids(names, location.objects, advntx.state.objects);
-    },
+      return find_item_ids(names, location.objects, this.state.objects);
+    }
 
-    set_location: function (location_id) {
-      advntx.state.location = location_id;
-    },
+    set_location (location_id) {
+      this.state.location = location_id;
+    }
 
-    get_location_description: function (location_id) {
-      var loc = advntx.state.locations[location_id];
-      var description = get_description(advntx.state.locations, location_id);
+    get_location_description (location_id) {
+      var loc = this.state.locations[location_id];
+      var description = get_description(this.state.locations, location_id);
       return description += '\n';
-    },
+    }
 
-    get_location_by_id: function (location_id) {
-      return advntx.state.locations[location_id];
-    },
+    get_location_by_id (location_id) {
+      return this.state.locations[location_id];
+    }
 
-    find_connection_for_direction: function(location, direction) {
+    find_connection_for_direction(location, direction) {
       var state = location.state;
       if (!isEmpty(state)&&location.states!=undefined) {
         var stateObj = location.states[state];
@@ -81,9 +85,9 @@ export default function locationhandler(my) {
         return (location.connections[direction]);
       }
       return undefined;
-    },
+    }
 
-    visited: function(location_id) {
+    visited(location_id) {
       var loc = this.get_location_by_id(location_id);
       if (loc.visited===undefined||loc.visited==false) {
         loc.visited = true;
@@ -91,6 +95,5 @@ export default function locationhandler(my) {
       }
       return true;
     }
-  }
-  return my;
+
 }
