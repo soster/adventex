@@ -9,9 +9,26 @@ import Parser from 'app/scripts/parser.js';
 import parse_json from 'app/scripts/json.js';
 import helper from 'app/scripts/helper.js'
 import eventhandler from 'app/scripts/eventhandler.js'
-import inventoryhandler from 'app/scripts/inventoryhandler.js'
+import InventoryHandler from 'app/scripts/inventoryhandler.js'
 import locationhandler from 'app/scripts/locationhandler.js'
 import interpreter from 'app/scripts/interpreter.js'
+
+import {
+  check_synonyms,
+  find_first_match,
+  find_item_ids,
+  find_item_ids_for_name,
+  get_description,
+  get_first_of_type,
+  get_last_of_type,
+  get_name,
+  get_of_type,
+  get_property,
+  get_second_of_type,
+  is_hidden,
+  list_objects,
+  set_state_of_object
+} from 'app/scripts/helper.js'
 
 
 
@@ -22,10 +39,8 @@ var assert = chai.assert;
 // some mocking:
 var advntx = (function (my) {
   var parser;
-  helper(my);
   eventhandler(my);
   locationhandler(my);
-  inventoryhandler(my);
   interpreter(my);
 
 
@@ -49,6 +64,9 @@ before(function (done) {
   // waits until done is called (async!)
   function async_done(bool) {
     advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
+    advntx.inventoryHandler = new InventoryHandler(advntx.state, function() {
+      // do nothing
+    });
     done();
   };
   parse_json(async_done, advntx);
@@ -241,7 +259,7 @@ describe('advntx test suite', function () {
     var names = ['guard', 'sugar'];
     var room_item_ids = ['unconscious_guard', 'barrel', 'stone'];
 
-    assert.equal('unconscious_guard', advntx.find_item_ids(names, room_item_ids, objects)[0]);
+    assert.equal('unconscious_guard', find_item_ids(names, room_item_ids, objects)[0]);
   });
 
   it('locations and connections', function () {
