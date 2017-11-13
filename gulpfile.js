@@ -127,7 +127,6 @@ gulp.task('serve', () => {
         baseDir: ['.tmp', '.', 'app'],
         routes: {
           '/jspm_packages': 'jspm_packages',
-          '/config': '.'
         }
       }
     });
@@ -168,7 +167,6 @@ gulp.task('serve:test', [], () => {
         '/node_modules': 'node_modules',
         '/jspm_packages': 'jspm_packages',
         '/test': 'test',
-        '/config': '.'
       }
     }
   });

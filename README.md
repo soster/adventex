@@ -1,16 +1,25 @@
 # Adventex
-A simple text adventure
+A simple interactive fiction (text adventure) game with its own adventure system. The adventure is defined by a couple of json files.
 
-# Generator
-yeoman with the webapp-generator has been used to generate the basics:
-`https://github.com/yeoman/generator-webapp#readme`
+## Prerequisites
+You need node.js and npm
 
-# After Clone
-`npm install && bower install`
+## Install
+First you need to install the npm dependencies:
+`npm install`
 
-# Remove bower, install jspm!
-Module system: system.js
-jspm install npm:jquery.terminal -o "{format: 'global'}"
+jspm and it's module loader system.js is needed as well:
+`npm install jspm -g`
 
-# Language:
-`http://www.udoklinger.de/Deutsch/Grammatik/Wortarten.htm`
+After installing jspm you can initialize the jspm dependencies:
+`jspm install`
+
+Now you need to install gulp:
+`npm install gulp-cli -g`
+
+## Startup
+You can start adventex locally with
+`gulp serve`
+
+Look into the gulp file `gulpfile.js` for other targets. If you want to deploy adventex to a server you can build it using this command:
+`gulp build`

@@ -4,6 +4,7 @@ export default function parse_json(async_init, advntx) {
   const parameter = '?v=' + advntx.version;
 
   function getJSON(url, result) {
+    // new fetch api of ecma6:
     fetch(url).then(function(response) {
       return response.json();
     }).then(function(json) {

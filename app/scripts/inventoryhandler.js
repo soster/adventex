@@ -1,4 +1,4 @@
-'use strict'; 
+'use strict';
 export default function inventoryhandler(my) {
   var advntx = my;
   my.inventoryhandler =  {
