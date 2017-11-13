@@ -33,7 +33,7 @@ var assert = chai.assert;
 
 
 // some mocking:
-var advntx = (function (my) {
+window.advntx = (function (my) {
   var parser;
 
 
@@ -46,12 +46,13 @@ var advntx = (function (my) {
   my.version = 14;
   return my;
   
-}(advntx || {}));
+}(window.advntx || {}));
 
 
 
 
 before(function (done) {
+  var advntx = window.advntx;
 
 
 
@@ -247,8 +248,9 @@ describe('advntx test suite', function () {
   });
 
   it('parse command', function () {
-    advntx.parser.set(['go', 'throw'], [], [], [], ['something', 'barrel', 'stone']);
-    var obj = advntx.parser.parse('throw stone');
+    var localParser = new Parser(['go', 'throw'], [], [], [], ['something', 'barrel', 'stone']);
+    
+    var obj = localParser.parse('throw stone');
     assert.equal('throw', obj.verbs[0]);
     assert.equal('stone', obj.objects[0]);
   });
@@ -288,22 +290,23 @@ describe('advntx test suite', function () {
     advntx.state.objects = objects;
     advntx.state.locations = locations;
     advntx.state.location = 'room';
+    var eventHandler = new EventHandler(advntx.state, advntx.vocabulary, function()  { });
 
-    advntx.eventHandler.executeEvent(events['open_door'], echo);
+    eventHandler.executeEvent(events['open_door'], echo);
     assert.equal(1, Object.keys(locations['room'].connections).length);
-    advntx.eventHandler.executeEvent(events['add_stone'], echo);
+    eventHandler.executeEvent(events['add_stone'], echo);
     assert.equal('stone', locations['room'].objects[1]);
-    advntx.eventHandler.executeEvent(events['remove_stone'], echo);
+    eventHandler.executeEvent(events['remove_stone'], echo);
     assert.equal(1, locations['room'].objects.length);
     advntx.state.location = 'room_two';
-    advntx.eventHandler.executeEvent(events['add_stone'], echo);
+    eventHandler.executeEvent(events['add_stone'], echo);
     assert.equal(1, locations['room_two'].objects.length);
     advntx.state = save;
   });
 
-  it('find not in inventory event', function () {
+  it('testing "find not in inventory" events', function () {
 
-
+    advntx.eventHandler
     var save = advntx.state;
     advntx.state = {
       steps: 0
@@ -313,14 +316,16 @@ describe('advntx test suite', function () {
     advntx.state.locations = locations;
     advntx.state.location = 'room_three';
     var locationObjects = locations[advntx.state.location].objects;
-
-
+    var oldEventHandler = advntx.eventHandler;
+    advntx.eventHandler = new EventHandler(advntx.state,oldEventHandler.vocabulary, oldEventHandler.initInventory);
     var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'take', undefined, events);
     assert.equal(0, foundEvents.length);
     advntx.state.inventory = [];
     var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'take', undefined, events);
     assert.equal(1, foundEvents.length);
-    assert.equal(events['not_inventory'], foundEvents[0])
+    assert.equal(events['not_inventory'], foundEvents[0]);
+    advntx.state = save;
+    advntx.eventHandler = oldEventHandler;
 
   });
 
@@ -333,27 +338,28 @@ describe('advntx test suite', function () {
     advntx.state.objects = objects;
     advntx.state.locations = locations;
     advntx.state.location = 'room_three';
+    var eventHandler = new EventHandler(advntx.state, advntx.vocabulary, function(){});
     var locationObjects = locations[advntx.state.location].objects;
 
-    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'kindle', undefined, events);
+    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'kindle', undefined, events);
     assert.equal(0, foundEvents.length);
     objects['torch'].state = 'none';
-    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'kindle', undefined, events);
+    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'kindle', undefined, events);
     assert.equal(events['kindle_torch'], foundEvents[0])
-    advntx.eventHandler.executeEvent(events['kindle_torch'], echo);
+    eventHandler.executeEvent(events['kindle_torch'], echo);
     assert.equal('burning', objects['torch'].state);
     assert.equal('burniiiiing', advntx.inventoryHandler.getNameOfState('torch', 'burning'));
-    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'extinguish', undefined, events);
-    advntx.eventHandler.executeEvent(foundEvents[0], echo);
+    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'extinguish', undefined, events);
+    eventHandler.executeEvent(foundEvents[0], echo);
     assert.equal('none', objects['torch'].state);
-    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'examine', undefined, events);
+    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'examine', undefined, events);
     assert.equal(0, foundEvents.length);
     objects['torch'].state = 'burning';
-    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'examine', undefined, events);
+    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'examine', undefined, events);
     assert.equal(1, foundEvents.length);
-    advntx.eventHandler.executeEvent(foundEvents[0], echo);
+    eventHandler.executeEvent(foundEvents[0], echo);
 
-    var foundEvents = advntx.eventHandler.findEvents(location, ['ring'], ['ring', 'barrel'], 'clean', undefined, events);
+    var foundEvents = eventHandler.findEvents(location, ['ring'], ['ring', 'barrel'], 'clean', undefined, events);
     assert.equal(0, foundEvents.length);
   });
 
