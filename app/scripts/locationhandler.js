@@ -1,4 +1,22 @@
 'use strict';
+
+import {
+  check_synonyms,
+  find_first_match,
+  find_item_ids,
+  find_item_ids_for_name,
+  get_description,
+  get_first_of_type,
+  get_last_of_type,
+  get_name,
+  get_of_type,
+  get_property,
+  get_second_of_type,
+  is_hidden,
+  list_objects,
+  set_state_of_object
+} from 'app/scripts/helper.js'
+
 export default function locationhandler(my) {
   var advntx = my;
   my.locationhandler = {
@@ -34,7 +52,7 @@ export default function locationhandler(my) {
       if (location==undefined) {
         return [];
       }
-      return advntx.find_item_ids(names, location.objects, advntx.state.objects);
+      return find_item_ids(names, location.objects, advntx.state.objects);
     },
 
     set_location: function (location_id) {
@@ -43,7 +61,7 @@ export default function locationhandler(my) {
 
     get_location_description: function (location_id) {
       var loc = advntx.state.locations[location_id];
-      var description = my.get_description(advntx.state.locations, location_id);
+      var description = get_description(advntx.state.locations, location_id);
       return description += '\n';
     },
 

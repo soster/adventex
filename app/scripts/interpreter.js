@@ -2,6 +2,16 @@
  * Interpret commands.
  */
 'use strict';
+
+import {
+  check_synonyms,
+  find_item_ids,
+  get_description,
+  get_first_of_type,
+  get_last_of_type,
+  get_name
+} from 'app/scripts/helper.js'
+
 export default function interpreter(my) {
   var help_string = undefined;
   var advntx = my;
@@ -27,15 +37,15 @@ my.interpreter = {
       echo(JSON.stringify(advntx.state));
     } else {
       var words = advntx.parser.parse(command);
-      var firstVerb = advntx.get_first_of_type(words, 'verbs');
-      var lastVerb = advntx.get_last_of_type(words, 'verbs');
-      var preposition = advntx.get_first_of_type(words, 'prepositions');
+      var firstVerb = get_first_of_type(words, 'verbs');
+      var lastVerb = get_last_of_type(words, 'verbs');
+      var preposition = get_first_of_type(words, 'prepositions');
       var objects = words['objects'];
       var misc = words['misc'];
       var foundNothing = false;
 
       var itemIdsFromLocation = advntx.locationhandler.find_item_ids_in_location(objects,advntx.state.locations[advntx.state.location]);
-      var itemIdsFromInventory = advntx.inventoryhandler.find_item_ids_in_inventory(objects);
+      var itemIdsFromInventory = advntx.inventoryHandler.find_item_ids_in_inventory(objects);
       var itemIds = [];
 
       
@@ -59,16 +69,16 @@ my.interpreter = {
 
 
       if (!foundEvent || doContinue) {
-        if (advntx.check_synonyms('go', firstVerb)) {
-          var direction = advntx.get_first_of_type(words, 'directions');
+        if (check_synonyms('go', firstVerb, advntx.vocabulary.synonyms)) {
+          var direction = get_first_of_type(words, 'directions');
           this.move(direction, itemIdsFromLocation, misc);
-        } else if (advntx.check_synonyms('take', firstVerb)) {
+        } else if (check_synonyms('take', firstVerb, advntx.vocabulary.synonyms)) {
           this.get_item(objects, itemIdsFromLocation);
-        } else if (advntx.check_synonyms('examine', firstVerb)) {
+        } else if (check_synonyms('examine', firstVerb, advntx.vocabulary.synonyms)) {
           this.examine(objects, itemIds);
-        } else if (advntx.check_synonyms('drop', firstVerb)) {
+        } else if (check_synonyms('drop', firstVerb, advntx.vocabulary.synonyms)) {
           this.drop(objects, itemIdsFromInventory);
-        } else if (advntx.check_synonyms('restart', firstVerb)) {
+        } else if (check_synonyms('restart', firstVerb, advntx.vocabulary.synonyms)) {
           this.echo('\n');
           this.init_game(true);
         } else {// I give up...
@@ -102,7 +112,7 @@ my.interpreter = {
           var errorMessage = error[firstVerb];
           echo(errorMessage, 'coral');
         } else {
-          echo(advntx.messages.error_verb_object.format(firstVerb,advntx.inventoryhandler.get_name_definitive(itemId)), 'red');
+          echo(advntx.messages.error_verb_object.format(firstVerb,advntx.inventoryHandler.get_name_definitive(itemId)), 'red');
         }
       } else if (foundNothing && !foundEvent) {
           this.standard_error(command); 
@@ -129,7 +139,7 @@ my.interpreter = {
     if (isEmpty(direction)) {
       if (item_ids.length>0) {
         var item_id = item_ids[0];
-          my.interpreter.echo(advntx.messages.error_movement_thing.format(advntx.inventoryhandler.get_name_definitive(item_id)), 'coral');
+          my.interpreter.echo(advntx.messages.error_movement_thing.format(advntx.inventoryHandler.get_name_definitive(item_id)), 'coral');
           return;
       } 
       if (advntx.config.debug && misc.length>0) {
@@ -165,18 +175,18 @@ my.interpreter = {
     }
     for (var i=0;i<item_ids.length;i++) {
       var item_id = item_ids[i];
-      if (!advntx.inventoryhandler.is_portable(item_id)) {
-        var portable_error = advntx.inventoryhandler.get_portable_error(item_id);
+      if (!advntx.inventoryHandler.is_portable(item_id)) {
+        var portable_error = advntx.inventoryHandler.get_portable_error(item_id);
         if (!isEmpty(portable_error)) {
           this.echo(portable_error, 'coral');
         } else {
-          var indevname = advntx.inventoryhandler.get_name_indefinitive(item_id);
+          var indevname = advntx.inventoryHandler.get_name_indefinitive(item_id);
           this.echo(advntx.messages.error_portable.format(indevname), 'coral');
         }
 
       } else {
-        this.echo(advntx.messages.info_you_took.format(advntx.inventoryhandler.get_name_definitive(item_id)));
-        advntx.inventoryhandler.add_to_inventory(item_id);
+        this.echo(advntx.messages.info_you_took.format(advntx.inventoryHandler.get_name_definitive(item_id)));
+        advntx.inventoryHandler.add_to_inventory(item_id);
         my.init_inventory();
         advntx.locationhandler.remove_item_from_location(advntx.state.location, item_id);
       }
@@ -190,7 +200,7 @@ my.interpreter = {
       var item_id = item_ids[0];
       var object = objects[0];
       if (!isEmpty(item_id)) {
-        var desc = advntx.get_description(advntx.state.objects, item_id);
+        var desc = get_description(advntx.state.objects, item_id);
         this.echo(desc);
       } else if (!isEmpty(object)) {
         this.echo(advntx.messages.error_thing.format(object), 'red');
@@ -213,9 +223,9 @@ my.interpreter = {
         this.echo(advntx.messages.error_thing.format(item), 'red');
         break;
       } else {
-        advntx.inventoryhandler.remove_from_inventory(item_id);
+        advntx.inventoryHandler.remove_from_inventory(item_id);
         advntx.locationhandler.add_item_to_location(advntx.state.location, item_id);
-        this.echo(advntx.messages.info_you_dropped.format(advntx.inventoryhandler.get_name_definitive(item_id)));
+        this.echo(advntx.messages.info_you_dropped.format(advntx.inventoryHandler.get_name_definitive(item_id)));
       }
     }
     

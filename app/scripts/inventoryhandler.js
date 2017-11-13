@@ -1,54 +1,63 @@
 'use strict';
-export default function inventoryhandler(my) {
-  var advntx = my;
-  my.inventoryhandler =  {
-    in_inventory:function (item_id) {
-      if (advntx.state.inventory.indexOf(item_id) != -1) {
+
+import {
+  find_item_ids
+} from 'app/scripts/helper.js'
+
+export default class InventoryHandler {
+  constructor(state, init_inventory) {
+    this.l_state = state;
+    this.init_inventory = init_inventory;
+  }
+
+
+    in_inventory (item_id) {
+      if (this.l_state.inventory.indexOf(item_id) != -1) {
         return true; 
       }
       return false; 
-    }, 
+    }
 
 
-    is_portable:function (item_id) {
-      if (advntx.state.objects[item_id] === undefined) {
+    is_portable (item_id) {
+      if (this.l_state.objects[item_id] === undefined) {
         return false; 
       }
-      return advntx.state.objects[item_id].portable; 
-    }, 
+      return this.l_state.objects[item_id].portable; 
+    }
 
-    get_portable_error:function (item_id) {
-      var text = advntx.state.objects[item_id].error_portable; 
+    get_portable_error (item_id) {
+      var text = this.l_state.objects[item_id].error_portable; 
       return text; 
-    }, 
+    }
 
-    add_to_inventory:function (item_id) {
-      advntx.state.inventory.push(item_id); 
-      advntx.init_inventory(); 
-    }, 
+    add_to_inventory (item_id) {
+      this.l_state.inventory.push(item_id); 
+      this.init_inventory(); 
+    }
 
-    remove_from_inventory:function (item) {
-      advntx.state.inventory.remove(item); 
-      advntx.init_inventory(); 
-    },
+    remove_from_inventory (item) {
+      this.l_state.inventory.remove(item); 
+      this.init_inventory(); 
+    }
 
-    find_item_ids_in_inventory: function (names) {
-      return advntx.find_item_ids(names, advntx.state.inventory, advntx.state.objects);
-    },
+    find_item_ids_in_inventory (names) {
+      return find_item_ids(names, this.l_state.inventory, this.l_state.objects);
+    }
 
-    find_item_ids_for_name_anywhere: function (name) {
+    find_item_ids_for_name_anywhere (name) {
       var itemIds = [];
-      for (var property in advntx.state.objects) {
-        var item = advntx.state.objects[property];
+      for (var property in this.l_state.objects) {
+        var item = this.l_state.objects[property];
         if (item.name.endsWith(name) && itemIds.indexOf(item.name)==-1) {
           itemIds.push(property);
         }
       }
       return itemIds;
-    }, 
+    }
 
-    get_name_definitive:function (item_id) {
-      var item = advntx.state.objects[item_id]; 
+    get_name_definitive (item_id) {
+      var item = this.l_state.objects[item_id]; 
       var article = item.definite_article; 
       var name = item.name; 
       if ( ! isEmpty(article)) {
@@ -56,10 +65,10 @@ export default function inventoryhandler(my) {
       }else {
         return name; 
       }
-    },
+    }
 
-    get_state_of_object:function(itemId) {
-      var object = advntx.state.objects[itemId];
+    get_state_of_object(itemId) {
+      var object = this.l_state.objects[itemId];
       if (object===undefined) {
         return 'none';
       }
@@ -67,10 +76,10 @@ export default function inventoryhandler(my) {
         return 'none';
       }
       return object.state;
-    },
+    }
 
-    get_name_of_state:function(itemId, state) {
-      var object = advntx.state.objects[itemId];
+    get_name_of_state(itemId, state) {
+      var object = this.l_state.objects[itemId];
       if (state!='none'&&object.states[state]===undefined) {
         throw state+' is not an allowed state for '+itemId;
       }
@@ -78,19 +87,22 @@ export default function inventoryhandler(my) {
         return '';
       }
       return object.states[state].name;
-    },
+    }
 
-    get_state_string:function(itemId) {
+    get_state_string(itemId) {
       var stateName = this.get_name_of_state(itemId, this.get_state_of_object(itemId));
       var stateString = '';
       if (!isEmpty(stateName)) {
         stateString = '('+stateName+')';
       }
       return stateString;
-    },
+    }
 
-    get_name_indefinitive:function (item_id) {
-      var item = advntx.state.objects[item_id]; 
+    get_name_indefinitive (item_id) {
+      var item = this.l_state.objects[item_id];
+      if (item===undefined) {
+        return '';
+      }
       var article = item.indefinite_article; 
       var name = item.name; 
       if ( ! isEmpty(article)) {
@@ -100,6 +112,4 @@ export default function inventoryhandler(my) {
       }
     }
 
-  }
-  return my; 
 }

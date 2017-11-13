@@ -1,4 +1,11 @@
 'use strict';
+
+import {
+  check_synonyms,
+  set_state_of_object
+} from 'app/scripts/helper.js'
+
+
 export default function eventhandler(my) {
   var advntx = my;
 
@@ -33,7 +40,7 @@ export default function eventhandler(my) {
           return false;
         } else {
           if (arr.length>1) {
-            var state = advntx.inventoryhandler.get_state_of_object(arr[0]);
+            var state = advntx.inventoryHandler.get_state_of_object(arr[0]);
             if (state==undefined && arr[1]=='none') {
               continue;
             }
@@ -60,7 +67,7 @@ export default function eventhandler(my) {
         var arr = prereq[i].split('|');
         if (to_check.indexOf(arr[0])!=-1) {
           if (arr.length>1) {
-            var state = advntx.inventoryhandler.get_state_of_object(arr[0]);
+            var state = advntx.inventoryHandler.get_state_of_object(arr[0]);
             if (state==arr[1]) {
               return false;
             }
@@ -146,7 +153,7 @@ export default function eventhandler(my) {
             continue;
           }
           if (!isEmpty(event.prereq_verb) && !isEmpty(verb)) {
-            if (advntx.check_synonyms(event.prereq_verb, verb)) {
+            if (check_synonyms(event.prereq_verb, verb, advntx.vocabulary.synonyms)) {
               verb = event.prereq_verb;
             }
           }
@@ -181,7 +188,7 @@ export default function eventhandler(my) {
             if (stateSplit.length==2) {
               advntx.state.objects[stateSplit[0]].state = stateSplit[1];
             }
-            advntx.inventoryhandler.add_to_inventory(stateSplit[0]);
+            advntx.inventoryHandler.add_to_inventory(stateSplit[0]);
           } else if (temp.length==2) {//location
             var location;
             if (temp[0]=='location') {
@@ -207,7 +214,7 @@ export default function eventhandler(my) {
         for (var i=0;i<event.action_remove_items.length;i++) {
           var temp = event.action_remove_items[i].split(':');
           if (temp.length==1) {//inventory
-            advntx.inventoryhandler.remove_from_inventory(temp[0]);
+            advntx.inventoryHandler.remove_from_inventory(temp[0]);
           } else if (temp.length==2) {
             var location;
             if (temp[0]=='location') {
@@ -270,14 +277,14 @@ export default function eventhandler(my) {
       if (!isEmpty(event.action_set_state_items)) {
         for (var i=0;i<event.action_set_state_items.length;i++) {
           var arr = event.action_set_state_items[i].split('|');
-          advntx.set_state_of_object(arr[0],arr[1],advntx.state.objects);
+          set_state_of_object(arr[0],arr[1],advntx.state.objects);
         }
       }
 
       if (!isEmpty(event.action_set_state_locations)) {
         for (var i=0;i<event.action_set_state_locations.length;i++) {
           var arr = event.action_set_state_locations[i].split('|');
-          advntx.set_state_of_object(arr[0],arr[1],advntx.state.locations);
+          set_state_of_object(arr[0],arr[1],advntx.state.locations);
         }
       }
 
