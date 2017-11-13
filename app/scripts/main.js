@@ -128,7 +128,7 @@ window.advntx = {
       var item = advntx.state.inventory[i];
       var itemName = getName(advntx.state.objects, item);
       var stateString = ' ' + advntx.inventoryHandler.getStateString(item);
-      $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventory_click(\'' + itemName + '\')" class="btn btn-info btn-sm inventory_button">' + itemName + stateString + '</button></p>');
+      $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventoryClick(\'' + itemName + '\')" class="btn btn-info btn-sm inventory_button">' + itemName + stateString + '</button></p>');
     }
   }
 

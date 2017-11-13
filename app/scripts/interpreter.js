@@ -117,7 +117,11 @@ export default class Interpreter {
           echo(this.advntx.messages.error_verb_object.format(firstVerb,this.advntx.inventoryHandler.getNameDefinitive(itemId)), 'red');
         }
       } else if (foundNothing && !foundEvent) {
-          this.standardError(command); 
+        if (firstVerb!=undefined) {
+          this.echo(this.advntx.messages.error_verb.format(firstVerb), 'coral');
+        } else {
+          this.standardError(command);
+        }
       }
 
       var allEvents = preEvents.concat(postEvents);
