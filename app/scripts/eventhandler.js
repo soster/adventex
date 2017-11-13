@@ -5,14 +5,19 @@ import {
   setStateOfObject
 } from 'app/scripts/helper.js'
 
+import InventoryHandler from 'app/scripts/inventoryhandler.js';
+import LocationHandler from 'app/scripts/locationhandler.js';
+
 
 export default class EventHandler {
 
-  constructor(state, vocabulary, inventoryHandler, locationHandler) {
+  constructor(state, vocabulary, initInventory) {
     this.state = state;
     this.vocabulary = vocabulary;
-    this.inventoryHandler = inventoryHandler;
-    this.locationHandler = locationHandler;
+    this.initInventory = initInventory;
+
+    this.inventoryHandler = new InventoryHandler(state, initInventory);
+    this.locationHandler = new LocationHandler(state);
 
   }
 

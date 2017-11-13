@@ -51,7 +51,7 @@ window.advntx = (function (my) {
   my.version = 14;
 
 
-  my.describe_location_echo = function (location_id, always_show_full_description) {
+  my.describeLocationEcho = function (location_id, always_show_full_description) {
     var loc = advntx.locationHandler.getLocationById(location_id);
     if (!advntx.locationHandler.visited(location_id) || always_show_full_description) {
       my.echo(advntx.locationHandler.getLocationDescription(location_id), loc.color);
@@ -69,7 +69,7 @@ window.advntx = (function (my) {
       my.echo(things_message);
       my.echo(persons_message);
     }
-
+    
   };
 
 
@@ -92,7 +92,7 @@ window.advntx = (function (my) {
     my.term = $('#terminal').terminal(function (command) {
       var echo = my.echo;
 
-      advntx.interpreter.interpret(command, my.describe_location_echo, my.init_inventory, my.echo, my.init_game);
+      advntx.interpreter.interpret(command, my.describeLocationEcho, my.init_inventory, my.echo, my.init_game);
     }, {
         greetings: advntx.messages.greetings.format(my.version),
         name: advntx.messages.name,
@@ -106,7 +106,7 @@ window.advntx = (function (my) {
     advntx.inventoryHandler = new InventoryHandler(advntx.state, advntx.init_inventory);
     advntx.interpreter = new Interpreter(advntx);
     advntx.locationHandler = new LocationHandler(advntx.state);
-    advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, advntx.inventoryHandler, advntx.locationHandler);
+    advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, advntx.init_inventory);
 
     my.init_inventory();
     if (reset) {
@@ -114,7 +114,7 @@ window.advntx = (function (my) {
       advntx.eventHandler.executeEvent(startEvent, my.echo);
     }
 
-    my.describe_location_echo(advntx.state.location);
+    my.describeLocationEcho(advntx.state.location);
     my.async_refocus_terminal();
   }
 

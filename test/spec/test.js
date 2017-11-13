@@ -58,12 +58,14 @@ before(function (done) {
   // waits until done is called (async!)
   function async_done(bool) {
     advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
-    advntx.inventoryHandler = new InventoryHandler(advntx.state, function() {
-      // do nothing
-    });
+    
+    var dummy = function()  {
+
+    };
+    advntx.inventoryHandler = new InventoryHandler(advntx.state,dummy);
     advntx.interpreter = new Interpreter(advntx);
     advntx.locationHandler = new LocationHandler(advntx.state);
-    advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, advntx.inventoryHandler, advntx.locationHandler);
+    advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, dummy);
     done();
   };
   parseJson(async_done, advntx);

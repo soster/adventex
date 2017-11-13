@@ -5,9 +5,9 @@ import {
 } from 'app/scripts/helper.js'
 
 export default class InventoryHandler {
-  constructor(state, init_inventory) {
+  constructor(state, initInventory) {
     this.l_state = state;
-    this.init_inventory = init_inventory;
+    this.initInventory = initInventory;
   }
 
 
@@ -33,12 +33,12 @@ export default class InventoryHandler {
 
     addToInventory (item_id) {
       this.l_state.inventory.push(item_id); 
-      this.init_inventory(); 
+      this.initInventory(); 
     }
 
     removeFromInventory (item) {
       this.l_state.inventory.remove(item); 
-      this.init_inventory(); 
+      this.initInventory(); 
     }
 
     findItemIdsInInventory (names) {
