@@ -199,7 +199,7 @@ export default class EventHandler {
             if (stateSplit.length==2) {
               this.state.objects[stateSplit[0]].state = stateSplit[1];
             }
-            this.inventoryHandler.add_to_inventory(stateSplit[0]);
+            this.inventoryHandler.addToInventory(stateSplit[0]);
           } else if (temp.length==2) {//location
             var location;
             if (temp[0]=='location') {

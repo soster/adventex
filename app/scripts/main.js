@@ -31,70 +31,62 @@ import Interpreter from 'app/scripts/interpreter.js'
 
 
 
-window.advntx = (function (my) {
-  var parser;
-  var inventoryHandler;
+window.advntx = {
+  version:15,
+  seconds:0,
 
-
-
-  my.echo = function (text, color) {
+  echo (text, color) {
     if (color === undefined) {
       color = 'white';
     }
-    my.term.echo(text, {
+    advntx.term.echo(text, {
       finalize: function (div) {
         div.css('color', color);
       }
     });
-  };
-
-  my.version = 14;
-
-
-  my.describeLocationEcho = function (location_id, always_show_full_description) {
+  },
+  
+  describeLocationEcho (location_id, always_show_full_description) {
     var loc = advntx.locationHandler.getLocationById(location_id);
     if (!advntx.locationHandler.visited(location_id) || always_show_full_description) {
-      my.echo(advntx.locationHandler.getLocationDescription(location_id), loc.color);
+      advntx.echo(advntx.locationHandler.getLocationDescription(location_id), loc.color);
     } else {
-      my.echo(getName(advntx.state.locations, location_id), loc.color);
+      advntx.echo(getName(advntx.state.locations, location_id), loc.color);
     }
 
     var things = loc.objects;
     var persons = loc.persons;
-    var message = my.messages.info_you_see;
+    var message = advntx.messages.info_you_see;
     var things_message = listObjects(things, advntx.state.objects, advntx.inventoryHandler);
     var persons_message = listObjects(persons, advntx.state.persons, advntx.inventoryHandler);
     if (!isEmpty(persons_message) || !isEmpty(things_message)) {
-      my.echo(message);
-      my.echo(things_message);
-      my.echo(persons_message);
+      advntx.echo(message);
+      advntx.echo(things_message);
+      advntx.echo(persons_message);
     }
     
-  };
+  },
 
-
-
-
-  my.add_to_inventory_echo = function (item) {
+  addToInventoryEcho (item) {
     advntx.inventoryHandler.addToInventory(item);
-    my.init_inventory();
-  }
+    advntx.initInventory();
+  },
 
-  my.init_game = function (refresh_json) {
+  initGame (refresh_json) {
     if (refresh_json == true) {
-      parseJson(my.init_game_async, advntx);
+      parseJson(advntx.initGameAsync, advntx);
     } else {
-      my.init_game_async(false);
+      advntx.initGameAsync(false);
     }
-  }
+  },
 
-  my.init_game_async = function (reset) {
-    my.term = $('#terminal').terminal(function (command) {
-      var echo = my.echo;
+  initGameAsync (reset) {
+    advntx.term = $('#terminal').terminal(function (command) {
+      var echo = advntx.echo;
 
-      advntx.interpreter.interpret(command, my.describeLocationEcho, my.init_inventory, my.echo, my.init_game);
+      advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame);
     }, {
-        greetings: advntx.messages.greetings.format(my.version),
+        greetings: advntx.messages.greetings.format(advntx.version),
         name: advntx.messages.name,
         prompt: advntx.config.console.prompt,
         height: advntx.config.console.height
@@ -103,39 +95,34 @@ window.advntx = (function (my) {
     $('#inventory_container').css('max-height', advntx.config.console.height + 'px');
 
     advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
-    advntx.inventoryHandler = new InventoryHandler(advntx.state, advntx.init_inventory);
+    advntx.inventoryHandler = new InventoryHandler(advntx.state, advntx.initInventory);
     advntx.interpreter = new Interpreter(advntx);
     advntx.locationHandler = new LocationHandler(advntx.state);
-    advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, advntx.init_inventory);
+    advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, advntx.initInventory);
 
-    my.init_inventory();
+    advntx.initInventory();
     if (reset) {
       var startEvent = advntx.state.events['start_event'];
-      advntx.eventHandler.executeEvent(startEvent, my.echo);
+      advntx.eventHandler.executeEvent(startEvent, advntx.echo);
     }
 
-    my.describeLocationEcho(advntx.state.location);
-    my.async_refocus_terminal();
-  }
-
-
-
-
-  my.refocus_terminal = function () {
-    my.term.focus();
-  }
-
-  my.async_refocus_terminal = function () {
-    window.setTimeout('advntx.refocus_terminal()', 250);
-  }
-
-
-  my.inventory_click = function (item) {
-    my.term.insert(' ' + item + ' ');
-    my.async_refocus_terminal();
-  }
-
-  my.init_inventory = function () {
+    advntx.describeLocationEcho(advntx.state.location);
+    advntx.asyncRefocusTerminal();
+  },
+  refocusTerminal() {
+    advntx.term.focus();
+  },
+  
+  asyncRefocusTerminal() {
+    window.setTimeout('advntx.refocusTerminal()', 250);
+  },
+  
+  inventoryClick (item) {
+    advntx.term.insert(' ' + item + ' ');
+    advntx.asyncRefocusTerminal();
+  },
+  
+  initInventory() {
     $('#inventory > .inventory_item').remove();
     for (var i = 0; i < advntx.state.inventory.length; i++) {
       var item = advntx.state.inventory[i];
@@ -145,10 +132,7 @@ window.advntx = (function (my) {
     }
   }
 
-
-  return my;
-}(window.advntx || {}));
-
+};
 
 window.periodicUpdates = function periodicUpdates() {
   advntx.state.seconds++;
@@ -160,8 +144,8 @@ window.periodicUpdates = function periodicUpdates() {
 $(document).ready(function () {
   $('#btn_help').click(function () {
     advntx.term.exec('help', false);
-    advntx.init_inventory();
-    advntx.async_refocus_terminal();
+    advntx.initInventory();
+    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_load_storage').click(function () {
@@ -170,7 +154,7 @@ $(document).ready(function () {
       advntx.state = JSON.parse(retrievedObject);
       advntx.echo('game loaded.');
       advntx.term.exec('clear');
-      advntx.init_game(false);
+      advntx.initGame(false);
     }
 
   });
@@ -178,28 +162,28 @@ $(document).ready(function () {
   $('#btn_save_storage').click(function () {
     localStorage.setItem('advntx', JSON.stringify(advntx.state));
     advntx.echo('game saved.');
-    advntx.init_inventory();
-    advntx.async_refocus_terminal();
+    advntx.initInventory();
+    advntx.asyncRefocus();
   });
 
   $('#btn_save').click(function () {
     $('#game_state').val(JSON.stringify(advntx.state));
-    advntx.init_inventory();
-    advntx.async_refocus_terminal();
+    advntx.initInventory();
+    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_load').click(function () {
     advntx.state = $.parseJSON($('#game_state').val());
     advntx.term.exec('clear');
-    advntx.init_game(false);
+    advntx.initGame(false);
 
   });
 
   $('#btn_restart').click(function () {
-    advntx.init_game(true);
+    advntx.initGame(true);
 
   });
   window.setInterval('window.periodicUpdates()', 1000);
-  advntx.init_game(true);
+  advntx.initGame(true);
 });
 

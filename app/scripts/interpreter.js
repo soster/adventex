@@ -128,7 +128,7 @@ export default class Interpreter {
 
       if (!foundNothing || foundEvent) {
         this.advntx.state.steps++;
-        this.advntx.init_inventory();
+        this.init_inventory();
       }
 
     }
@@ -189,7 +189,7 @@ export default class Interpreter {
       } else {
         this.echo(this.advntx.messages.info_you_took.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)));
         this.advntx.inventoryHandler.addToInventory(item_id);
-        this.advntx.init_inventory();
+        this.init_inventory();
         this.advntx.locationHandler.removeItemFromLocation(this.advntx.state.location, item_id);
       }
     }
