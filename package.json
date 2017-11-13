@@ -1,5 +1,8 @@
 {
   "private": true,
+  "scripts": {
+    "test": "mocha --delay test/setup.js"
+  },
   "engines": {
     "node": ">=4"
   },
@@ -19,20 +22,21 @@
     "gulp-htmlmin": "^3.0.0",
     "gulp-if": "^2.0.2",
     "gulp-imagemin": "^3.0.1",
+    "gulp-jsonminify": "1.0.0",
+    "gulp-jspm": "^0.5.13",
     "gulp-load-plugins": "^1.2.4",
+    "gulp-mocha": "^4.3.1",
     "gulp-plumber": "^1.0.1",
+    "gulp-remove-code": "^1.0.2",
     "gulp-sass": "^3.0.0",
     "gulp-size": "^2.1.0",
     "gulp-sourcemaps": "^2.2.0",
-    "gulp-uglify": "^2.0.0",
+    "gulp-uglify": "^2.1.2",
     "gulp-useref": "^3.0.0",
-    "main-bower-files": "^2.5.0",
-    "gulp-version-number": "^0.1.7",
-    "gulp-mocha": "^4.3.1",
     "gulp-util": "^3.0.8",
-    "gulp-jsonminify": "1.0.0",
-    "gulp-jspm": "^0.5.13",
-    "gulp-remove-code": "^1.0.2",
+    "gulp-version-number": "^0.1.7",
+    "jspm": "^0.16.53",
+    "main-bower-files": "^2.5.0",
     "run-sequence": "^1.2.2"
   },
   "eslintConfig": {
@@ -72,8 +76,5 @@
         "format": "global"
       }
     }
-  },
-  "dependencies": {
-    "gulp-jspm": "^0.5.13"
   }
 }

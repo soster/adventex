@@ -12,6 +12,7 @@ var jsonminify = require('gulp-jsonminify');
 var sass = require('gulp-sass');
 var gulp_jspm = require('gulp-jspm');
 var removeCode = require('gulp-remove-code');
+var uglify = require('gulp-uglify');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
@@ -29,15 +30,16 @@ let dev = true;
 
 
 gulp.task('test', function () {
-  return gulp.src(['app/scripts/**/!(main.js)','test/**/*.js'], { read: false })
-  .pipe(mocha({ reporter: 'list' }))
-  .on('error', gutil.log);
+  return gulp.src(['test/setup.js'])
+  .pipe(mocha({ reporter: 'list'}))
+  .on('warning', gutil.log);
 });
 
 gulp.task('jspm', function(){
     return gulp.src('app/scripts/main.js')
     .pipe($.sourcemaps.init())
     .pipe(gulp_jspm({selfExecutingBundle: true}))
+    .pipe(uglify())    
     .pipe($.sourcemaps.write('.'))
     .pipe(gulp.dest('dist/scripts'));
 });
@@ -138,9 +140,9 @@ gulp.task('serve', () => {
     ]).on('change', reload);
 
     gulp.watch('app/styles/**/*.scss', ['sass']);
-    gulp.watch('app/scripts/**/*.js', ['scripts']);
+    gulp.watch('app/scripts/**/*.js', ['jspm']);
+    gulp.watch(['app/scripts/**/*.js', 'test/index.html']).on('change', reload);
     gulp.watch('app/fonts/**/*', ['fonts']);
-    gulp.watch('app/peg/**/*', ['pegjs']);
 
   });
 });
@@ -163,6 +165,7 @@ gulp.task('serve:test', [], () => {
     server: {
       baseDir: ['test','app', '.', '.tmp'],
       routes: {
+        '/node_modules': 'node_modules',
         '/jspm_packages': 'jspm_packages',
         '/test': 'test',
         '/config': '.'
@@ -170,7 +173,7 @@ gulp.task('serve:test', [], () => {
     }
   });
 
-  gulp.watch('app/scripts/**/*.js', ['scripts']);
+  gulp.watch(['app/scripts/**/*.js', 'test/index.html']).on('change', reload);
   gulp.watch(['test/spec/**/*.js', 'test/index.html']).on('change', reload);
   gulp.watch('test/spec/**/*.js', ['lint:test']);
 });

@@ -1,3 +1,8 @@
+import chai, { expect } from 'chai';
+
+
+//import 'config.js';
+
 import $ from 'jquery';
 import terminal from 'jquery.terminal';
 import Parser from 'app/scripts/parser.js';
@@ -9,19 +14,44 @@ import locationhandler from 'app/scripts/locationhandler.js'
 import interpreter from 'app/scripts/interpreter.js'
 
 
-import chai, { expect } from 'chai';
-import mocha, { before } from 'mocha';
-
 
 var assert = chai.assert;
 
 
+
+// some mocking:
+var advntx = (function (my) {
+  var parser;
+  helper(my);
+  eventhandler(my);
+  locationhandler(my);
+  inventoryhandler(my);
+  interpreter(my);
+
+
+
+  my.echo = function (text, color) {
+    console.info('advntx> ' + text);
+  };
+
+  my.version = 14;
+  return my;
+  
+}(advntx || {}));
+
+
+
+
 before(function (done) {
+
+
+
   // waits until done is called (async!)
   function async_done(bool) {
+    advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
     done();
   };
-  advntx.parse_json(async_done);
+  parse_json(async_done, advntx);
 });
 
 function echo(string) { };

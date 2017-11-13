@@ -4,23 +4,25 @@
 <head>
   <meta charset="utf-8">
   <title>Mocha Spec Runner</title>
-  <link rel="stylesheet" href="../bower_components/mocha/mocha.css">
+  <link rel="stylesheet" href="/node_modules/mocha/mocha.css">
 </head>
 
 <body>
   <div id="mocha"></div>
 
-  <!-- build:js scripts/app.js -->
-  <script src="scripts/functions.js"></script>
-  <!-- endbuild -->
+  <script src="app/scripts/functions.js"></script>
 
-
+  <!--mocha is not working if loading with system.js! -->
+  <script src="node_modules/mocha/mocha.js"></script>
   <script src="jspm_packages/system.js"></script>
   <script src="config/config.js"></script>
+  
 
   <script>
-    System.import('test/spec/test.js').then(function() {
-
+    //mocha.checkLeaks();
+    //mocha.setup('tdd');
+    //mocha.run();
+    System.import('test/main.js').then(function() {
   });
   </script>
 
