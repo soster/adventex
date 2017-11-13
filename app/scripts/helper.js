@@ -80,7 +80,7 @@ export function listObjects(list, list_of_all, inventoryHandler) {
         message += ', ';
       }
       message += getName(list_of_all, list[i]);
-      var stateString = inventoryHandler.get_state_string(list[i]);
+      var stateString = inventoryHandler.getStateString(list[i]);
       if (!isEmpty(stateString)) {
         message += ' ' + stateString;
       }

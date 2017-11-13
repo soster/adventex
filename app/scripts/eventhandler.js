@@ -16,22 +16,22 @@ export default class EventHandler {
 
   }
 
-    check_event_prereq (prereq, to_check) {
+    checkEventPrereq (prereq, to_check) {
       if (isEmpty(prereq) || prereq == to_check) {
         return true;
       }
       return false;
     }
 
-    check_event_prereq_inventory (prereq) {
-      return this.check_event_prereq_array(prereq, this.state.inventory);
+    checkEventPrereqInventory (prereq) {
+      return this.checkEventPrereqArray(prereq, this.state.inventory);
     }
 
-    check_event_prereq_not_inventory (prereq) {
-      return this.check_event_prereq_not_array(prereq, this.state.inventory);
+    checkEventPrereqNotInventory (prereq) {
+      return this.checkEventPrereqNotArray(prereq, this.state.inventory);
     }
 
-    check_event_prereq_array (prereq, to_check) {
+    checkEventPrereqArray (prereq, to_check) {
       if (prereq===undefined || prereq == '') {
         return true;
       }
@@ -46,7 +46,7 @@ export default class EventHandler {
           return false;
         } else {
           if (arr.length>1) {
-            var state = this.inventoryHandler.get_state_of_object(arr[0]);
+            var state = this.inventoryHandler.getStateOfObject(arr[0]);
             if (state==undefined && arr[1]=='none') {
               continue;
             }
@@ -60,7 +60,7 @@ export default class EventHandler {
       return true;
     }
 
-    check_event_prereq_not_array (prereq, to_check) {
+    checkEventPrereqNotArray (prereq, to_check) {
       if (prereq===undefined || prereq == '') {
         return true;
       }
@@ -87,7 +87,7 @@ export default class EventHandler {
     }
     
     /** checks if the events in the list are already triggered AND enabled */
-    check_triggered_events (prereq_triggered_events,prereq_triggered_event_step_offset) {
+    checkTriggeredEvents (prereq_triggered_events,prereq_triggered_event_step_offset) {
       if (isEmpty(prereq_triggered_events)) {
         return true;
       }
@@ -108,7 +108,7 @@ export default class EventHandler {
       return true;
     }
 
-    check_visited_locations(prereq_visited_locations) {
+    checkVisitedLocations(prereq_visited_locations) {
       if (isEmpty(prereq_visited_locations)) {
         return true;
       }
@@ -122,7 +122,7 @@ export default class EventHandler {
       return true;
     }
 
-    check_event_prereq_location_state(prereq) {
+    checkEventPrereqLocationState(prereq) {
       if (isEmpty(prereq)) {
         return true;
       }
@@ -140,7 +140,7 @@ export default class EventHandler {
       return false;
     }
 
-    check_trigger_once(event) {
+    checkTriggerOnce(event) {
       if (event.triggered===undefined||event.triggered==false||event.trigger_once === undefined) {
         return true;
       }
@@ -150,7 +150,7 @@ export default class EventHandler {
       }
     }
 
-    find_events (location, used_items, location_items, verb, preposition, events) {
+    findEvents (location, used_items, location_items, verb, preposition, events) {
       var retEvents = [];
       for (var property in events) {
         if (events.hasOwnProperty(property) && property != 'start_event') {
@@ -165,17 +165,17 @@ export default class EventHandler {
           }
 
 
-          if (this.check_event_prereq(event.prereq_location, location)
-            && this.check_event_prereq(event.prereq_verb, verb)
-            && this.check_event_prereq(event.prereq_preposition, preposition)
-            && this.check_event_prereq_array(event.prereq_used_items, used_items)
-            && this.check_event_prereq_array(event.prereq_location_items, location_items)
-            && this.check_event_prereq_inventory(event.prereq_inventory_items)
-            && this.check_event_prereq_location_state(event.prereq_location_state)
-            && this.check_event_prereq_not_inventory(event.prereq_not_inventory_items)
-            && this.check_triggered_events(event.prereq_triggered_events, event.prereq_triggered_event_step_offset)
-            && this.check_visited_locations(event.prereq_visited_locations)
-            && this.check_trigger_once(event)) {
+          if (this.checkEventPrereq(event.prereq_location, location)
+            && this.checkEventPrereq(event.prereq_verb, verb)
+            && this.checkEventPrereq(event.prereq_preposition, preposition)
+            && this.checkEventPrereqArray(event.prereq_used_items, used_items)
+            && this.checkEventPrereqArray(event.prereq_location_items, location_items)
+            && this.checkEventPrereqInventory(event.prereq_inventory_items)
+            && this.checkEventPrereqLocationState(event.prereq_location_state)
+            && this.checkEventPrereqNotInventory(event.prereq_not_inventory_items)
+            && this.checkTriggeredEvents(event.prereq_triggered_events, event.prereq_triggered_event_step_offset)
+            && this.checkVisitedLocations(event.prereq_visited_locations)
+            && this.checkTriggerOnce(event)) {
               retEvents.push(event);
           }
         }
@@ -184,7 +184,7 @@ export default class EventHandler {
       return retEvents;
     }
 
-    execute_event (event, echo) {
+    executeEvent (event, echo) {
       if (!isEmpty(event.action_add_items)) {
         // into the inventory
         for (var i=0;i<event.action_add_items.length;i++) {
@@ -220,7 +220,7 @@ export default class EventHandler {
         for (var i=0;i<event.action_remove_items.length;i++) {
           var temp = event.action_remove_items[i].split(':');
           if (temp.length==1) {//inventory
-            this.inventoryHandler.remove_from_inventory(temp[0]);
+            this.inventoryHandler.removeFromInventory(temp[0]);
           } else if (temp.length==2) {
             var location;
             if (temp[0]=='location') {
@@ -245,7 +245,7 @@ export default class EventHandler {
       }
 
       if (!isEmpty(event.action_move_to_location)) {
-        this.locationHandler.set_location(event.action_move_to_location);
+        this.locationHandler.setLocation(event.action_move_to_location);
       }
 
       if (!isEmpty(event.action_disable_events)) {
@@ -306,7 +306,7 @@ export default class EventHandler {
 
       if (!isEmpty(event.action_trigger_event)) {
           var nevent = this.state.events[event.action_trigger_event];
-          return this.execute_event(nevent, echo);
+          return this.executeEvent(nevent, echo);
       }
 
       if (!isEmpty(event.action_continue)&&event.action_continue) {

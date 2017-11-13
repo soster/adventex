@@ -11,7 +11,7 @@ export default class InventoryHandler {
   }
 
 
-    in_inventory (item_id) {
+    inInventory (item_id) {
       if (this.l_state.inventory.indexOf(item_id) != -1) {
         return true; 
       }
@@ -19,33 +19,33 @@ export default class InventoryHandler {
     }
 
 
-    is_portable (item_id) {
+    isPortable (item_id) {
       if (this.l_state.objects[item_id] === undefined) {
         return false; 
       }
       return this.l_state.objects[item_id].portable; 
     }
 
-    get_portable_error (item_id) {
+    getPortableError (item_id) {
       var text = this.l_state.objects[item_id].error_portable; 
       return text; 
     }
 
-    add_to_inventory (item_id) {
+    addToInventory (item_id) {
       this.l_state.inventory.push(item_id); 
       this.init_inventory(); 
     }
 
-    remove_from_inventory (item) {
+    removeFromInventory (item) {
       this.l_state.inventory.remove(item); 
       this.init_inventory(); 
     }
 
-    find_item_ids_in_inventory (names) {
+    findItemIdsInInventory (names) {
       return findItemIds(names, this.l_state.inventory, this.l_state.objects);
     }
 
-    find_item_ids_for_name_anywhere (name) {
+    findItemIdsForNameAnywhere (name) {
       var itemIds = [];
       for (var property in this.l_state.objects) {
         var item = this.l_state.objects[property];
@@ -56,7 +56,7 @@ export default class InventoryHandler {
       return itemIds;
     }
 
-    get_name_definitive (item_id) {
+    getNameDefinitive (item_id) {
       var item = this.l_state.objects[item_id]; 
       var article = item.definite_article; 
       var name = item.name; 
@@ -67,7 +67,7 @@ export default class InventoryHandler {
       }
     }
 
-    get_state_of_object(itemId) {
+    getStateOfObject(itemId) {
       var object = this.l_state.objects[itemId];
       if (object===undefined) {
         return 'none';
@@ -78,7 +78,7 @@ export default class InventoryHandler {
       return object.state;
     }
 
-    get_name_of_state(itemId, state) {
+    getNameOfState(itemId, state) {
       var object = this.l_state.objects[itemId];
       if (state!='none'&&object.states[state]===undefined) {
         throw state+' is not an allowed state for '+itemId;
@@ -89,8 +89,8 @@ export default class InventoryHandler {
       return object.states[state].name;
     }
 
-    get_state_string(itemId) {
-      var stateName = this.get_name_of_state(itemId, this.get_state_of_object(itemId));
+    getStateString(itemId) {
+      var stateName = this.getNameOfState(itemId, this.getStateOfObject(itemId));
       var stateString = '';
       if (!isEmpty(stateName)) {
         stateString = '('+stateName+')';
@@ -98,7 +98,7 @@ export default class InventoryHandler {
       return stateString;
     }
 
-    get_name_indefinitive (item_id) {
+    getNameIndefinitive (item_id) {
       var item = this.l_state.objects[item_id];
       if (item===undefined) {
         return '';

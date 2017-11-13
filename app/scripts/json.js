@@ -1,4 +1,4 @@
-export default function parse_json(async_init, advntx) {
+export default function parseJson(async_init, advntx) {
   var jsons = 0;
   const num_requests_necessary = 4;
   const parameter = '?v=' + advntx.version;
@@ -12,7 +12,7 @@ export default function parse_json(async_init, advntx) {
     });
   }
 
-  function async_init_local() {
+  function asyncInitLocal() {
     advntx.vocabulary.objects = [];
     for (var property in advntx.state.objects) {
       var item = advntx.state.objects[property];
@@ -26,7 +26,7 @@ export default function parse_json(async_init, advntx) {
       advntx.vocabulary = result;
       jsons++;
       if (jsons == num_requests_necessary) {
-        async_init_local();
+        asyncInitLocal();
       }
 
     });
@@ -37,7 +37,7 @@ export default function parse_json(async_init, advntx) {
       advntx.messages = result;
       jsons++;
       if (jsons == num_requests_necessary) {
-        async_init_local();
+        asyncInitLocal();
       }
     });
 
@@ -46,7 +46,7 @@ export default function parse_json(async_init, advntx) {
       advntx.state = result;
       jsons++;
       if (jsons == num_requests_necessary) {
-        async_init_local();
+        asyncInitLocal();
       }
 
     });
@@ -56,7 +56,7 @@ export default function parse_json(async_init, advntx) {
       advntx.config = result;
       jsons++;
       if (jsons == num_requests_necessary) {
-        async_init_local();
+        asyncInitLocal();
       }
 
     });

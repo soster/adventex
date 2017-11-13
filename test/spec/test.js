@@ -3,27 +3,27 @@ import chai, { expect } from 'chai';
 import $ from 'jquery';
 import terminal from 'jquery.terminal';
 import Parser from 'app/scripts/parser.js';
-import parse_json from 'app/scripts/json.js';
+import parseJson from 'app/scripts/json.js';
 import EventHandler from 'app/scripts/eventhandler.js'
 import InventoryHandler from 'app/scripts/inventoryhandler.js'
 import LocationHandler from 'app/scripts/locationhandler.js'
 import Interpreter from 'app/scripts/interpreter.js'
 
 import {
-  check_synonyms,
-  find_first_match,
-  find_item_ids,
-  find_item_ids_for_name,
-  get_description,
-  get_first_of_type,
-  get_last_of_type,
-  get_name,
-  get_of_type,
-  get_property,
-  get_second_of_type,
-  is_hidden,
-  list_objects,
-  set_state_of_object
+  checkSynonyms,
+  findFirstMatch,
+  findItemIds,
+  findItemIdsForName,
+  getDescription,
+  getFirstOfType,
+  getLastOfType,
+  getName,
+  getOfType,
+  getProperty,
+  getSecondOfType,
+  isHidden,
+  listObjects,
+  setStateOfObject
 } from 'app/scripts/helper.js'
 
 
@@ -66,7 +66,7 @@ before(function (done) {
     advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, advntx.inventoryHandler, advntx.locationHandler);
     done();
   };
-  parse_json(async_done, advntx);
+  parseJson(async_done, advntx);
 });
 
 function echo(string) { };
@@ -256,7 +256,7 @@ describe('advntx test suite', function () {
     var names = ['guard', 'sugar'];
     var room_item_ids = ['unconscious_guard', 'barrel', 'stone'];
 
-    assert.equal('unconscious_guard', find_item_ids(names, room_item_ids, objects)[0]);
+    assert.equal('unconscious_guard', findItemIds(names, room_item_ids, objects)[0]);
   });
 
   it('locations and connections', function () {
@@ -266,13 +266,13 @@ describe('advntx test suite', function () {
     advntx.state.location = 'room';
 
     var location = advntx.state.locations['room_connections'];
-    assert.equal('room_two', advntx.locationHandler.find_connection_for_direction(location, 'north'));
+    assert.equal('room_two', advntx.locationHandler.findConnectionsForDirection(location, 'north'));
   });
 
   it('find events', function () {
-    assert.equal(events[0], advntx.eventHandler.find_events(location, ['door', 'stone'], 'open', undefined, events)[0]);
-    assert.equal(0, advntx.eventHandler.find_events(location, ['torch'], [], 'throw', undefined, events).length);
-    assert.equal(1, advntx.eventHandler.find_events(location, ['torch', 'guard'], [], 'throw', undefined, events).length);
+    assert.equal(events[0], advntx.eventHandler.findEvents(location, ['door', 'stone'], 'open', undefined, events)[0]);
+    assert.equal(0, advntx.eventHandler.findEvents(location, ['torch'], [], 'throw', undefined, events).length);
+    assert.equal(1, advntx.eventHandler.findEvents(location, ['torch', 'guard'], [], 'throw', undefined, events).length);
 
 
   });
@@ -287,14 +287,14 @@ describe('advntx test suite', function () {
     advntx.state.locations = locations;
     advntx.state.location = 'room';
 
-    advntx.eventHandler.execute_event(events['open_door'], echo);
+    advntx.eventHandler.executeEvent(events['open_door'], echo);
     assert.equal(1, Object.keys(locations['room'].connections).length);
-    advntx.eventHandler.execute_event(events['add_stone'], echo);
+    advntx.eventHandler.executeEvent(events['add_stone'], echo);
     assert.equal('stone', locations['room'].objects[1]);
-    advntx.eventHandler.execute_event(events['remove_stone'], echo);
+    advntx.eventHandler.executeEvent(events['remove_stone'], echo);
     assert.equal(1, locations['room'].objects.length);
     advntx.state.location = 'room_two';
-    advntx.eventHandler.execute_event(events['add_stone'], echo);
+    advntx.eventHandler.executeEvent(events['add_stone'], echo);
     assert.equal(1, locations['room_two'].objects.length);
     advntx.state = save;
   });
@@ -313,10 +313,10 @@ describe('advntx test suite', function () {
     var locationObjects = locations[advntx.state.location].objects;
 
 
-    var foundEvents = advntx.eventHandler.find_events(location, ['torch'], locationObjects, 'take', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'take', undefined, events);
     assert.equal(0, foundEvents.length);
     advntx.state.inventory = [];
-    var foundEvents = advntx.eventHandler.find_events(location, ['torch'], locationObjects, 'take', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'take', undefined, events);
     assert.equal(1, foundEvents.length);
     assert.equal(events['not_inventory'], foundEvents[0])
 
@@ -333,25 +333,25 @@ describe('advntx test suite', function () {
     advntx.state.location = 'room_three';
     var locationObjects = locations[advntx.state.location].objects;
 
-    var foundEvents = advntx.eventHandler.find_events(location, ['torch'], locationObjects, 'kindle', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'kindle', undefined, events);
     assert.equal(0, foundEvents.length);
     objects['torch'].state = 'none';
-    var foundEvents = advntx.eventHandler.find_events(location, ['torch'], locationObjects, 'kindle', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'kindle', undefined, events);
     assert.equal(events['kindle_torch'], foundEvents[0])
-    advntx.eventHandler.execute_event(events['kindle_torch'], echo);
+    advntx.eventHandler.executeEvent(events['kindle_torch'], echo);
     assert.equal('burning', objects['torch'].state);
-    assert.equal('burniiiiing', advntx.inventoryHandler.get_name_of_state('torch', 'burning'));
-    var foundEvents = advntx.eventHandler.find_events(location, ['torch'], locationObjects, 'extinguish', undefined, events);
-    advntx.eventHandler.execute_event(foundEvents[0], echo);
+    assert.equal('burniiiiing', advntx.inventoryHandler.getNameOfState('torch', 'burning'));
+    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'extinguish', undefined, events);
+    advntx.eventHandler.executeEvent(foundEvents[0], echo);
     assert.equal('none', objects['torch'].state);
-    var foundEvents = advntx.eventHandler.find_events(location, ['torch'], locationObjects, 'examine', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'examine', undefined, events);
     assert.equal(0, foundEvents.length);
     objects['torch'].state = 'burning';
-    var foundEvents = advntx.eventHandler.find_events(location, ['torch'], locationObjects, 'examine', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'examine', undefined, events);
     assert.equal(1, foundEvents.length);
-    advntx.eventHandler.execute_event(foundEvents[0], echo);
+    advntx.eventHandler.executeEvent(foundEvents[0], echo);
 
-    var foundEvents = advntx.eventHandler.find_events(location, ['ring'], ['ring', 'barrel'], 'clean', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(location, ['ring'], ['ring', 'barrel'], 'clean', undefined, events);
     assert.equal(0, foundEvents.length);
   });
 

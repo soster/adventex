@@ -5,7 +5,7 @@ import 'jquery.terminal/css/jquery.terminal.min.css!';
 import $ from 'jquery';
 import terminal from 'jquery.terminal';
 import Parser from 'app/scripts/parser.js';
-import parse_json from 'app/scripts/json.js';
+import parseJson from 'app/scripts/json.js';
 import {
   checkSynonyms,
   findFirstMatch,
@@ -52,9 +52,9 @@ window.advntx = (function (my) {
 
 
   my.describe_location_echo = function (location_id, always_show_full_description) {
-    var loc = advntx.locationHandler.get_location_by_id(location_id);
+    var loc = advntx.locationHandler.getLocationById(location_id);
     if (!advntx.locationHandler.visited(location_id) || always_show_full_description) {
-      my.echo(advntx.locationHandler.get_location_description(location_id), loc.color);
+      my.echo(advntx.locationHandler.getLocationDescription(location_id), loc.color);
     } else {
       my.echo(getName(advntx.state.locations, location_id), loc.color);
     }
@@ -76,13 +76,13 @@ window.advntx = (function (my) {
 
 
   my.add_to_inventory_echo = function (item) {
-    advntx.inventoryHandler.add_to_inventory(item);
+    advntx.inventoryHandler.addToInventory(item);
     my.init_inventory();
   }
 
   my.init_game = function (refresh_json) {
     if (refresh_json == true) {
-      parse_json(my.init_game_async, advntx);
+      parseJson(my.init_game_async, advntx);
     } else {
       my.init_game_async(false);
     }
@@ -111,7 +111,7 @@ window.advntx = (function (my) {
     my.init_inventory();
     if (reset) {
       var startEvent = advntx.state.events['start_event'];
-      advntx.eventHandler.execute_event(startEvent, my.echo);
+      advntx.eventHandler.executeEvent(startEvent, my.echo);
     }
 
     my.describe_location_echo(advntx.state.location);
@@ -140,7 +140,7 @@ window.advntx = (function (my) {
     for (var i = 0; i < advntx.state.inventory.length; i++) {
       var item = advntx.state.inventory[i];
       var itemName = getName(advntx.state.objects, item);
-      var stateString = ' ' + advntx.inventoryHandler.get_state_string(item);
+      var stateString = ' ' + advntx.inventoryHandler.getStateString(item);
       $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventory_click(\'' + itemName + '\')" class="btn btn-info btn-sm inventory_button">' + itemName + stateString + '</button></p>');
     }
   }

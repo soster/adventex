@@ -20,10 +20,10 @@ export default class Interpreter {
 
 
 
-  interpret (command, describe_location_echo, init_inventory, echo, init_game) {
+  interpret (command, describeLocationEcho, init_inventory, echo, init_game) {
     var original = command;
     this.echo = echo;
-    this.describe_location_echo = describe_location_echo;
+    this.describeLocationEcho = describeLocationEcho;
     this.init_inventory = init_inventory;
     this.init_game = init_game;
 
@@ -34,7 +34,7 @@ export default class Interpreter {
     }
 
     if (command == 'help') {
-      echo(this.build_help_string());
+      echo(this.buildHelpString());
     } else if (command == 'debug' && this.advntx.config.debug) {
       echo(JSON.stringify(this.advntx.state));
     } else {
@@ -46,15 +46,15 @@ export default class Interpreter {
       var misc = words['misc'];
       var foundNothing = false;
 
-      var itemIdsFromLocation = this.advntx.locationHandler.find_item_ids_in_location(objects,this.advntx.state.locations[this.advntx.state.location]);
-      var itemIdsFromInventory = this.advntx.inventoryHandler.find_item_ids_in_inventory(objects);
+      var itemIdsFromLocation = this.advntx.locationHandler.findItemIdsInLocation(objects,this.advntx.state.locations[this.advntx.state.location]);
+      var itemIdsFromInventory = this.advntx.inventoryHandler.findItemIdsInInventory(objects);
       var itemIds = [];
 
       
       var itemIds = itemIdsFromLocation.concat(itemIdsFromInventory);
       var locationObject = this.advntx.state.locations[this.advntx.state.location];
       
-      var preEvents = this.advntx.eventHandler.find_events(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
+      var preEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
       var executedPreEvents = [];
       var foundEvent = false;
 
@@ -64,7 +64,7 @@ export default class Interpreter {
         if (event.prereq_only_after == true) {
           continue;
         }
-        doContinue = doContinue & this.trigger_event(event);
+        doContinue = doContinue & this.triggerEvent(event);
         foundEvent = true;
         executedPreEvents.push(event);
       }
@@ -75,7 +75,7 @@ export default class Interpreter {
           var direction = getFirstOfType(words, 'directions');
           this.move(direction, itemIdsFromLocation, misc);
         } else if (checkSynonyms('take', firstVerb, this.advntx.vocabulary.synonyms)) {
-          this.get_item(objects, itemIdsFromLocation);
+          this.getItem(objects, itemIdsFromLocation);
         } else if (checkSynonyms('examine', firstVerb, this.advntx.vocabulary.synonyms)) {
           this.examine(objects, itemIds);
         } else if (checkSynonyms('drop', firstVerb, this.advntx.vocabulary.synonyms)) {
@@ -89,7 +89,7 @@ export default class Interpreter {
       }
       
       locationObject = this.advntx.state.locations[this.advntx.state.location];
-      var postEvents = this.advntx.eventHandler.find_events(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
+      var postEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
 
       if (doContinue) {
         for (var i=0;i<postEvents.length;i++) {
@@ -99,7 +99,7 @@ export default class Interpreter {
             continue;
           }
           
-          this.trigger_event(event);
+          this.triggerEvent(event);
           foundEvent = true;
         }
       }
@@ -114,14 +114,14 @@ export default class Interpreter {
           var errorMessage = error[firstVerb];
           echo(errorMessage, 'coral');
         } else {
-          echo(this.advntx.messages.error_verb_object.format(firstVerb,this.advntx.inventoryHandler.get_name_definitive(itemId)), 'red');
+          echo(this.advntx.messages.error_verb_object.format(firstVerb,this.advntx.inventoryHandler.getNameDefinitive(itemId)), 'red');
         }
       } else if (foundNothing && !foundEvent) {
-          this.standard_error(command); 
+          this.standardError(command); 
       }
 
       var allEvents = preEvents.concat(postEvents);
-      if (this.check_winning_condition(allEvents)) {
+      if (this.checkWinningCondition(allEvents)) {
         echo(this.advntx.messages.info_you_win.format(this.advntx.state.steps,this.advntx.state.points),'yellow');
       }
 
@@ -141,7 +141,7 @@ export default class Interpreter {
     if (isEmpty(direction)) {
       if (item_ids.length>0) {
         var item_id = item_ids[0];
-        this.advntx.interpreter.echo(this.advntx.messages.error_movement_thing.format(this.advntx.inventoryHandler.get_name_definitive(item_id)), 'coral');
+        this.advntx.interpreter.echo(this.advntx.messages.error_movement_thing.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)), 'coral');
           return;
       } 
       if (this.advntx.config.debug && misc.length>0) {
@@ -158,18 +158,18 @@ export default class Interpreter {
     var location = this.advntx.state.locations[this.advntx.state.location];
 
     if (new_location==undefined) {
-      new_location = this.advntx.locationHandler.find_connection_for_direction(location,direction);
+      new_location = this.advntx.locationHandler.findConnectionsForDirection(location,direction);
     } 
 
     if (new_location!=undefined) {
-      this.advntx.locationHandler.set_location(new_location);
-      this.advntx.interpreter.describe_location_echo(new_location, false);
+      this.advntx.locationHandler.setLocation(new_location);
+      this.advntx.interpreter.describeLocationEcho(new_location, false);
     } else {
       this.advntx.interpreter.echo(this.advntx.messages.error_movement_direction.format(direction), 'red');
     }
   }
 
-  get_item (objects, item_ids) {
+  getItem (objects, item_ids) {
     if (item_ids.length==0&&objects.length>0) {
       this.echo(this.advntx.messages.error_specific_get.format(objects[0]), 'red')
     } else if (objects.length==0){
@@ -177,27 +177,27 @@ export default class Interpreter {
     }
     for (var i=0;i<item_ids.length;i++) {
       var item_id = item_ids[i];
-      if (!this.advntx.inventoryHandler.is_portable(item_id)) {
-        var portable_error = this.advntx.inventoryHandler.get_portable_error(item_id);
+      if (!this.advntx.inventoryHandler.isPortable(item_id)) {
+        var portable_error = this.advntx.inventoryHandler.getPortableError(item_id);
         if (!isEmpty(portable_error)) {
           this.echo(portable_error, 'coral');
         } else {
-          var indevname = this.advntx.inventoryHandler.get_name_indefinitive(item_id);
+          var indevname = this.advntx.inventoryHandler.getNameIndefinitive(item_id);
           this.echo(this.advntx.messages.error_portable.format(indevname), 'coral');
         }
 
       } else {
-        this.echo(this.advntx.messages.info_you_took.format(this.advntx.inventoryHandler.get_name_definitive(item_id)));
-        this.advntx.inventoryHandler.add_to_inventory(item_id);
+        this.echo(this.advntx.messages.info_you_took.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)));
+        this.advntx.inventoryHandler.addToInventory(item_id);
         this.advntx.init_inventory();
-        this.advntx.locationHandler.remove_item_from_location(this.advntx.state.location, item_id);
+        this.advntx.locationHandler.removeItemFromLocation(this.advntx.state.location, item_id);
       }
     }
   }
 
   examine (objects, item_ids) {
     if (objects.length==0) {
-      this.describe_location_echo(this.advntx.state.location,true);
+      this.describeLocationEcho(this.advntx.state.location,true);
     } else {
       var item_id = item_ids[0];
       var object = objects[0];
@@ -207,7 +207,7 @@ export default class Interpreter {
       } else if (!isEmpty(object)) {
         this.echo(this.advntx.messages.error_thing.format(object), 'red');
       } else {
-        this.standard_error(command);
+        this.standardError(command);
       }
     }
   }
@@ -225,23 +225,23 @@ export default class Interpreter {
         this.echo(this.advntx.messages.error_thing.format(item), 'red');
         break;
       } else {
-        this.advntx.inventoryHandler.remove_from_inventory(item_id);
-        this.advntx.locationHandler.add_item_to_location(this.advntx.state.location, item_id);
-        this.echo(this.advntx.messages.info_you_dropped.format(this.advntx.inventoryHandler.get_name_definitive(item_id)));
+        this.advntx.inventoryHandler.removeFromInventory(item_id);
+        this.advntx.locationHandler.addItemToLocation(this.advntx.state.location, item_id);
+        this.echo(this.advntx.messages.info_you_dropped.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)));
       }
     }
     
 
   }
 
-  trigger_event  (event) {
+  triggerEvent  (event) {
     var old_location = this.advntx.state.location;
 
-    var doContinue = this.advntx.eventHandler.execute_event(event,this.advntx.interpreter.echo);
+    var doContinue = this.advntx.eventHandler.executeEvent(event,this.advntx.interpreter.echo);
 
     if (old_location != this.advntx.state.location) {
       setTimeout(function () {
-        this.advntx.interpreter.describe_location_echo(this.advntx.state.location, false)
+        this.advntx.interpreter.describeLocationEcho(this.advntx.state.location, false)
       }, this.advntx.config.standard_wait_eventtext);
     }
 
@@ -249,7 +249,7 @@ export default class Interpreter {
   }
 
 
-  standard_error  (command) {
+  standardError  (command) {
     this.echo(this.advntx.messages.error.format(command), 'red');
   }
 
@@ -269,7 +269,7 @@ export default class Interpreter {
 
   }
 
-  build_help_string() {
+  buildHelpString() {
     if (this.help_string!=undefined) return;
     var verbString = '';
     for (var i=0;i<this.advntx.vocabulary.verbs.length;i++) {
@@ -281,7 +281,7 @@ export default class Interpreter {
     return this.help_string;
   }
 
-  check_winning_condition (events) {
+  checkWinningCondition (events) {
     for (var i=0;i<events.length;i++) {
       if (this.advntx.state.events['win_event']===events[i]) {
         return true;

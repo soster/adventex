@@ -24,7 +24,7 @@ export default class LocationHandler {
   }
 
 
-    remove_item_from_location (location, item) {
+    removeItemFromLocation (location, item) {
       var place = this.state.locations[location];
       if (place !== undefined) {
         var loc = place.objects.indexOf(item);
@@ -34,12 +34,12 @@ export default class LocationHandler {
       }
     }
 
-    add_item_to_location (location, item) {
+    addItemToLocation (location, item) {
       var place = this.state.locations[location];
       place.objects.push(item);
     }
 
-    in_location (itemOrPerson) {
+    inLocation (itemOrPerson) {
       var olocation = this.state.locations[this.state.location];
       if (olocation.objects.indexOf(itemOrPerson.toLowerCase()) != -1) {
         return true;
@@ -52,28 +52,28 @@ export default class LocationHandler {
     }
 
     //FIXME
-    find_item_ids_in_location (names, location) {
+    findItemIdsInLocation (names, location) {
       if (location==undefined) {
         return [];
       }
       return findItemIds(names, location.objects, this.state.objects);
     }
 
-    set_location (location_id) {
+    setLocation (location_id) {
       this.state.location = location_id;
     }
 
-    get_location_description (location_id) {
+    getLocationDescription (location_id) {
       var loc = this.state.locations[location_id];
       var description = getDescription(this.state.locations, location_id);
       return description += '\n';
     }
 
-    get_location_by_id (location_id) {
+    getLocationById (location_id) {
       return this.state.locations[location_id];
     }
 
-    find_connection_for_direction(location, direction) {
+    findConnectionsForDirection(location, direction) {
       var state = location.state;
       if (!isEmpty(state)&&location.states!=undefined) {
         var stateObj = location.states[state];
@@ -88,7 +88,7 @@ export default class LocationHandler {
     }
 
     visited(location_id) {
-      var loc = this.get_location_by_id(location_id);
+      var loc = this.getLocationById(location_id);
       if (loc.visited===undefined||loc.visited==false) {
         loc.visited = true;
         return false;
