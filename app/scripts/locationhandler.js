@@ -1,20 +1,20 @@
 'use strict';
 
 import {
-  check_synonyms,
-  find_first_match,
-  find_item_ids,
-  find_item_ids_for_name,
-  get_description,
-  get_first_of_type,
-  get_last_of_type,
-  get_name,
-  get_of_type,
-  get_property,
-  get_second_of_type,
-  is_hidden,
-  list_objects,
-  set_state_of_object
+  checkSynonyms,
+  findFirstMatch,
+  findItemIds,
+  findItemIdsForName,
+  getDescription,
+  getFirstOfType,
+  getLastOfType,
+  getName,
+  getOfType,
+  getProperty,
+  getSecondOfType,
+  isHidden,
+  listObjects,
+  setStateOfObject
 } from 'app/scripts/helper.js'
 
 export default class LocationHandler {
@@ -56,7 +56,7 @@ export default class LocationHandler {
       if (location==undefined) {
         return [];
       }
-      return find_item_ids(names, location.objects, this.state.objects);
+      return findItemIds(names, location.objects, this.state.objects);
     }
 
     set_location (location_id) {
@@ -65,7 +65,7 @@ export default class LocationHandler {
 
     get_location_description (location_id) {
       var loc = this.state.locations[location_id];
-      var description = get_description(this.state.locations, location_id);
+      var description = getDescription(this.state.locations, location_id);
       return description += '\n';
     }
 

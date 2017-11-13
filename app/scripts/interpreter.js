@@ -4,12 +4,12 @@
 'use strict';
 
 import {
-  check_synonyms,
-  find_item_ids,
-  get_description,
-  get_first_of_type,
-  get_last_of_type,
-  get_name
+  checkSynonyms,
+  findItemIds,
+  getDescription,
+  getFirstOfType,
+  getLastOfType,
+  getName
 } from 'app/scripts/helper.js'
 
 export default class Interpreter {
@@ -39,9 +39,9 @@ export default class Interpreter {
       echo(JSON.stringify(this.advntx.state));
     } else {
       var words = this.advntx.parser.parse(command);
-      var firstVerb = get_first_of_type(words, 'verbs');
-      var lastVerb = get_last_of_type(words, 'verbs');
-      var preposition = get_first_of_type(words, 'prepositions');
+      var firstVerb = getFirstOfType(words, 'verbs');
+      var lastVerb = getLastOfType(words, 'verbs');
+      var preposition = getFirstOfType(words, 'prepositions');
       var objects = words['objects'];
       var misc = words['misc'];
       var foundNothing = false;
@@ -71,16 +71,16 @@ export default class Interpreter {
 
 
       if (!foundEvent || doContinue) {
-        if (check_synonyms('go', firstVerb, this.advntx.vocabulary.synonyms)) {
-          var direction = get_first_of_type(words, 'directions');
+        if (checkSynonyms('go', firstVerb, this.advntx.vocabulary.synonyms)) {
+          var direction = getFirstOfType(words, 'directions');
           this.move(direction, itemIdsFromLocation, misc);
-        } else if (check_synonyms('take', firstVerb, this.advntx.vocabulary.synonyms)) {
+        } else if (checkSynonyms('take', firstVerb, this.advntx.vocabulary.synonyms)) {
           this.get_item(objects, itemIdsFromLocation);
-        } else if (check_synonyms('examine', firstVerb, this.advntx.vocabulary.synonyms)) {
+        } else if (checkSynonyms('examine', firstVerb, this.advntx.vocabulary.synonyms)) {
           this.examine(objects, itemIds);
-        } else if (check_synonyms('drop', firstVerb, this.advntx.vocabulary.synonyms)) {
+        } else if (checkSynonyms('drop', firstVerb, this.advntx.vocabulary.synonyms)) {
           this.drop(objects, itemIdsFromInventory);
-        } else if (check_synonyms('restart', firstVerb, this.advntx.vocabulary.synonyms)) {
+        } else if (checkSynonyms('restart', firstVerb, this.advntx.vocabulary.synonyms)) {
           this.echo('\n');
           this.init_game(true);
         } else {// I give up...
@@ -202,7 +202,7 @@ export default class Interpreter {
       var item_id = item_ids[0];
       var object = objects[0];
       if (!isEmpty(item_id)) {
-        var desc = get_description(this.advntx.state.objects, item_id);
+        var desc = getDescription(this.advntx.state.objects, item_id);
         this.echo(desc);
       } else if (!isEmpty(object)) {
         this.echo(this.advntx.messages.error_thing.format(object), 'red');

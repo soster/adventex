@@ -7,20 +7,20 @@ import terminal from 'jquery.terminal';
 import Parser from 'app/scripts/parser.js';
 import parse_json from 'app/scripts/json.js';
 import {
-  check_synonyms,
-  find_first_match,
-  find_item_ids,
-  find_item_ids_for_name,
-  get_description,
-  get_first_of_type,
-  get_last_of_type,
-  get_name,
-  get_of_type,
-  get_property,
-  get_second_of_type,
-  is_hidden,
-  list_objects,
-  set_state_of_object
+  checkSynonyms,
+  findFirstMatch,
+  findItemIds,
+  findItemIdsForName,
+  getDescription,
+  getFirstOfType,
+  getLastOfType,
+  getName,
+  getOfType,
+  getProperty,
+  getSecondOfType,
+  isHidden,
+  listObjects,
+  setStateOfObject
 } from 'app/scripts/helper.js'
 
 import InventoryHandler from 'app/scripts/inventoryhandler.js'
@@ -56,14 +56,14 @@ var advntx = (function (my) {
     if (!advntx.locationHandler.visited(location_id) || always_show_full_description) {
       my.echo(advntx.locationHandler.get_location_description(location_id), loc.color);
     } else {
-      my.echo(get_name(advntx.state.locations, location_id), loc.color);
+      my.echo(getName(advntx.state.locations, location_id), loc.color);
     }
 
     var things = loc.objects;
     var persons = loc.persons;
     var message = my.messages.info_you_see;
-    var things_message = list_objects(things, advntx.state.objects, advntx.inventoryHandler);
-    var persons_message = list_objects(persons, advntx.state.persons, advntx.inventoryHandler);
+    var things_message = listObjects(things, advntx.state.objects, advntx.inventoryHandler);
+    var persons_message = listObjects(persons, advntx.state.persons, advntx.inventoryHandler);
     if (!isEmpty(persons_message) || !isEmpty(things_message)) {
       my.echo(message);
       my.echo(things_message);
@@ -139,7 +139,7 @@ var advntx = (function (my) {
     $('#inventory > .inventory_item').remove();
     for (var i = 0; i < advntx.state.inventory.length; i++) {
       var item = advntx.state.inventory[i];
-      var itemName = get_name(advntx.state.objects, item);
+      var itemName = getName(advntx.state.objects, item);
       var stateString = ' ' + advntx.inventoryHandler.get_state_string(item);
       $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventory_click(\'' + itemName + '\')" class="btn btn-info btn-sm inventory_button">' + itemName + stateString + '</button></p>');
     }

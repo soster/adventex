@@ -1,8 +1,8 @@
 'use strict';
 
 import {
-  check_synonyms,
-  set_state_of_object
+  checkSynonyms,
+  setStateOfObject
 } from 'app/scripts/helper.js'
 
 
@@ -159,7 +159,7 @@ export default class EventHandler {
             continue;
           }
           if (!isEmpty(event.prereq_verb) && !isEmpty(verb)) {
-            if (check_synonyms(event.prereq_verb, verb, this.vocabulary.synonyms)) {
+            if (checkSynonyms(event.prereq_verb, verb, this.vocabulary.synonyms)) {
               verb = event.prereq_verb;
             }
           }
@@ -283,14 +283,14 @@ export default class EventHandler {
       if (!isEmpty(event.action_set_state_items)) {
         for (var i=0;i<event.action_set_state_items.length;i++) {
           var arr = event.action_set_state_items[i].split('|');
-          set_state_of_object(arr[0],arr[1],this.state.objects);
+          setStateOfObject(arr[0],arr[1],this.state.objects);
         }
       }
 
       if (!isEmpty(event.action_set_state_locations)) {
         for (var i=0;i<event.action_set_state_locations.length;i++) {
           var arr = event.action_set_state_locations[i].split('|');
-          set_state_of_object(arr[0],arr[1],this.state.locations);
+          setStateOfObject(arr[0],arr[1],this.state.locations);
         }
       }
 

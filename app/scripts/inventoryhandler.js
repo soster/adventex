@@ -1,7 +1,7 @@
 'use strict';
 
 import {
-  find_item_ids
+  findItemIds
 } from 'app/scripts/helper.js'
 
 export default class InventoryHandler {
@@ -42,7 +42,7 @@ export default class InventoryHandler {
     }
 
     find_item_ids_in_inventory (names) {
-      return find_item_ids(names, this.l_state.inventory, this.l_state.objects);
+      return findItemIds(names, this.l_state.inventory, this.l_state.objects);
     }
 
     find_item_ids_for_name_anywhere (name) {
