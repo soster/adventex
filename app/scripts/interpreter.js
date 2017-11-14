@@ -56,7 +56,7 @@ export default class Interpreter {
     var doContinue = true;
     for (var i = 0; i < preEvents.length; i++) {
       var event = preEvents[i];
-      if (event.prereq_only_after == true) {
+      if (event.only_after == true) {
         continue;
       }
       doContinue = doContinue & this.triggerEvent(event);
@@ -93,7 +93,7 @@ export default class Interpreter {
     if (doContinue) {
       for (var i = 0; i < postEvents.length; i++) {
         var event = postEvents[i];
-        if (executedPreEvents.indexOf(event) != -1 || event.prereq_only_before) {
+        if (executedPreEvents.indexOf(event) != -1 || event.only_before) {
           // event already executed or not suitable
           continue;
         }
