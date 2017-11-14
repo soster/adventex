@@ -100,10 +100,20 @@ var events = {
     action_remove_items: ['room:stone']
   },
   not_inventory: {
-    name: '',
+    name: 'not in inventory',
     prereq_verb: 'take',
-    prereq_items: ['torch'],
-    prereq_not_inventory_items: ['torch']
+    not: {
+      prereq_inventory_items: ['torch']
+    }
+  },
+
+  any_event: {
+    name: 'any',
+    prereq_verb: 'help',
+    any: {
+      prereq_inventory_items: ['torch'],
+      prereq_inventory_items: ['stone']
+    }
   },
 
   drop_torch: {
@@ -305,8 +315,6 @@ describe('advntx test suite', function () {
   });
 
   it('testing "find not in inventory" events', function () {
-
-    advntx.eventHandler
     var save = advntx.state;
     advntx.state = {
       steps: 0
@@ -327,6 +335,13 @@ describe('advntx test suite', function () {
     advntx.state = save;
     advntx.eventHandler = oldEventHandler;
 
+  });
+
+  it('testing "find any" events', function () {
+    advntx.state.inventory = ['torch'];
+    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], [], 'help', undefined, events);
+    assert.equal(1, foundEvents.length);
+    assert.equal(events['any_event'], foundEvents[0]);
   });
 
   it('check events with state', function () {

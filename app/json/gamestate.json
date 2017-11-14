@@ -404,7 +404,9 @@
 			"description": "The torch makes it easier to find your way. The dungeon down here is mostly dark.\nBut you will be seen immediately with the bright torch in your hands.",
 			"prereq_verb": "take",
 			"prereq_used_items": ["torch"],
-			"prereq_not_inventory_items": ["torch"],
+			"not": {
+				"prereq_inventory_items": ["torch"]
+			},
 			"action_add_items": ["forward_corridor:stone"],
 			"action_continue": true
 		},
@@ -423,7 +425,7 @@
 			"description": "You see a big guard standing in a corner of the room. He doesn't look into your direction, yet.",
 			"prereq_location_items": ["guard|none"],
 			"trigger_once": true,
-			"prereq_only_after": true
+			"only_after": true
 		},
 
 		"hide_barrel": {
@@ -439,7 +441,7 @@
 		"unhide_barrel": {
 			"prereq_verb": "go",
 			"prereq_location_state": "backward_corridor|hidden",
-			"prereq_only_after": true,
+			"only_after": true,
 			"action_untrigger_events": ["hide_barrel", "guard_trigger"],
 			"action_enable_events": ["guard_trigger","throw_stone_at_guard"],
 			"action_set_state_locations": ["backward_corridor|none"]
@@ -532,14 +534,14 @@
 			"description": "After a quick glance around the ledge you hear two guards talking to each other.\nYou can eavedrop some of their talk:\n- \"..But where did you loose it?\"\n- \"I don't know, I still had the f*'$! ring this morning!\n  Must have lost it somewhere..\"",
 			"prereq_location": "guard_room",
 			"trigger_once": true,
-			"prereq_only_after": true,
+			"only_after": true,
 			"action_trigger_event": "two_guards_trigger"
 		},
 
 		"two_guards_trigger": {
 			"prereq_location": "guard_room",
 			"trigger_once": true,
-			"prereq_only_after": true
+			"only_after": true
 		},
 
 		"two_guards_untrigger": {
@@ -552,7 +554,7 @@
 			"name": "",
 			"description": "Both guards turn around simultanously and attack you.\nIt all happens very quickly, you have no chance against them.\nAfter getting hit on your head, you loose conscioiusness (again)...",
 			"prereq_location": "guard_room",
-			"prereq_only_before": true,
+			"only_before": true,
 			"prereq_triggered_events": ["two_guards_trigger"],
 			"prereq_triggered_event_step_offset": 3,
 			"action_untrigger_events":["two_guards_trigger"],
@@ -569,7 +571,9 @@
 
 		"staircase_no_torch": {
 			"prereq_location": "staircase",
-			"prereq_not_inventory_items": ["torch"],
+			"not": {
+				"prereq_inventory_items": ["torch"]
+			},
 			"prereq_location_state": "staircase|torch",
 			"action_set_state_locations": ["staircase|none"]		
 		},
@@ -596,7 +600,7 @@
 			"prereq_location": "backward_corridor",
 			"description": "You try to sneak away...",
 			"prereq_location_items": ["guard|none"],
-			"prereq_only_before": true,
+			"only_before": true,
 			"action_trigger_event": "arest"
 		},
 
@@ -648,7 +652,7 @@
 			"prereq_verb": "go",
 			"description": "The old woman blocks your way with her large backpack.\nShe screams for help and before you manage to overwhelm her, two guards are running towards you.\nThey hit you on your head.\nThe last thing you think about before it gets dark around you is \"not again!\"",
 			"action_move_to_location": "dungeon_cell",
-			"prereq_only_before": true
+			"only_before": true
 		},
 
 		"win_event": {
@@ -664,17 +668,23 @@
 			"prereq_verb": "switch",
 			"prereq_location": "",
 			"prereq_used_items": [],
-			"prereq_location_items": [],
-			"prereq_inventory_items": [],
-			"prereq_preposition": "on",
-			"prereq_min_steps": 0,
-			"prereq_max_steps": 0,
-			"prereq_triggered_event_step_offset": 0,
-			"prereq_triggered_events": [],
-			"prereq_visited_locations": [],
-			"prereq_only_before": false,
-			"prereq_only_after": false,
+			"not": {
+				"prereq_location_items": [],
+				"prereq_inventory_items": [],
+				"prereq_preposition": "on",
+				"prereq_min_steps": 0,
+				"prereq_max_steps": 0
+			},
+			"or": {
+				"prereq_triggered_event_step_offset": 0,
+				"prereq_triggered_events": [],
+				"prereq_visited_locations": []
+			},
+
 			"prereq_location_state": "",
+
+			"only_before": false,
+			"only_after": false,
 			"action_add_items": [""],
 			"action_remove_items": [""],
 			"action_set_state_locations": [],
