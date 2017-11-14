@@ -278,7 +278,9 @@ export default class Interpreter {
   }
 
   buildHelpString() {
-    if (this.help_string!=undefined) return;
+    if (this.help_string!=undefined) {
+      return this.help_string;
+    }
     var verbString = '';
     for (var i=0;i<this.advntx.vocabulary.verbs.length;i++) {
       if (i!=0)
