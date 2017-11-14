@@ -40,6 +40,7 @@
         "drink",
         "eat", 
         "hint",
+        "help",
         "restart"
     ],
     "directions": [
