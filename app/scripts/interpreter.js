@@ -27,7 +27,8 @@ export default class Interpreter {
     this.init_inventory = init_inventory;
     this.init_game = init_game;
 
-    command = command.toLowerCase();
+    // lower case and remove backslash from auto suggest:
+    command = command.toLowerCase().replace('\\','');
 
     if (isEmpty(command)) {
       return;
