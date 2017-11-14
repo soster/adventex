@@ -70,10 +70,11 @@ export default class Interpreter {
         executedPreEvents.push(event);
       }
 
+      var direction = getFirstOfType(words, 'directions');
+
 
       if (!foundEvent || doContinue) {
-        if (checkSynonyms('go', firstVerb, this.advntx.vocabulary.synonyms)) {
-          var direction = getFirstOfType(words, 'directions');
+        if (checkSynonyms('go', firstVerb, this.advntx.vocabulary.synonyms) || !isEmpty(direction)) {
           this.move(direction, itemIdsFromLocation, misc);
         } else if (checkSynonyms('take', firstVerb, this.advntx.vocabulary.synonyms)) {
           this.getItem(objects, itemIdsFromLocation);
