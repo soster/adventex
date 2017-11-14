@@ -30,7 +30,10 @@ import Interpreter from 'app/scripts/interpreter.js'
 
 
 
-
+/**
+ * Set advntx as global variable. 
+ * window is needed because of system.js.
+ */
 window.advntx = {
   version:15,
   seconds:0,

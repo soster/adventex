@@ -114,10 +114,14 @@ export default class Interpreter {
           var errorMessage = error[firstVerb];
           echo(errorMessage, 'coral');
         } else {
-          echo(this.advntx.messages.error_verb_object.format(firstVerb,this.advntx.inventoryHandler.getNameDefinitive(itemId)), 'red');
+          var placeholder = ' ';
+          if (!isEmpty(preposition)) {
+            placeholder = ' '+preposition+' ';
+          }
+          echo(this.advntx.messages.error_verb_object.format(firstVerb,placeholder,this.advntx.inventoryHandler.getNameDefinitive(itemId)), 'red');
         }
       } else if (foundNothing && !foundEvent) {
-        if (firstVerb!=undefined) {
+        if (!isEmpty(firstVerb)) {
           this.echo(this.advntx.messages.error_verb.format(firstVerb), 'coral');
         } else {
           this.standardError(command);
