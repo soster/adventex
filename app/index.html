@@ -1,104 +1,117 @@
 <!doctype html>
 <html lang="">
-  <head>
-    <meta charset="utf-8">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>adventex</title>
 
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="stylesheet" media="all" href="styles/main.css">
-    
-  </head>
-  <body>
-    <!--[if IE]>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>adventex</title>
+
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" media="all" href="styles/main.css">
+
+</head>
+
+<body>
+  <!--[if IE]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    
-    <div class="container">
-      <div class="header">
-        <ul class="nav nav-pills float-right">
-          <li class="nav-item">
-            <a class="nav-link active" href="#">Home</a>
-          </li>
-          <li>
-            <a class="nav-link" href="#">About</a>
-          </li>        
-          </ul>
-        <h3 class="text-muted">adventex</h3>
-      </div>
-      <div class="row" >
-        <div class="col-md-9">
+
+  <div class="container">
+    <div class="header">
+      <ul class="nav nav-pills float-right">
+        <li class="nav-item">
+          <a class="nav-link active" href="#">Home</a>
+        </li>
+        <li>
+          <a class="nav-link" href="#">About</a>
+        </li>
+      </ul>
+      <h3 class="text-muted">adventex</h3>
+    </div>
+    <div class="row">
+      <div class="col-md-9">
         <p id="terminal">
         </p>
-        </div>
-        <div id="inventory_container" class="col-3">          
-          <h3>Inventory</h3>
-          <div id="inventory">
-            <p class="inventory_item"></p>
-          </div>
+      </div>
+      <div id="inventory_container" class="col-3">
+        <h3>Inventory</h3>
+        <div id="inventory">
+          <p class="inventory_item"></p>
         </div>
       </div>
-      <div class="row" >
-        <div class="col-md-9">
+    </div>
+    <div class="row">
+      <div class="col-md-9">
         <p>
           <button type="button" class="btn btn-primary" id="btn_help">Help</button>&nbsp;
           <button type="button" class="btn btn-primary" id="btn_save_storage">Save</button>&nbsp;
           <button type="button" class="btn btn-primary" id="btn_load_storage">Load</button>&nbsp;
+        </p>
+        <p>
           <button type="button" class="btn btn-primary" id="btn_save">Save (to textfield)</button>&nbsp;
           <button type="button" class="btn btn-primary" id="btn_load">Load (from textfield)</button>&nbsp;
           <button type="button" class="btn btn-primary" id="btn_restart">Restart</button>&nbsp;
-        </p>          
-        </div>
-      </div>
-
-      <div class="row">
-        <div class="col-12">
-        </div>
-      </div>
-
-      <div class="row">
-          <div class="col-12">
-              <div class="form-group">
-                  <label for="game_state">Game state text field:</label>
-                  <textarea class="form-control" id="game_state" rows="3"></textarea>
-                </div>
-      </div>
-      </div>
-
-      <div class="footer smalltext alert-warning">
-        <div class="row">
-            <div class="col-md-6">
-        <p>2017 Stefan Ostermann</p>
-        </div>
-        <div class="col-md-6">
-            <div><span aria-hidden="true"></span></button>Frameworks: <a href="http://terminal.jcubic.pl/">JQuery Terminal</a>&nbsp;<a href="https://getbootstrap.com/">Bootstrap</div>
-        </div>
-      </div>
+        </p>
       </div>
     </div>
-   
-    <!-- build:js scripts/app.js -->
-    <script src="scripts/functions.js"></script>
-    <!-- endbuild -->
+
+    <div class="row">
+      <div class="col-12">
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group">
+          <label for="game_state">Game state text field:</label>
+          <textarea class="form-control" id="game_state" rows="3"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer smalltext alert-warning">
+      <div class="row">
+        <div class="col-md-6">
+          <p>2017 Stefan Ostermann</p>
+        </div>
+        <div class="col-md-6">
+          <div>
+            <span aria-hidden="true"></span>
+            </button>Frameworks:
+            <a href="http://terminal.jcubic.pl/">JQuery Terminal</a>&nbsp;
+            <a href="https://getbootstrap.com/">Bootstrap</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- build:js scripts/app.js -->
+  <script src="scripts/functions.js"></script>
+  <!-- endbuild -->
 
 
-    <!--removeIf(production)-->
-    <script src="jspm_packages/system.js"></script>
-    <script src="config.js"></script>
-    <!--endRemoveIf(production)-->
+  <!--removeIf(production)-->
+  <script src="jspm_packages/system.js"></script>
+  <script src="config.js"></script>
+  <!--endRemoveIf(production)-->
 
-    <!-- System.js bundle, only for production build: -->
-    <script src="scripts/main.bundle.js"></script>
-    
-    <!--removeIf(production)-->
-    <script>
-        System.config({
-        });
-        System.import('scripts/main.js').then(function() {
-          
-        });
-    </script>
-    <!--endRemoveIf(production)-->
-  </body>
+  <!-- global variable, value is replaced by gulp-version-number -->
+  <script>
+  var g_ver = 'VERSION_REPLACE';
+  </script>
+  <!-- System.js bundle, only for production build: -->
+  <script src="scripts/main.bundle.js"></script>
+
+  <!--removeIf(production)-->
+  <script>
+    System.config({
+    });
+    System.import('scripts/main.js').then(function () {
+
+    });
+  </script>
+  <!--endRemoveIf(production)-->
+</body>
+
 </html>

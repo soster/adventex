@@ -18,11 +18,12 @@ const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
 const versionConfig = {
-  'value': '%MDS%',
+  'value': '%DT%',
   'append': {
     'key': 'v',
     'to': ['css', 'js'],
   },
+  'replaces': ['VERSION_REPLACE']
 };
 
 let dev = true;

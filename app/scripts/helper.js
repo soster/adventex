@@ -143,3 +143,12 @@ export function findItemIdsForName(name, objects) {
   return itemIds;
 }
 
+export function getObjectNameArray(objects) {
+  var names = [];
+  for (var property in objects) {
+    var item = objects[property];
+    names.push(item.name);
+  }
+  return names;
+}
+

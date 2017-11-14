@@ -20,7 +20,8 @@ import {
   getSecondOfType,
   isHidden,
   listObjects,
-  setStateOfObject
+  setStateOfObject,
+  getObjectNameArray
 } from 'app/scripts/helper.js'
 
 import InventoryHandler from 'app/scripts/inventoryhandler.js'
@@ -35,9 +36,6 @@ import Interpreter from 'app/scripts/interpreter.js'
  * window is needed because of system.js.
  */
 window.advntx = {
-  version:15,
-  seconds:0,
-
   echo (text, color) {
     if (color === undefined) {
       color = 'white';
@@ -76,6 +74,8 @@ window.advntx = {
   },
 
   initGame (refresh_json) {
+    // version string, add to json calls to avoid browser caching:
+    advntx.version = g_ver;
     if (refresh_json == true) {
       parseJson(advntx.initGameAsync, advntx);
     } else {
@@ -86,14 +86,15 @@ window.advntx = {
   initGameAsync (reset) {
     advntx.term = $('#terminal').terminal(function (command) {
       var echo = advntx.echo;
-
       advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame);
     }, {
         greetings: advntx.messages.greetings.format(advntx.version),
         name: advntx.messages.name,
         prompt: advntx.config.console.prompt,
-        height: advntx.config.console.height
+        height: advntx.config.console.height,
+        completion: advntx.vocabulary.verbs.concat(advntx.vocabulary.directions).concat(advntx.vocabulary.prepositions).concat(getObjectNameArray(advntx.state.objects))
       });
+
 
     $('#inventory_container').css('max-height', advntx.config.console.height + 'px');
 

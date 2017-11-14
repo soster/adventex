@@ -1,6 +1,15 @@
 export default function parseJson(async_init, advntx) {
+  const j_vocabulary = 'json/vocabulary.json';
+  const j_messages = 'json/messages.json';
+  const j_game = 'json/gamestate.json';
+  const j_config = 'json/config.json';
+
+
+  // counter for number of necessary requests:
   var jsons = 0;
   const num_requests_necessary = 4;
+
+
   const parameter = '?v=' + advntx.version;
 
   function getJSON(url, result) {
@@ -21,7 +30,7 @@ export default function parseJson(async_init, advntx) {
     async_init(true);
   }
 
-  getJSON('json/vocabulary.json' + parameter,
+  getJSON(j_vocabulary + parameter,
     function (result) {
       advntx.vocabulary = result;
       jsons++;
@@ -32,7 +41,7 @@ export default function parseJson(async_init, advntx) {
     });
   
 
-  getJSON('json/messages.json' + parameter,
+  getJSON(j_messages + parameter,
     function (result) {
       advntx.messages = result;
       jsons++;
@@ -41,7 +50,7 @@ export default function parseJson(async_init, advntx) {
       }
     });
 
-  getJSON('json/gamestate.json' + parameter,
+  getJSON(j_game + parameter,
     function (result) {
       advntx.state = result;
       jsons++;
@@ -51,7 +60,7 @@ export default function parseJson(async_init, advntx) {
 
     });
 
-  getJSON('json/config.json' + parameter,
+  getJSON(j_config + parameter,
     function (result) {
       advntx.config = result;
       jsons++;
