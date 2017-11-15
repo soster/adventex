@@ -47,16 +47,16 @@ window.advntx = {
       text = '[[;'+color+';;'+clazz+']'+text+']';
     }
     advntx.term.echo(text, {
-      keepWords: true
+      wrap: true
     });
   },
   
   describeLocationEcho (locationId, alwaysShowFullDescription) {
     var loc = advntx.locationHandler.getLocationById(locationId);
+
+    advntx.echo(getName(advntx.state.locations, locationId), loc.color, 'headline');
     if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
       advntx.echo(advntx.locationHandler.getLocationDescription(locationId), loc.color);
-    } else {
-      advntx.echo(getName(advntx.state.locations, locationId), loc.color);
     }
 
     var objects = loc.objects;
@@ -194,6 +194,10 @@ $(document).ready(function () {
 
   });
   window.setInterval('window.periodicUpdates()', 1000);
+  $('textarea.clipboard').attr('autocomplete', 'off');
+  $('textarea.clipboard').attr('autocorrect', 'off');
+  $('textarea.clipboard').attr('autocapitalize', 'off');
+  $('textarea.clipboard').attr('spellcheck', 'off');
   advntx.initGame(true);
 });
 

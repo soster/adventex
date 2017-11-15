@@ -23,6 +23,8 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
 }
 
 /** overwrite terminal css: */
+
+
 .terminal, .cmd {
   font-family: 'Open Sans', sans-serif !important;
   color: $term_fg_color !important;
@@ -34,10 +36,18 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
   line-height: 16px !important;
 }
 
+.terminal-output div span {
+  display: inline !important;
+}
+
 .terminal .inverted, .cmd .inverted {
   background-color: $term_fg_color !important;
   color: $term_bg_color !important;
 }
+
+.terminal .terminal-wrapper
+
+/* ---- */
 
 .mono {
   font-family: monospace;
@@ -49,14 +59,14 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
 }
 
 .sansserif {
-  font-family: sans-serif;
+  font-family: 'Open Sans',sans-serif;
 }
 
 .bigger {
   font-size: 125%;
 }
 
-/* ---- */
+
 
 .browserupgrade {
   margin: 0.2em 0;
