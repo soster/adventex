@@ -7,5 +7,6 @@
   "text_color": "white",
   "error_color": "red",
   "warn_color": "coral",
+  "win_color": "navy",
   "debug": false
 }

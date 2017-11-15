@@ -22,6 +22,7 @@
     "verb_load": "load",
     "verb_save": "save",
     "info_you_see": "You see:",
+    "info_you_see_nothing": "You see nothing of interest here.",
     "info_you_took": "You took {0}.",
     "info_you_dropped": "You dropped {0}.",
     "info_you_win": "You have won! Congratulations.\nMoves: {0}, Points: {1}",

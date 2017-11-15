@@ -48,14 +48,16 @@
 		
 		"corridor": {
 			"name": "Narrow corridor",
-			"description": "It stretches to the east and to the west, slightly curved.\nYou hear a faint noise from the west!",
+			"description": "The opened cell door is to the south. The corridor stretches to the east and to the west, slightly curved.\nYou hear a faint noise from the west!",
 			"additional_description": "There is a burning torch on a mount on the wall, it flickers and casts creepy shadows.",
 			"objects": [
-				"torch"
+				"torch",
+				"unlocked_cell_door"
 			],
 			"connections": {
 				"east": "forward_corridor",
-				"west": "backward_corridor"
+				"west": "backward_corridor",
+				"south": "lower_cell"
 			}
 		},
 		"forward_corridor": {
@@ -101,7 +103,7 @@
 		},
 
 		"latrine_room": {
-			"name": "The latrine.",
+			"name": "Latrine room",
 			"description": "A small, smelly room, the latrine.\nIn the end of the room is a wooden board with a hole in it.",
 			"objects": ["latrine"],
 			"connections": {
@@ -110,7 +112,7 @@
 		},
 
 		"upper_corridor": {
-			"name": "A narrow corridor on the second floor",
+			"name": "Narrow corridor, 2nd floor",
 			"description": "South from you, the stairs lead down.\nThe corridor stretches further to the west.\nYou hear voices from the west.",
 			"objects": [],
 			"connections": {
@@ -141,7 +143,6 @@
 		"outside": {
 			"name": "Outside world",
 			"description": "A meadow! Trees! Singing birds! You are back in the outside world.",
-			"color": "aquamarine",
 			"connections": {
 				"north": "entrance_corridor"
 			}
@@ -426,7 +427,7 @@
 
 		"guard_trigger": {
 			"name": "",
-			"description": "You see a big guard standing in a corner of the room. He doesn't look into your direction, yet.",
+			"description": "You notice a big guard standing in a corner of the room. He doesn't look into your direction, yet.",
 			"prereq_location_items": ["guard|none"],
 			"trigger_once": true,
 			"only_after": true

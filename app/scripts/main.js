@@ -58,8 +58,9 @@ window.advntx = {
   describeLocationEcho (locationId, alwaysShowFullDescription) {
     var loc = advntx.locationHandler.getLocationById(locationId);
     var name = getName(advntx.state.locations, locationId);
-    advntx.echo(name, loc.color, 'headline');
+    
     if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
+      advntx.echo(name, loc.color, 'headline');
       advntx.echo(advntx.locationHandler.getLocationDescription(locationId), loc.color);
     }
     var prompt = name+'>';
@@ -73,6 +74,8 @@ window.advntx = {
     if (!isEmpty(objectsMessage)) {
       advntx.echo(message);
       advntx.echo(objectsMessage);
+    } else {
+      advntx.echo(advntx.messages.info_you_see_nothing)
     }
     
   },
