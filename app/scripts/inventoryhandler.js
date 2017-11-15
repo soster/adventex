@@ -11,7 +11,7 @@ export default class InventoryHandler {
   }
 
 
-    inInventory (item_id) {
+    inInventory (itemId) {
       if (this.l_state.inventory.indexOf(item_id) != -1) {
         return true; 
       }
@@ -19,20 +19,20 @@ export default class InventoryHandler {
     }
 
 
-    isPortable (item_id) {
-      if (this.l_state.objects[item_id] === undefined) {
+    isPortable (itemId) {
+      if (this.l_state.objects[itemId] === undefined) {
         return false; 
       }
-      return this.l_state.objects[item_id].portable; 
+      return this.l_state.objects[itemId].portable; 
     }
 
-    getPortableError (item_id) {
-      var text = this.l_state.objects[item_id].error_portable; 
+    getPortableError (itemId) {
+      var text = this.l_state.objects[itemId].error_portable; 
       return text; 
     }
 
-    addToInventory (item_id) {
-      this.l_state.inventory.push(item_id); 
+    addToInventory (itemId) {
+      this.l_state.inventory.push(itemId); 
       this.initInventory(); 
     }
 
@@ -54,17 +54,6 @@ export default class InventoryHandler {
         }
       }
       return itemIds;
-    }
-
-    getNameDefinitive (item_id) {
-      var item = this.l_state.objects[item_id]; 
-      var article = item.definite_article; 
-      var name = item.name; 
-      if ( ! isEmpty(article)) {
-        return article + ' ' + name; 
-      }else {
-        return name; 
-      }
     }
 
     getStateOfObject(itemId) {
@@ -98,12 +87,26 @@ export default class InventoryHandler {
       return stateString;
     }
 
-    getNameIndefinitive (item_id) {
-      var item = this.l_state.objects[item_id];
+    getNameIndefinitive (itemId) {
+      var item = this.l_state.objects[itemId];
       if (item===undefined) {
         return '';
       }
       var article = item.indefinite_article; 
+      var name = item.name; 
+      if ( ! isEmpty(article)) {
+        return article + ' ' + name; 
+      }else {
+        return name; 
+      }
+    }
+
+    getNameDefinitive (itemId) {
+      var item = this.l_state.objects[itemId];
+      if (item===undefined) {
+        return '';
+      }
+      var article = item.definite_article; 
       var name = item.name; 
       if ( ! isEmpty(article)) {
         return article + ' ' + name; 
