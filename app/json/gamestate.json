@@ -151,6 +151,7 @@
 	"objects": {
 		"straw": {
 			"name": "straw",
+			"effect": "blurry-text",
 			"description": "The straw is dirty, rotten and full with vermin. But underneath you see a trap door in the floor!",
 			"portable": false,
 			"error_portable": "While touching the rotten straw you feel an iron ring which belongs to a hidden trap door!\nBut it makes no sense to fill your pockets with the straw, so you leave it where it is.",
@@ -166,6 +167,7 @@
 		},
 		"bucket": {
 			"name": "wooden bucket",
+			"effect": "three-d",
 			"description": "A wooden bucket.\nIt appears to be used for... well you can imagine. No other facilities here.",
 			"portable": false,
 			"error_portable": "Trust me, you DON'T want to carry THAT around! It is nearly full with... you know.",
@@ -236,8 +238,10 @@
 			"description": "The torch is quite bright!",
 			"portable": true,
 			"state": "burning",
+			"color": "brown",
 			"states":  { "burning": {
-				"name": "burning"
+				"name": "burning",
+				"effect": "fire"
 			}},
 			"definite_article": "the",
 			"indefinite_article": "a"
@@ -246,6 +250,7 @@
 			"name": "barrel",
 			"description": "A large barrel, approx. half your height. It is very heavy, but you can't look inside because it is closed.",
 			"portable": false,
+			"synonyms": ["water"],
 			"definite_article": "the",
 			"indefinite_article": "a",
 			"states": {
@@ -682,7 +687,6 @@
 			},
 
 			"prereq_location_state": "",
-
 			"only_before": false,
 			"only_after": false,
 			"action_add_items": [""],

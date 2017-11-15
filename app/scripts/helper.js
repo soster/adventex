@@ -69,7 +69,7 @@ export function findFirstMatch(words, type, objects) {
   return '';
 }
 
-export function listObjects(list, list_of_all, inventoryHandler) {
+export function listFormattedObjects(list, list_of_all, inventoryHandler) {
   var message = '';
   if (list !== undefined && list.length > 0) {
     for (var i = 0; i < list.length; i++) {
@@ -79,13 +79,22 @@ export function listObjects(list, list_of_all, inventoryHandler) {
       if (i > 0 && !isHidden(list_of_all, list[i - 1])) {
         message += ', ';
       }
-      message += getName(list_of_all, list[i]);
+      var effect = inventoryHandler.getEffect(list[i]);
+      var color = inventoryHandler.getColor(list[i]);
+      if (color === undefined) {
+        color = '';
+      }
+      if (effect === undefined) {
+        effect = '';
+      }
+      message += '[[;' + color + ';;' + effect + ']' + getName(list_of_all, list[i]);
+
       var stateString = inventoryHandler.getStateString(list[i]);
       if (!isEmpty(stateString)) {
         message += ' ' + stateString;
       }
+      message += ']';
     }
-    message += '\n';
   }
   return message;
 
@@ -150,5 +159,18 @@ export function getObjectNameArray(objects) {
     names.push(item.name);
   }
   return names;
+}
+
+export function getFromStateOrObject(objectId, property, objects) {
+  var object = objects[objectId];
+  var state = object.state;
+  var effect;
+  if (!isEmpty(state) && state != 'none' && object.states[state] != undefined) {
+    effect = object.states[state][property];
+  }
+  if (effect === undefined) {
+    effect = object[property];
+  }
+  return effect;
 }
 

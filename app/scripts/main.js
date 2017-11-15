@@ -19,7 +19,7 @@ import {
   getProperty,
   getSecondOfType,
   isHidden,
-  listObjects,
+  listFormattedObjects,
   setStateOfObject,
   getObjectNameArray
 } from 'app/scripts/helper.js'
@@ -36,34 +36,37 @@ import Interpreter from 'app/scripts/interpreter.js'
  * window is needed because of system.js.
  */
 window.advntx = {
-  echo (text, color) {
-    if (color === undefined) {
-      color = 'white';
+  echo (text, color, clazz) {
+    if (color!=undefined||clazz!=undefined) {
+      if (clazz === undefined) {
+        clazz='';
+      }
+      if (color === undefined) {
+        color = '';
+      }
+      text = '[[;'+color+';;'+clazz+']'+text+']';
     }
     advntx.term.echo(text, {
-      finalize: function (div) {
-        div.css('color', color);
-      }
+      keepWords: true
     });
   },
   
-  describeLocationEcho (location_id, always_show_full_description) {
-    var loc = advntx.locationHandler.getLocationById(location_id);
-    if (!advntx.locationHandler.visited(location_id) || always_show_full_description) {
-      advntx.echo(advntx.locationHandler.getLocationDescription(location_id), loc.color);
+  describeLocationEcho (locationId, alwaysShowFullDescription) {
+    var loc = advntx.locationHandler.getLocationById(locationId);
+    if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
+      advntx.echo(advntx.locationHandler.getLocationDescription(locationId), loc.color);
     } else {
-      advntx.echo(getName(advntx.state.locations, location_id), loc.color);
+      advntx.echo(getName(advntx.state.locations, locationId), loc.color);
     }
 
-    var things = loc.objects;
-    var persons = loc.persons;
+    var objects = loc.objects;
     var message = advntx.messages.info_you_see;
-    var things_message = listObjects(things, advntx.state.objects, advntx.inventoryHandler);
-    var persons_message = listObjects(persons, advntx.state.persons, advntx.inventoryHandler);
-    if (!isEmpty(persons_message) || !isEmpty(things_message)) {
+    var objectsMessage = listFormattedObjects(objects, advntx.state.objects, advntx.inventoryHandler);
+    
+    
+    if (!isEmpty(objectsMessage)) {
       advntx.echo(message);
-      advntx.echo(things_message);
-      advntx.echo(persons_message);
+      advntx.echo(objectsMessage);
     }
     
   },
@@ -98,7 +101,8 @@ window.advntx = {
 
     $('#inventory_container').css('max-height', advntx.config.console.height + 'px');
 
-    advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
+    advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, 
+      advntx.vocabulary.adjectives, advntx.vocabulary.objects, advntx.state.objects);
     advntx.inventoryHandler = new InventoryHandler(advntx.state, advntx.initInventory);
     advntx.interpreter = new Interpreter(advntx);
     advntx.locationHandler = new LocationHandler(advntx.state);
