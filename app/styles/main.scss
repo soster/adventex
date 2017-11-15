@@ -1,5 +1,8 @@
 
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Special+Elite');
 
+$term_bg_color: #f2f2f2;
+$term_fg_color: #0d0d0d;
 
 /* effects: */
 .fire {
@@ -15,15 +18,15 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
 }
 
 .blurry-text {
-  text-shadow: 0 0 1.5px white;
+  text-shadow: 0 0 1.5px $term_fg_color;
   color: transparent;
 }
 
 /** overwrite terminal css: */
 .terminal, .cmd {
-  color: #fff !important;
-
-  //font-family: sans-serif !important;
+  font-family: 'Open Sans', sans-serif !important;
+  color: $term_fg_color !important;
+  background-color: $term_bg_color !important;
 }
 
 .cmd, .cmd .prompt, .terminal, .terminal .terminal-output div div {
@@ -32,12 +35,17 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
 }
 
 .terminal .inverted, .cmd .inverted {
-  background-color: #aaa !important;
-  color: #000 !important;
+  background-color: $term_fg_color !important;
+  color: $term_bg_color !important;
 }
 
 .mono {
   font-family: monospace;
+}
+
+.headline {
+  font-family: 'Special Elite', cursive;
+  font-size: 18px; 
 }
 
 .sansserif {
