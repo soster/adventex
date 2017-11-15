@@ -26,7 +26,8 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
 
 
 .terminal, .cmd {
-  font-family: 'Open Sans', sans-serif !important;
+  /*
+  font-family: 'Open Sans', sans-serif !important;*/
   color: $term_fg_color !important;
   background-color: $term_bg_color !important;
 }
@@ -36,9 +37,11 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
   line-height: 16px !important;
 }
 
-.terminal-output div span {
-  display: inline !important;
+.advntx h1, h2, h3, h4, h5, h6 {
+  font-family: 'Special Elite', cursive !important;
 }
+
+
 
 .terminal .inverted, .cmd .inverted {
   background-color: $term_fg_color !important;

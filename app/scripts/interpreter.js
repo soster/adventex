@@ -23,12 +23,14 @@ export default class Interpreter {
 
 
 
-  interpret(command, describeLocationEcho, initInventory, echo, initGame) {
+  interpret(command, describeLocationEcho, initInventory, echo, initGame, load, save) {
     var original = command;
     this.echo = echo;
     this.describeLocationEcho = describeLocationEcho;
     this.initInventory = initInventory;
     this.initGame = initGame;
+    this.load = load;
+    this.save = save;
 
     // lower case and remove backslash from auto suggest:
     command = command.toLowerCase().replace('\\', '').trim();
@@ -42,6 +44,7 @@ export default class Interpreter {
     var preposition = getFirstOfType(words, 'prepositions');
     var objects = words['objects'];
     var misc = words['misc'];
+    var firstMisc = getFirstOfType(words,'misc');
     var foundNothing = false;
 
     var itemIdsFromLocation = this.advntx.locationHandler.findItemIdsInLocation(objects, this.advntx.state.locations[this.advntx.state.location]);
@@ -100,7 +103,16 @@ export default class Interpreter {
       } else if (checkSynonyms(advntx.messages.verb_restart, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.echo('\n');
         this.initGame(true);
-      } else {// I give up... however, there might be an event to execute.
+      } else if (checkSynonyms(advntx.messages.verb_load, firstVerb, this.advntx.vocabulary.synonyms)) {
+        var name = this.getLoadSaveName(command);
+        this.load(name);
+      } else if (checkSynonyms(advntx.messages.verb_save, firstVerb, this.advntx.vocabulary.synonyms)) {
+        var name = this.getLoadSaveName(command);
+        this.save(name);
+    
+      }
+      
+      else {// I give up... however, there might be an event to execute.
         foundNothing = true;
       }
     }
@@ -160,7 +172,14 @@ export default class Interpreter {
 
   }
 
-
+  getLoadSaveName(command) {
+    var ws = command.split(' ');
+    var name='';
+    if (ws.length>1) {
+      name=ws[1];
+    }
+    return name;
+  }
 
   move(direction, item_ids, misc) {
     var new_location = undefined;

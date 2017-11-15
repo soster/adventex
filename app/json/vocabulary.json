@@ -41,7 +41,9 @@
         "eat", 
         "hint",
         "help",
-        "restart"
+        "restart",
+        "load",
+        "save"
     ],
     "directions": [
         "north",
