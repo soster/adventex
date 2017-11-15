@@ -18,14 +18,11 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-  <div class="container">
+  <div class="container advntx">
     <div class="header">
       <ul class="nav nav-pills float-right">
-        <li class="nav-item">
-          <a class="nav-link active" href="#">Home</a>
-        </li>
         <li>
-          <a class="nav-link" href="#">About</a>
+          <a class="nav-link" href="https://thoster.net/" target="_blank">thoster.net</a>
         </li>
       </ul>
       <h3 class="text-muted">adventex</h3>
@@ -44,26 +41,29 @@
     </div>
     <div class="row">
       <div class="col-md-9">
-        <p>
-          <button type="button" class="btn btn-primary" id="btn_help">Help</button>&nbsp;
-          <button type="button" class="btn btn-primary" id="btn_save_storage">Save</button>&nbsp;
-          <button type="button" class="btn btn-primary" id="btn_load_storage">Load</button>&nbsp;
-        </p>
-        <p>
-          <button type="button" class="btn btn-primary" id="btn_save">Save (to textfield)</button>&nbsp;
-          <button type="button" class="btn btn-primary" id="btn_load">Load (from textfield)</button>&nbsp;
-          <button type="button" class="btn btn-primary" id="btn_restart">Restart</button>&nbsp;
-        </p>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-12">
+        <div class="btn-group" role="group" aria-label="">
+          <p>
+          <button type="button" class="btn btn-secondary btn-sm" id="btn_help">Help</button>&nbsp;
+          <button type="button" class="btn btn-secondary btn-sm" id="btn_save_storage">Save</button>&nbsp;
+          <button type="button" class="btn btn-secondary btn-sm" id="btn_load_storage">Load</button>&nbsp;
+          <button type="button" class="btn btn-secondary btn-sm" id="btn_restart">Restart</button>&nbsp;
+          </p>
       </div>
-    </div>
-
-    <div class="row">
+      </div>
+      </div>
+      <p>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn_options" onclick="$('#options').toggleClass('invisible');">Options</button></p>
+    <div id="options" class="row invisible">
       <div class="col-12">
+
+          <div class="btn-group" role="group" aria-label="">
+            <p>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn_save">Save (text)</button>&nbsp;
+              <button type="button" class="btn btn-secondary btn-sm" id="btn_load">Load (text)</button>&nbsp;
+            </p>
+        </div>
+
         <div class="form-group">
           <label for="game_state">Game state text field:</label>
           <textarea class="form-control" id="game_state" rows="3"></textarea>

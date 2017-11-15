@@ -46,18 +46,20 @@ window.advntx = {
       }
       text = '[[;'+color+';;'+clazz+']'+text+']';
     }
-    advntx.term.echo(text, {
-      wrap: true
+    advntx.term.echo(text,{
+      keepWords: true
     });
   },
   
   describeLocationEcho (locationId, alwaysShowFullDescription) {
     var loc = advntx.locationHandler.getLocationById(locationId);
-
-    advntx.echo(getName(advntx.state.locations, locationId), loc.color, 'headline');
+    var name = getName(advntx.state.locations, locationId);
+    advntx.echo(name, loc.color, 'headline');
     if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
       advntx.echo(advntx.locationHandler.getLocationDescription(locationId), loc.color);
     }
+    var prompt = name+' >';
+    advntx.term.set_prompt(prompt);
 
     var objects = loc.objects;
     var message = advntx.messages.info_you_see;
@@ -86,10 +88,27 @@ window.advntx = {
     }
   },
 
+  load(name) {
+    var retrievedObject = localStorage.getItem('advntx'+name);
+    if (retrievedObject != undefined) {
+      advntx.state = JSON.parse(retrievedObject);
+      advntx.echo('game loaded.');
+      advntx.term.exec('clear');
+      advntx.initGame(false);
+    }
+  },
+
+  save(name) {
+    localStorage.setItem('advntx'+name, JSON.stringify(advntx.state));
+    advntx.echo('game saved.');
+    advntx.initInventory();
+    advntx.asyncRefocusTerminal();
+  },
+
   initGameAsync (reset) {
     advntx.term = $('#terminal').terminal(function (command) {
       var echo = advntx.echo;
-      advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame);
+      advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame, advntx.load, advntx.save);
     }, {
         greetings: '',
         name: advntx.messages.name,
@@ -117,6 +136,12 @@ window.advntx = {
     }
     
     advntx.describeLocationEcho(advntx.state.location);
+
+    $('textarea.clipboard').attr('autocomplete', 'off');
+    $('textarea.clipboard').attr('autocorrect', 'off');
+    $('textarea.clipboard').attr('autocapitalize', 'off');
+    $('textarea.clipboard').attr('spellcheck', 'off');
+
     advntx.asyncRefocusTerminal();
   },
   refocusTerminal() {
@@ -138,7 +163,7 @@ window.advntx = {
       var item = advntx.state.inventory[i];
       var itemName = getName(advntx.state.objects, item);
       var stateString = ' ' + advntx.inventoryHandler.getStateString(item);
-      $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventoryClick(\'' + itemName + '\')" class="btn btn-info btn-sm inventory_button">' + itemName + stateString + '</button></p>');
+      $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventoryClick(\'' + itemName + '\')" class="btn btn-secondary btn-sm inventory_button">' + itemName + stateString + '</button></p>');
     }
   }
 
@@ -194,10 +219,6 @@ $(document).ready(function () {
 
   });
   window.setInterval('window.periodicUpdates()', 1000);
-  $('textarea.clipboard').attr('autocomplete', 'off');
-  $('textarea.clipboard').attr('autocorrect', 'off');
-  $('textarea.clipboard').attr('autocapitalize', 'off');
-  $('textarea.clipboard').attr('spellcheck', 'off');
   advntx.initGame(true);
 });
 
