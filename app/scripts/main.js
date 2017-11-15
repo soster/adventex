@@ -91,7 +91,7 @@ window.advntx = {
       var echo = advntx.echo;
       advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame);
     }, {
-        greetings: advntx.messages.greetings.format(advntx.version),
+        greetings: '',
         name: advntx.messages.name,
         prompt: advntx.config.console.prompt,
         height: advntx.config.console.height,
@@ -108,12 +108,14 @@ window.advntx = {
     advntx.locationHandler = new LocationHandler(advntx.state);
     advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, advntx.initInventory);
 
+    advntx.echo(advntx.messages.greetings.format(advntx.version)+'\n',undefined,'headline');
+
     advntx.initInventory();
     if (reset) {
       var startEvent = advntx.state.events['start_event'];
       advntx.eventHandler.executeEvent(startEvent, advntx.echo);
     }
-
+    
     advntx.describeLocationEcho(advntx.state.location);
     advntx.asyncRefocusTerminal();
   },
