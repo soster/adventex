@@ -36,7 +36,7 @@ import Interpreter from 'app/scripts/interpreter.js'
  * window is needed because of system.js.
  */
 window.advntx = {
-  echo (text, color, clazz) {
+  echo (text, color, clazz, bold) {
     if (color!=undefined||clazz!=undefined) {
       if (clazz === undefined) {
         clazz='';
@@ -44,7 +44,11 @@ window.advntx = {
       if (color === undefined) {
         color = '';
       }
-      text = '[[;'+color+';;'+clazz+']'+text+']';
+      var formatting='';
+      if (bold) {
+        formatting = 'b';
+      }
+      text = '[['+formatting+';'+color+';;'+clazz+']'+text+']';
     }
     advntx.term.echo(text,{
       keepWords: true
@@ -59,7 +63,7 @@ window.advntx = {
       advntx.echo(advntx.locationHandler.getLocationDescription(locationId), loc.color);
     }
     var prompt = name+' >';
-    advntx.term.set_prompt(prompt);
+    advntx.term.set_prompt('[[b;;]'+prompt+']');
 
     var objects = loc.objects;
     var message = advntx.messages.info_you_see;

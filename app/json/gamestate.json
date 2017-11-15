@@ -187,7 +187,7 @@
 		},
 		"bed": {
 			"name": "bunk bed",
-			"description": "Your bunk bed. Comfortable as a wooden board. Maybe due to the fact that it IS a wooden board.\nIt is mounted on the wall.",
+			"description": "A bunk bed. Comfortable as a wooden board. Maybe due to the fact that it IS a wooden board.\nIt is mounted on the wall.",
 			"portable": false,
 			"hidden": false,
 			"definite_article": "the",
