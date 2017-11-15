@@ -160,7 +160,7 @@ export default class Interpreter {
 
     var allEvents = preEvents.concat(postEvents);
     if (this.checkWinningCondition(allEvents)) {
-      echo(this.advntx.messages.info_you_win.format(this.advntx.state.steps, this.advntx.state.points), 'yellow');
+      echo(this.advntx.messages.info_you_win.format(this.advntx.state.steps, this.advntx.state.points), advntx.config.win_color);
     }
 
 
