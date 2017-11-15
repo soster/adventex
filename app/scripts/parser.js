@@ -2,23 +2,24 @@
 
 
 export default class Parser {
-    constructor(verbs, directions, prepositions, adjectives, objects) {
+    constructor(verbs, directions, prepositions, adjectives, objectNames, objects) {
         this.l_verbs = verbs;
         this.l_directions = directions;
         this.l_prepositions = prepositions;
         this.l_adjectives = adjectives;
+        this.l_objectNames = objectNames;
         this.l_objects = objects;
         this.l_simple_objects = [];
         this.l_simple_object_map = [];
-        for (var i = 0; i < objects.length; i++) {
-            var words = objects[i].split(/[ ,]+/).filter(Boolean);
+        for (var i = 0; i < objectNames.length; i++) {
+            var words = objectNames[i].split(/[ ,]+/).filter(Boolean);
             if (words.length > 1) {
                 var obj = this.l_simple_objects[words[words.length - 1]];
                 if (obj == undefined) {
                     this.l_simple_objects.push(words[words.length - 1]);
                     this.l_simple_object_map[words[words.length - 1]] = [];
                 }
-                this.l_simple_object_map[words[words.length - 1]].push(objects[i]);
+                this.l_simple_object_map[words[words.length - 1]].push(objectNames[i]);
             }
         }
     }
@@ -51,15 +52,26 @@ export default class Parser {
                     adjectives.push(words[i]);
                     word_consumed = true;
                 }
-                if (this.isInArray(words[i], this.l_objects)) {
+                if (this.isInArray(words[i], this.l_objectNames)) {
                     objects.push(words[i]);
                     word_consumed = true;
-                } else if (words.length > i + 1 && this.isInArray(words[i] + ' ' + words[i + 1], this.l_objects)) {
+                } else if (words.length > i + 1 && this.isInArray(words[i] + ' ' + words[i + 1], this.l_objectNames)) {
                     //special case: 2 word objects.
                     objects.push(words[i] + ' ' + words[i + 1]);
                     i++;
                     word_consumed = true;
+                } else {
+                    for (var property in this.l_objects) {
+                        var obj = this.l_objects[property];
+                        if (obj.synonyms != undefined) {
+                            if (this.isInArray(words[i],obj.synonyms)) {
+                                objects.push(obj.name);
+                                word_consumed = true;
+                            }
+                        }
+                    }
                 }
+
                 if (!word_consumed && this.isInArray(words[i], this.l_simple_objects)) {
                     var object_array = this.l_simple_object_map[words[i]];
                     for (var i2 = 0; i2 < object_array.length; i2++) {

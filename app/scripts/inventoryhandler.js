@@ -1,7 +1,8 @@
 'use strict';
 
 import {
-  findItemIds
+  findItemIds,
+  getFromStateOrObject
 } from 'app/scripts/helper.js'
 
 export default class InventoryHandler {
@@ -85,6 +86,14 @@ export default class InventoryHandler {
         stateString = '('+stateName+')';
       }
       return stateString;
+    }
+
+    getEffect(itemId) {
+      return getFromStateOrObject(itemId,'effect', this.l_state.objects);
+    }
+
+    getColor(itemId) {
+      return getFromStateOrObject(itemId,'color', this.l_state.objects);
     }
 
     getNameIndefinitive (itemId) {

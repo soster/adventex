@@ -1,3 +1,55 @@
+
+
+
+/* effects: */
+.fire {
+      font-size: 120%;
+      animation: burn 1.5s linear infinite alternate;       
+}
+
+@keyframes burn {
+from { text-shadow: -.1em 0 .3em #fefcc9, .1em -.1em .3em #feec85, -.2em -.2em .4em #ffae34, .2em -.3em .3em #ec760c, -.2em -.4em .4em #cd4606, .1em -.5em .7em #973716, .1em -.7em .7em #451b0e; }
+45%  { text-shadow: .1em -.2em .5em #fefcc9, .15em 0 .4em #feec85, -.1em -.25em .5em #ffae34, .15em -.45em .5em #ec760c, -.1em -.5em .6em #cd4606, 0 -.8em .6em #973716, .2em -1em .8em #451b0e; }
+70%  { text-shadow: -.1em 0 .3em #fefcc9, .1em -.1em .3em #feec85, -.2em -.2em .6em #ffae34, .2em -.3em .4em #ec760c, -.2em -.4em .7em #cd4606, .1em -.5em .7em #973716, .1em -.7em .9em #451b0e; }
+to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em .6em #ffae34, -.15em -.45em .5em #ec760c, .1em -.5em .6em #cd4606, 0 -.8em .6em #973716, -.2em -1em .8em #451b0e; }						
+}
+
+.blurry-text {
+  text-shadow: 0 0 1.5px white;
+  color: transparent;
+}
+
+/** overwrite terminal css: */
+.terminal, .cmd {
+  color: #fff !important;
+
+  //font-family: sans-serif !important;
+}
+
+.cmd, .cmd .prompt, .terminal, .terminal .terminal-output div div {
+  font-size: 14px !important;
+  line-height: 16px !important;
+}
+
+.terminal .inverted, .cmd .inverted {
+  background-color: #aaa !important;
+  color: #000 !important;
+}
+
+.mono {
+  font-family: monospace;
+}
+
+.sansserif {
+  font-family: sans-serif;
+}
+
+.bigger {
+  font-size: 125%;
+}
+
+/* ---- */
+
 .browserupgrade {
   margin: 0.2em 0;
   background: #ccc;

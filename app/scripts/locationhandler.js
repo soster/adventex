@@ -13,7 +13,7 @@ import {
   getProperty,
   getSecondOfType,
   isHidden,
-  listObjects,
+  listFormattedObjects,
   setStateOfObject
 } from 'app/scripts/helper.js'
 
