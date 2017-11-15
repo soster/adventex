@@ -133,7 +133,6 @@
 			"name": "Entrance hall",
 			"description": "The corridor from the east ends here. There is a big portal to the south.",
 			"objects": ["portal"],
-			"color": "white",
 			"connections": {
 				"east": "backward_corridor"
 			}
