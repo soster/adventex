@@ -53,9 +53,6 @@ window.advntx = (function (my) {
 
 before(function (done) {
   var advntx = window.advntx;
-
-
-
   // waits until done is called (async!)
   function async_done(bool) {
     advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
@@ -74,6 +71,7 @@ before(function (done) {
 
 function echo(string) { };
 
+// set up some testing events:
 var events = {
   open_door: {
     name: 'open door',
@@ -159,6 +157,7 @@ var events = {
 
 };
 
+// set up some locations:
 var locations = {
   room: {
     name: 'room',
@@ -202,6 +201,7 @@ var locations = {
 
 };
 
+// set up the objects:
 var objects = {
   guard: { name: 'guard' },
   unconscious_guard: { name: 'unconscious guard' },
@@ -257,7 +257,7 @@ describe('advntx test suite', function () {
     assert.notEqual(-1, advntx.vocabulary.directions.indexOf('north'));
   });
 
-  it('parse command', function () {
+  it('test parser', function () {
     var localParser = new Parser(['go', 'throw'], [], [], [], ['something', 'barrel', 'stone']);
     
     var obj = localParser.parse('throw stone');
@@ -314,7 +314,7 @@ describe('advntx test suite', function () {
     advntx.state = save;
   });
 
-  it('testing "find not in inventory" events', function () {
+  it('testing "not" condition events', function () {
     var save = advntx.state;
     advntx.state = {
       steps: 0
@@ -337,14 +337,14 @@ describe('advntx test suite', function () {
 
   });
 
-  it('testing "find any" events', function () {
+  it('testing "any" condition events', function () {
     advntx.state.inventory = ['torch'];
     var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], [], 'help', undefined, events);
     assert.equal(1, foundEvents.length);
     assert.equal(events['any_event'], foundEvents[0]);
   });
 
-  it('check events with state', function () {
+  it('testing events on states', function () {
     var save = advntx.state;
     advntx.state = {
       steps: 0
@@ -376,6 +376,7 @@ describe('advntx test suite', function () {
 
     var foundEvents = eventHandler.findEvents(location, ['ring'], ['ring', 'barrel'], 'clean', undefined, events);
     assert.equal(0, foundEvents.length);
+    advntx.state = save;
   });
 
 });
