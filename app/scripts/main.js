@@ -62,7 +62,7 @@ window.advntx = {
     if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
       advntx.echo(advntx.locationHandler.getLocationDescription(locationId), loc.color);
     }
-    var prompt = name+' >';
+    var prompt = name+'>';
     advntx.term.set_prompt('[[b;;]'+prompt+']');
 
     var objects = loc.objects;
