@@ -15,17 +15,20 @@ import {
 export default class Interpreter {
   constructor(advntx) {
     this.advntx = advntx;
-    this.help_string = undefined;
+    this.helpString = undefined;
+    this.textColor = advntx.config.text_color;
+    this.errorColor = advntx.config.error_color;
+    this.warnColor = advntx.config.warn_color;
   }
 
 
 
-  interpret(command, describeLocationEcho, init_inventory, echo, init_game) {
+  interpret(command, describeLocationEcho, initInventory, echo, initGame) {
     var original = command;
     this.echo = echo;
     this.describeLocationEcho = describeLocationEcho;
-    this.init_inventory = init_inventory;
-    this.init_game = init_game;
+    this.initInventory = initInventory;
+    this.initGame = initGame;
 
     // lower case and remove backslash from auto suggest:
     command = command.toLowerCase().replace('\\', '').trim();
@@ -49,10 +52,20 @@ export default class Interpreter {
     var itemIds = itemIdsFromLocation.concat(itemIdsFromInventory);
     var locationObject = this.advntx.state.locations[this.advntx.state.location];
 
-    var preEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
+    
     var executedPreEvents = [];
     var foundEvent = false;
 
+    var direction = getFirstOfType(words, 'directions');
+
+    // check if the player entered a direction, then artificially add the verb for 'go'.
+    // important: Do this before any event is executed!
+    if (isEmpty(firstVerb) && !isEmpty(direction)) {
+      firstVerb = advntx.messages.verb_go;
+    }
+
+    // find and execute events BEFORE executing standard verbs:
+    var preEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
     var doContinue = true;
     for (var i = 0; i < preEvents.length; i++) {
       var event = preEvents[i];
@@ -64,32 +77,38 @@ export default class Interpreter {
       executedPreEvents.push(event);
     }
 
-    var direction = getFirstOfType(words, 'directions');
+    
 
-
+    // check for 'standard' verbs, all other verbs are dealt with in the events.
     if (!foundEvent || doContinue) {
+      // help
       if (checkSynonyms(advntx.messages.verb_help, firstVerb, this.advntx.vocabulary.synonyms)) {
         echo(this.buildHelpString());
-      } else if (checkSynonyms(advntx.messages.verb_go, firstVerb, this.advntx.vocabulary.synonyms)
-        || (isEmpty(firstVerb) && !isEmpty(direction))) {
+        // go
+      } else if (checkSynonyms(advntx.messages.verb_go, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.move(direction, itemIdsFromLocation, misc);
+        // take
       } else if (checkSynonyms(advntx.messages.verb_take, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.getItem(objects, itemIdsFromLocation);
+        // examine
       } else if (checkSynonyms(advntx.messages.verb_examine, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.examine(objects, itemIds);
+        // drop
       } else if (checkSynonyms(advntx.messages.verb_drop, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.drop(objects, itemIdsFromInventory);
+        // restart
       } else if (checkSynonyms(advntx.messages.verb_restart, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.echo('\n');
-        this.init_game(true);
-      } else {// I give up...
+        this.initGame(true);
+      } else {// I give up... however, there might be an event to execute.
         foundNothing = true;
       }
     }
 
     locationObject = this.advntx.state.locations[this.advntx.state.location];
-    var postEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
 
+    // find and execute events AFTER executing standard verbs:
+    var postEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
     if (doContinue) {
       for (var i = 0; i < postEvents.length; i++) {
         var event = postEvents[i];
@@ -111,17 +130,17 @@ export default class Interpreter {
       if (obj != undefined && obj.custom_errors != undefined) {
         var error = obj.custom_errors;
         var errorMessage = error[firstVerb];
-        echo(errorMessage, 'coral');
+        echo(errorMessage, this.warnColor);
       } else {
         var placeholder = ' ';
         if (!isEmpty(preposition)) {
           placeholder = ' ' + preposition + ' ';
         }
-        echo(this.advntx.messages.error_verb_object.format(firstVerb, placeholder, this.advntx.inventoryHandler.getNameDefinitive(itemId)), 'red');
+        echo(this.advntx.messages.error_verb_object.format(firstVerb, placeholder, this.advntx.inventoryHandler.getNameDefinitive(itemId)), this.errorColor);
       }
     } else if (foundNothing && !foundEvent) {
       if (!isEmpty(firstVerb)) {
-        this.echo(this.advntx.messages.error_verb.format(firstVerb), 'coral');
+        this.echo(this.advntx.messages.error_verb.format(firstVerb), this.warnColor);
       } else {
         this.standardError(command);
       }
@@ -135,7 +154,7 @@ export default class Interpreter {
 
     if (!foundNothing || foundEvent) {
       this.advntx.state.steps++;
-      this.init_inventory();
+      this.initInventory();
     }
 
 
@@ -148,7 +167,7 @@ export default class Interpreter {
     if (isEmpty(direction)) {
       if (item_ids.length > 0) {
         var item_id = item_ids[0];
-        this.advntx.interpreter.echo(this.advntx.messages.error_movement_thing.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)), 'coral');
+        this.advntx.interpreter.echo(this.advntx.messages.error_movement_thing.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)), this.warnColor);
         return;
       }
       if (this.advntx.config.debug && misc.length > 0) {
@@ -158,7 +177,7 @@ export default class Interpreter {
         }
       }
       if (new_location == undefined) {
-        this.advntx.interpreter.echo(this.advntx.messages.error_movement, 'red');
+        this.advntx.interpreter.echo(this.advntx.messages.error_movement, this.errorColor);
         return;
       }
     }
@@ -172,31 +191,31 @@ export default class Interpreter {
       this.advntx.locationHandler.setLocation(new_location);
       this.advntx.interpreter.describeLocationEcho(new_location, false);
     } else {
-      this.advntx.interpreter.echo(this.advntx.messages.error_movement_direction.format(direction), 'red');
+      this.advntx.interpreter.echo(this.advntx.messages.error_movement_direction.format(direction), this.errorColor);
     }
   }
 
   getItem(objects, item_ids) {
     if (item_ids.length == 0 && objects.length > 0) {
-      this.echo(this.advntx.messages.error_specific_get.format(objects[0]), 'red')
+      this.echo(this.advntx.messages.error_specific_get.format(objects[0]), this.errorColor)
     } else if (objects.length == 0) {
-      this.echo(this.advntx.messages.error_specific_get.format('this'), 'red');
+      this.echo(this.advntx.messages.error_specific_get.format('this'), this.errorColor);
     }
     for (var i = 0; i < item_ids.length; i++) {
       var item_id = item_ids[i];
       if (!this.advntx.inventoryHandler.isPortable(item_id)) {
         var portable_error = this.advntx.inventoryHandler.getPortableError(item_id);
         if (!isEmpty(portable_error)) {
-          this.echo(portable_error, 'coral');
+          this.echo(portable_error, this.warnColor);
         } else {
           var indevname = this.advntx.inventoryHandler.getNameIndefinitive(item_id);
-          this.echo(this.advntx.messages.error_portable.format(indevname), 'coral');
+          this.echo(this.advntx.messages.error_portable.format(indevname), this.warnColor);
         }
 
       } else {
         this.echo(this.advntx.messages.info_you_took.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)));
         this.advntx.inventoryHandler.addToInventory(item_id);
-        this.init_inventory();
+        this.initInventory();
         this.advntx.locationHandler.removeItemFromLocation(this.advntx.state.location, item_id);
       }
     }
@@ -212,7 +231,7 @@ export default class Interpreter {
         var desc = getDescription(this.advntx.state.objects, item_id);
         this.echo(desc);
       } else if (!isEmpty(object)) {
-        this.echo(this.advntx.messages.error_thing.format(object), 'red');
+        this.echo(this.advntx.messages.error_thing.format(object), this.errorColor);
       } else {
         this.standardError(command);
       }
@@ -229,7 +248,7 @@ export default class Interpreter {
     for (var i = 0; i < item_ids.length; i++) {
       var item_id = item_ids[i];
       if (isEmpty(item_id)) {
-        this.echo(this.advntx.messages.error_thing.format(item), 'red');
+        this.echo(this.advntx.messages.error_thing.format(item), this.errorColor);
         break;
       } else {
         this.advntx.inventoryHandler.removeFromInventory(item_id);
@@ -257,7 +276,7 @@ export default class Interpreter {
 
 
   standardError(command) {
-    this.echo(this.advntx.messages.error.format(command), 'red');
+    this.echo(this.advntx.messages.error.format(command), this.errorColor);
   }
 
   /**
@@ -277,8 +296,8 @@ export default class Interpreter {
   }
 
   buildHelpString() {
-    if (this.help_string != undefined) {
-      return this.help_string;
+    if (this.helpString != undefined) {
+      return this.helpString;
     }
     var verbString = '';
     for (var i = 0; i < this.advntx.vocabulary.verbs.length; i++) {
@@ -286,8 +305,8 @@ export default class Interpreter {
         verbString += ', ';
       verbString += this.advntx.vocabulary.verbs[i];
     }
-    this.help_string = this.advntx.messages.help.format(verbString);
-    return this.help_string;
+    this.helpString = this.advntx.messages.help.format(verbString);
+    return this.helpString;
   }
 
   checkWinningCondition(events) {

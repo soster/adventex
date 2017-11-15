@@ -167,7 +167,7 @@ $(document).ready(function () {
     localStorage.setItem('advntx', JSON.stringify(advntx.state));
     advntx.echo('game saved.');
     advntx.initInventory();
-    advntx.asyncRefocus();
+    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_save').click(function () {
