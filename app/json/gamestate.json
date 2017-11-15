@@ -8,7 +8,7 @@
 	"points": 0,
 	"locations": {
 		"dungeon_cell": {
-			"name": "A dungeon cell",
+			"name": "Dungeon cell",
 			"description": "A weak light shines through a small barred window just below the ceiling.\nYou see the outlines of the few things in your cell.\nThere is a door north from you.\nDirty, half rotten straw is lying on the floor.",
 			"objects": [
 				"straw",
@@ -47,7 +47,7 @@
 		},
 		
 		"corridor": {
-			"name": "A narrow corridor",
+			"name": "Narrow corridor",
 			"description": "It stretches to the east and to the west, slightly curved.\nYou hear a faint noise from the west!",
 			"additional_description": "There is a burning torch on a mount on the wall, it flickers and casts creepy shadows.",
 			"objects": [
@@ -59,8 +59,8 @@
 			}
 		},
 		"forward_corridor": {
-			"name": "A narrow, dark and dirty corridor",
-			"description": "Coming from the west, it stretches further to the east, leading to a staircase.\nThere is some debris on the floor, but it is to dark to see any details.",
+			"name": "Narrow and dirty corridor",
+			"description": "Coming from the west, it stretches further to the east, leading to a staircase.\nThere is some debris on the floor, but it is too dark to see any details.",
 			"objects": [],
 			"connections": {
 				"west": "corridor",
@@ -68,7 +68,7 @@
 			}
 		},
 		"backward_corridor": {
-			"name": "A narrow, guarded corridor",
+			"name": "Narrow, guarded corridor",
 			"description": "Coming from the east, it stretches further to the west, slightly curved.",
 			"objects": ["guard", "barrel"],
 			"connections": {
@@ -82,7 +82,7 @@
 			}
 		},
 		"staircase": {
-			"name": "A dark staircase",
+			"name": "Dark staircase",
 			"description": "North from you, the steps lead up.",
 			"objects": [],
 			"connections": {
@@ -121,7 +121,7 @@
 		},
 
 		"guard_room": {
-			"name": "A guard room",
+			"name": "Guard room",
 			"description": "You manage to hide behind a ledge before anyone could see you.\nYou hear a fire cracking in a fireplace.",
 			"objects": ["small_guard","big_guard", "cell_door", "fireplace"],
 			"connections": {
@@ -140,7 +140,7 @@
 		},
 
 		"outside": {
-			"name": "The outside world",
+			"name": "Outside world",
 			"description": "A meadow! Trees! Singing birds! You are back in the outside world.",
 			"color": "aquamarine",
 			"connections": {
