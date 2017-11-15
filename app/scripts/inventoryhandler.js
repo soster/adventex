@@ -12,7 +12,7 @@ export default class InventoryHandler {
 
 
     inInventory (itemId) {
-      if (this.l_state.inventory.indexOf(item_id) != -1) {
+      if (this.l_state.inventory.indexOf(itemId) != -1) {
         return true; 
       }
       return false; 
