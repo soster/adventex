@@ -9,7 +9,7 @@
 
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" media="all" href="styles/main.css">
-  
+
 
 </head>
 
@@ -32,7 +32,7 @@
         <p id="terminal">
         </p>
       </div>
-      <div id="inventory_container" class="col-3">
+      <div id="inventory_container" class="col-md-3">
         <h3>Inventory</h3>
         <div id="inventory">
           <p class="inventory_item"></p>
@@ -40,37 +40,50 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-9">
-
+      <div class="col-md-6">
         <div class="btn-group" role="group" aria-label="">
           <p>
-          <button type="button" class="btn btn-secondary btn-sm" id="btn_help">Help</button>&nbsp;
-          <button type="button" class="btn btn-secondary btn-sm" id="btn_save_storage">Save</button>&nbsp;
-          <button type="button" class="btn btn-secondary btn-sm" id="btn_load_storage">Load</button>&nbsp;
-          <button type="button" class="btn btn-secondary btn-sm" id="btn_restart">Restart</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_take" onclick="advntx.terminalLink('take');">Take</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_open" onclick="advntx.terminalLink('open');">Open</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_close" onclick="advntx.terminalLink('close');">Close</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_examine" onclick="advntx.terminalLink('examine');">Examine</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_examine" onclick="advntx.executeCurrent();">↵</button>&nbsp;
           </p>
+        </div>
       </div>
+      <div class="col-md-6">
+        <div class="btn-group" role="group" aria-label="">
+          <p>
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_help">Help</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_save_storage">Save</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_load_storage">Load</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_list_storage">List</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_restart">Restart</button>&nbsp;
+          </p>
+        </div>
       </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <p>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn_options" onclick="$('#options').toggleClass('invisible');">Options</button>
+      </p>
       </div>
-      <p>
-        <button type="button" class="btn btn-secondary btn-sm" id="btn_options" onclick="$('#options').toggleClass('invisible');">Options</button></p>
-    <div id="options" class="row invisible">
-      <div class="col-12">
-
+      <div id="options" class="col-md-12 invisible">
           <div class="btn-group" role="group" aria-label="">
             <p>
               <button type="button" class="btn btn-secondary btn-sm" id="btn_save">Save (text)</button>&nbsp;
               <button type="button" class="btn btn-secondary btn-sm" id="btn_load">Load (text)</button>&nbsp;
             </p>
+          </div>
+            <div class="form-group">
+              <p>
+              <label for="game_state">Game state text field:</label>
+              <textarea class="form-control" id="game_state" rows="3"></textarea>
+              </p>
+            </div>
         </div>
-
-        <div class="form-group">
-          <label for="game_state">Game state text field:</label>
-          <textarea class="form-control" id="game_state" rows="3"></textarea>
-        </div>
-      </div>
     </div>
-
     <div class="footer smalltext alert-warning">
       <div class="row">
         <div class="col-md-6">
@@ -86,6 +99,7 @@
       </div>
     </div>
   </div>
+  
 
   <!-- build:js scripts/app.js -->
   <script src="scripts/functions.js"></script>
@@ -99,7 +113,7 @@
 
   <!-- global variable, value is replaced by gulp-version-number -->
   <script>
-  var g_ver = 'VERSION_REPLACE';
+    var g_ver = 'VERSION_REPLACE';
   </script>
   <!-- System.js bundle, only for production build: -->
   <script src="scripts/main.bundle.js"></script>

@@ -25,11 +25,36 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
 /** overwrite terminal css: */
 
 
+
 .terminal, .cmd {
   /*
   font-family: 'Open Sans', sans-serif !important;*/
   color: $term_fg_color !important;
   background-color: $term_bg_color !important;
+}
+
+.terminal a:link {
+  color: $term_fg_color !important;
+  background-color: $term_bg_color !important;
+  text-decoration: underline;
+}
+
+.terminal a:active {
+  color: $term_fg_color !important;
+  background-color: $term_bg_color !important;
+  text-decoration: underline;
+}
+
+.terminal a:hover {
+  color: $term_fg_color !important;
+  background-color: $term_bg_color !important;
+  text-decoration: underline;
+}
+
+.terminal a:visited {
+  color: $term_fg_color !important;
+  background-color: $term_bg_color !important;
+  text-decoration: underline;
 }
 
 .cmd, .cmd .prompt, .terminal, .terminal .terminal-output div div {

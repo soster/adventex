@@ -23,7 +23,7 @@ export default class Interpreter {
 
 
 
-  interpret(command, describeLocationEcho, initInventory, echo, initGame, load, save) {
+  interpret(command, describeLocationEcho, initInventory, echo, initGame, load, save, listSaveGames) {
     var original = command;
     this.echo = echo;
     this.describeLocationEcho = describeLocationEcho;
@@ -31,6 +31,7 @@ export default class Interpreter {
     this.initGame = initGame;
     this.load = load;
     this.save = save;
+    this.listSaveGames = listSaveGames;
 
     // lower case and remove backslash from auto suggest:
     command = command.toLowerCase().replace('\\', '').trim();
@@ -42,20 +43,21 @@ export default class Interpreter {
     var firstVerb = getFirstOfType(words, 'verbs');
     var lastVerb = getLastOfType(words, 'verbs');
     var preposition = getFirstOfType(words, 'prepositions');
+
+    //sometimes we need just the second word of the command without distinguishing between objects / verbs and so on:
+    var secondWord = this.getSecondWord(command)
     var objects = words['objects'];
     var misc = words['misc'];
-    var firstMisc = getFirstOfType(words,'misc');
+    var firstMisc = getFirstOfType(words, 'misc');
     var foundNothing = false;
 
     var itemIdsFromLocation = this.advntx.locationHandler.findItemIdsInLocation(objects, this.advntx.state.locations[this.advntx.state.location]);
     var itemIdsFromInventory = this.advntx.inventoryHandler.findItemIdsInInventory(objects);
     var itemIds = [];
 
-
     var itemIds = itemIdsFromLocation.concat(itemIdsFromInventory);
     var locationObject = this.advntx.state.locations[this.advntx.state.location];
 
-    
     var executedPreEvents = [];
     var foundEvent = false;
 
@@ -80,13 +82,13 @@ export default class Interpreter {
       executedPreEvents.push(event);
     }
 
-    
+
 
     // check for 'standard' verbs, all other verbs are dealt with in the events.
     if (!foundEvent || doContinue) {
       // help
       if (checkSynonyms(advntx.messages.verb_help, firstVerb, this.advntx.vocabulary.synonyms)) {
-        echo(this.buildHelpString());
+        this.help(secondWord);
         // go
       } else if (checkSynonyms(advntx.messages.verb_go, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.move(direction, itemIdsFromLocation, misc);
@@ -104,14 +106,13 @@ export default class Interpreter {
         this.echo('\n');
         this.initGame(true);
       } else if (checkSynonyms(advntx.messages.verb_load, firstVerb, this.advntx.vocabulary.synonyms)) {
-        var name = this.getLoadSaveName(command);
-        this.load(name);
+        this.load(secondWord);
       } else if (checkSynonyms(advntx.messages.verb_save, firstVerb, this.advntx.vocabulary.synonyms)) {
-        var name = this.getLoadSaveName(command);
-        this.save(name);
-    
+        this.save(secondWord);
+      } else if (checkSynonyms(advntx.messages.verb_list, firstVerb, this.advntx.vocabulary.synonyms)) {
+        this.listSaveGames();
       }
-      
+
       else {// I give up... however, there might be an event to execute.
         foundNothing = true;
       }
@@ -172,13 +173,28 @@ export default class Interpreter {
 
   }
 
-  getLoadSaveName(command) {
+  getSecondWord(command) {
     var ws = command.split(' ');
-    var name='';
-    if (ws.length>1) {
-      name=ws[1];
+    var name = '';
+    if (ws.length > 1) {
+      name = ws[1];
     }
     return name;
+  }
+
+  help(secondWord) {
+    this.echo(this.advntx.messages.verb_help,undefined,'headline');
+    if (secondWord != undefined) {
+      if (secondWord == 'verbs') {
+        this.echo(this.buildVocabularyHelpString(advntx.messages.help_verbs, advntx.vocabulary.verbs));
+        return;
+      } else if (advntx.messages['help_' + secondWord] != undefined) {
+        this.echo(advntx.messages['help_' + secondWord]);
+        return;
+      }
+    }
+    // otherwise:
+    this.echo(this.advntx.messages.help);
   }
 
   move(direction, item_ids, misc) {
@@ -314,19 +330,17 @@ export default class Interpreter {
 
   }
 
-  buildHelpString() {
-    if (this.helpString != undefined) {
-      return this.helpString;
-    }
-    var verbString = '';
-    for (var i = 0; i < this.advntx.vocabulary.verbs.length; i++) {
+  buildVocabularyHelpString(helpString, vocabularyObjects) {
+    var vocabString = '';
+    for (var i = 0; i < vocabularyObjects.length; i++) {
       if (i != 0)
-        verbString += ', ';
-      verbString += this.advntx.vocabulary.verbs[i];
+        vocabString += ', ';
+      vocabString += vocabularyObjects[i];
     }
-    this.helpString = this.advntx.messages.help.format(verbString);
-    return this.helpString;
+    var string = helpString.format(vocabString);
+    return string;
   }
+
 
   checkWinningCondition(events) {
     for (var i = 0; i < events.length; i++) {

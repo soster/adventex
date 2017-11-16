@@ -43,7 +43,8 @@
         "help",
         "restart",
         "load",
-        "save"
+        "save",
+        "list"
     ],
     "directions": [
         "north",

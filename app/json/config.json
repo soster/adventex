@@ -1,6 +1,6 @@
 {
 "console": {
-    "height": 450,
+    "height": 300,
     "prompt": "advntx> "
   },
   "standard_wait_eventtext": 1000,
