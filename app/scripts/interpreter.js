@@ -41,6 +41,7 @@ export default class Interpreter {
     }
     var words = this.advntx.parser.parse(command);
     var firstVerb = getFirstOfType(words, 'verbs');
+    var firstObject = getFirstOfType(words, 'objects');
     var lastVerb = getLastOfType(words, 'verbs');
     var preposition = getFirstOfType(words, 'prepositions');
 
@@ -67,6 +68,10 @@ export default class Interpreter {
     // important: Do this before any event is executed!
     if (isEmpty(firstVerb) && !isEmpty(direction)) {
       firstVerb = advntx.messages.verb_go;
+    }
+
+    if (isEmpty(firstVerb) && !isEmpty(firstObject)) {
+      firstVerb = advntx.messages.verb_examine;
     }
 
     // find and execute events BEFORE executing standard verbs:
