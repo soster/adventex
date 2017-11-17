@@ -28,7 +28,7 @@
       <h3 class="text-muted">adventex</h3>
     </div>
     <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-9 wrapper">
         <p id="terminal">
         </p>
       </div>
@@ -40,7 +40,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-5">
         <div class="btn-group" role="group" aria-label="">
           <p>
             <button type="button" class="btn btn-secondary btn-sm" id="btn_take" onclick="advntx.terminalLink('take');">Take</button>&nbsp;
@@ -51,7 +51,7 @@
           </p>
         </div>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-5">
         <div class="btn-group" role="group" aria-label="">
           <p>
             <button type="button" class="btn btn-secondary btn-sm" id="btn_help">Help</button>&nbsp;
@@ -66,12 +66,13 @@
     <div class="row">
       <div class="col-md-12">
         <p>
-        <button type="button" class="btn btn-secondary btn-sm" id="btn_options" onclick="$('#options').toggleClass('invisible');">Options</button>
+        <button type="button" class="btn btn-secondary btn-sm" id="btn_options" onclick="$('#options').toggle();">Options</button>
       </p>
       </div>
-      <div id="options" class="col-md-12 invisible">
+      <div id="options" class="col-md-12">
           <div class="btn-group" role="group" aria-label="">
             <p>
+              <button type="button" class="btn btn-secondary btn-sm" id="btn_invert" onclick="advntx.toggleTerminalColors();">Invert colors</button>&nbsp;
               <button type="button" class="btn btn-secondary btn-sm" id="btn_save">Save (text)</button>&nbsp;
               <button type="button" class="btn btn-secondary btn-sm" id="btn_load">Load (text)</button>&nbsp;
             </p>
