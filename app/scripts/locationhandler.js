@@ -89,6 +89,9 @@ export default class LocationHandler {
 
     visited(location_id) {
       var loc = this.getLocationById(location_id);
+      if (loc===undefined) {
+        return false;
+      }
       if (loc.visited===undefined||loc.visited==false) {
         loc.visited = true;
         return false;

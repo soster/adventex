@@ -1,0 +1,38 @@
+{
+	"timestamp": "1999-12-30T23:00:00.000Z",
+	"inventory": [],
+	"location": "start_location",
+	"seconds": 0,
+	"steps": 0,
+	"hints": 0,
+	"points": 0,
+	"locations": {
+		"start_location": {
+			"name": "Start",
+			"description": "This is the adventex tutorial. However, there is not much to see right now.",
+			"objects": [
+				"table"
+			],
+			"states": {},
+			"connections": {}
+		}
+	},
+	"objects": {
+		"table": {
+			"name": "table",
+			"description": "This is a simple, wooden table.",
+			"portable": false,
+			"error_portable": "Guess what: The table is to heavy to carry around.",
+			"hidden": false,
+			"definite_article": "the",
+			"indefinite_article": "a"
+		}
+	},
+	"events": {
+		"start_event": {
+			"name": "Awake",
+			"description": "Tutorial",
+			"action_move_to_location": "start_location"
+		}
+	}
+}

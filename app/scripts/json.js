@@ -1,8 +1,9 @@
-export default function parseJson(async_init, advntx) {
-  const j_vocabulary = 'json/vocabulary.json';
-  const j_messages = 'json/messages.json';
-  const j_game = 'json/gamestate.json';
-  const j_config = 'json/config.json';
+export default function parseJson(asyncInit, advntx) {
+
+  const j_vocabulary = advntx.currentGame+'/vocabulary.json';
+  const j_messages = advntx.currentGame+'/messages.json';
+  const j_game = advntx.currentGame+'/gamestate.json';
+  const j_config = advntx.currentGame+'/config.json';
 
 
   // counter for number of necessary requests:
@@ -27,7 +28,7 @@ export default function parseJson(async_init, advntx) {
       var item = advntx.state.objects[property];
       advntx.vocabulary.objects.push(item.name);
     }
-    async_init(true);
+    asyncInit(true);
   }
 
   getJSON(j_vocabulary + parameter,
