@@ -186,9 +186,22 @@ window.advntx = {
     $('textarea.clipboard').attr('autocorrect', 'off');
     $('textarea.clipboard').attr('autocapitalize', 'off');
     $('textarea.clipboard').attr('spellcheck', 'off');
+    $('#options').toggle();
+    
+    // set color scheme for terminal:
+    $('#terminal').toggleClass('termcolor');
+    $('.cmd').toggleClass('termcolor');
 
     advntx.asyncRefocusTerminal();
   },
+
+  toggleTerminalColors() {
+    $('#terminal').toggleClass('termcolor');
+    $('.cmd').toggleClass('termcolor');
+    $('#terminal').toggleClass('inverted');
+    $('.cmd').toggleClass('inverted');
+  },
+
   refocusTerminal() {
     advntx.term.focus();
   },

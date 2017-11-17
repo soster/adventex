@@ -4,6 +4,9 @@
 $term_bg_color: #f2f2f2;
 $term_fg_color: #0d0d0d;
 
+$term_bg_inv: $term_fg_color;
+$term_fg_inv: $term_bg_color;
+
 /* effects: */
 .fire {
       font-size: 120%;
@@ -26,56 +29,34 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
 
 
 
-.terminal, .cmd {
+.termcolor, .termcolor a:link, .termcolor a:active, .termcolor a:hover,.termcolor a:visited {
   /*
   font-family: 'Open Sans', sans-serif !important;*/
   color: $term_fg_color !important;
   background-color: $term_bg_color !important;
 }
 
-.terminal a:link {
-  color: $term_fg_color !important;
-  background-color: $term_bg_color !important;
+.terminal a {
   text-decoration: underline;
 }
 
-.terminal a:active {
-  color: $term_fg_color !important;
-  background-color: $term_bg_color !important;
-  text-decoration: underline;
-}
-
-.terminal a:hover {
-  color: $term_fg_color !important;
-  background-color: $term_bg_color !important;
-  text-decoration: underline;
-}
-
-.terminal a:visited {
-  color: $term_fg_color !important;
-  background-color: $term_bg_color !important;
-  text-decoration: underline;
-}
 
 .cmd, .cmd .prompt, .terminal, .terminal .terminal-output div div {
   font-size: 14px !important;
   line-height: 16px !important;
 }
 
-.advntx h1, h2, h3, h4, h5, h6 {
-  font-family: 'Special Elite', cursive !important;
-}
-
-
-
-.terminal .inverted, .cmd .inverted {
+.inverted, .inverted a:link, .inverted a:active, .inverted a:hover,.inverted a:visited {
   background-color: $term_fg_color !important;
   color: $term_bg_color !important;
 }
 
-.terminal .terminal-wrapper
 
 /* ---- */
+
+.advntx h1, h2, h3, h4, h5, h6 {
+  font-family: 'Special Elite', cursive !important;
+}
 
 .mono {
   font-family: monospace;
