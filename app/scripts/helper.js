@@ -69,7 +69,7 @@ export function findFirstMatch(words, type, objects) {
   return '';
 }
 
-export function listFormattedObjects(list, list_of_all, inventoryHandler) {
+export function listFormattedObjects(list, list_of_all, inventoryHandler, takeVerb) {
   var message = '';
   if (list !== undefined && list.length > 0) {
     for (var i = 0; i < list.length; i++) {
@@ -87,7 +87,9 @@ export function listFormattedObjects(list, list_of_all, inventoryHandler) {
       if (effect === undefined) {
         effect = '';
       }
-      message += '[[;' + color + ';;' + effect + ']' + getName(list_of_all, list[i]);
+
+      var name = getName(list_of_all, list[i]);
+      message += '[[!;' + color + ';;' + effect + ';javascript:advntx.terminalLink(\' '+name+'\');]' + name;
 
       var stateString = inventoryHandler.getStateString(list[i]);
       if (!isEmpty(stateString)) {

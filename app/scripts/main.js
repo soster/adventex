@@ -61,7 +61,15 @@ window.advntx = {
     
     if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
       advntx.echo(name, loc.color, 'headline');
-      advntx.echo(advntx.locationHandler.getLocationDescription(locationId), loc.color);
+      
+      var description = advntx.locationHandler.getLocationDescription(locationId);
+      // loop through possible directions:
+      for (var i=0;i<advntx.vocabulary.directions.length;i++) {
+        var direction = advntx.vocabulary.directions[i];
+        description = description.replace(direction,'[[!;;;;javascript:advntx.terminalLink(\' '+direction+' \');]'+direction+']');
+      }
+
+      advntx.echo(description);
     }
     var prompt = name+'>';
     advntx.term.set_prompt('[[b;;]'+prompt+']');
@@ -95,11 +103,27 @@ window.advntx = {
     }
   },
 
+  terminalLink(name) {
+    advntx.term.insert(name);
+    advntx.asyncRefocusTerminal();
+  },
+
+  executeLink(name) {
+    advntx.term.exec(name);
+    advntx.asyncRefocusTerminal();
+  },
+
+  executeCurrent() {
+    advntx.term.exec(advntx.term.get_command());
+    advntx.term.set_command('');
+    advntx.asyncRefocusTerminal();
+  },
+
   load(name) {
     var retrievedObject = localStorage.getItem('advntx'+name);
     if (retrievedObject != undefined) {
       advntx.state = JSON.parse(retrievedObject);
-      advntx.echo('game loaded.');
+      advntx.echo(advntx.messages.info_game_loaded.format(name));
       advntx.term.exec('clear');
       advntx.initGame(false);
     }
@@ -107,15 +131,29 @@ window.advntx = {
 
   save(name) {
     localStorage.setItem('advntx'+name, JSON.stringify(advntx.state));
-    advntx.echo('game saved.');
+    advntx.echo(advntx.messages.info_game_saved.format(name));
     advntx.initInventory();
     advntx.asyncRefocusTerminal();
+  },
+
+  listSavegames() {
+    for(var i in localStorage)
+    {
+        if (i.startsWith('advntx')) {
+          var name = i.replace('advntx','');
+          var link = name;
+          if (isEmpty(name)) {
+            name = 'default';
+          }
+          advntx.echo('[[!;;;;javascript:advntx.terminalLink(\'load '+link+'\');]'+name+']');
+        }  
+    }
   },
 
   initGameAsync (reset) {
     advntx.term = $('#terminal').terminal(function (command) {
       var echo = advntx.echo;
-      advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame, advntx.load, advntx.save);
+      advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame, advntx.load, advntx.save, advntx.listSavegames);
     }, {
         greetings: '',
         name: advntx.messages.name,
@@ -166,6 +204,9 @@ window.advntx = {
   
   initInventory() {
     $('#inventory > .inventory_item').remove();
+    if (advntx.state.inventory.length==0) {
+      $('#inventory').append('<p class="inventory_item">'+advntx.messages.info_inventory_empty+'</p>');
+    }
     for (var i = 0; i < advntx.state.inventory.length; i++) {
       var item = advntx.state.inventory[i];
       var itemName = getName(advntx.state.objects, item);
@@ -185,26 +226,25 @@ window.periodicUpdates = function periodicUpdates() {
 /** Global Initializations */
 $(document).ready(function () {
   $('#btn_help').click(function () {
-    advntx.term.exec('help', false);
+    advntx.term.exec(advntx.messages.verb_help, false);
     advntx.initInventory();
     advntx.asyncRefocusTerminal();
   });
 
   $('#btn_load_storage').click(function () {
-    var retrievedObject = localStorage.getItem('advntx');
-    if (retrievedObject != undefined) {
-      advntx.state = JSON.parse(retrievedObject);
-      advntx.echo('game loaded.');
-      advntx.term.exec('clear');
-      advntx.initGame(false);
-    }
+    advntx.echo(advntx.messages.info_enter_savegame_name);
+    advntx.term.insert(advntx.messages.verb_load + ' ');
+    advntx.asyncRefocusTerminal();
+  });
 
+  $('#btn_list_storage').click(function () {
+    advntx.term.exec(advntx.messages.verb_list);
+    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_save_storage').click(function () {
-    localStorage.setItem('advntx', JSON.stringify(advntx.state));
-    advntx.echo('game saved.');
-    advntx.initInventory();
+    advntx.echo(advntx.messages.info_enter_savegame_name);
+    advntx.term.insert(advntx.messages.verb_save + ' ');
     advntx.asyncRefocusTerminal();
   });
 
