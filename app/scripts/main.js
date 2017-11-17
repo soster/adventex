@@ -31,11 +31,14 @@ import Interpreter from 'app/scripts/interpreter.js'
 
 
 
+
 /**
  * Set advntx as global variable. 
  * window is needed because of system.js.
  */
 window.advntx = {
+
+
   echo (text, color, clazz, bold) {
     if (color!=undefined||clazz!=undefined) {
       if (clazz === undefined) {
@@ -93,10 +96,19 @@ window.advntx = {
     advntx.initInventory();
   },
 
-  initGame (refresh_json) {
+  initGame (refreshJson) {
     // version string, add to json calls to avoid browser caching:
     advntx.version = g_ver;
-    if (refresh_json == true) {
+    if (isEmpty(advntx.currentGame)) {
+      advntx.currentGame = 'json/escape';
+    }
+
+    if (advntx.term!=undefined) {
+      advntx.term.clear();
+    }
+    
+
+    if (refreshJson==true) {
       parseJson(advntx.initGameAsync, advntx);
     } else {
       advntx.initGameAsync(false);
@@ -151,6 +163,8 @@ window.advntx = {
   },
 
   initGameAsync (reset) {
+
+    if (advntx.term===undefined) {
     advntx.term = $('#terminal').terminal(function (command) {
       var echo = advntx.echo;
       advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame, advntx.load, advntx.save, advntx.listSavegames);
@@ -161,6 +175,7 @@ window.advntx = {
         height: advntx.config.console.height,
         completion: advntx.vocabulary.verbs.concat(advntx.vocabulary.directions).concat(advntx.vocabulary.prepositions).concat(getObjectNameArray(advntx.state.objects))
       });
+    }
 
 
     $('#inventory_container').css('max-height', advntx.config.console.height + 'px');
@@ -182,15 +197,20 @@ window.advntx = {
     
     advntx.describeLocationEcho(advntx.state.location);
 
-    $('textarea.clipboard').attr('autocomplete', 'off');
-    $('textarea.clipboard').attr('autocorrect', 'off');
-    $('textarea.clipboard').attr('autocapitalize', 'off');
-    $('textarea.clipboard').attr('spellcheck', 'off');
-    $('#options').toggle();
-    
-    // set color scheme for terminal:
-    $('#terminal').toggleClass('termcolor');
-    $('.cmd').toggleClass('termcolor');
+    if (advntx.htmlInitialized===undefined) {
+      $('textarea.clipboard').attr('autocomplete', 'off');
+      $('textarea.clipboard').attr('autocorrect', 'off');
+      $('textarea.clipboard').attr('autocapitalize', 'off');
+      $('textarea.clipboard').attr('spellcheck', 'off');
+      $('#options').toggle();
+      
+      // set color scheme for terminal:
+      $('#terminal').toggleClass('termcolor');
+      $('.cmd').toggleClass('termcolor');
+      advntx.htmlInitialized = true;
+    }
+
+
 
     advntx.asyncRefocusTerminal();
   },
@@ -200,6 +220,7 @@ window.advntx = {
     $('.cmd').toggleClass('termcolor');
     $('#terminal').toggleClass('inverted');
     $('.cmd').toggleClass('inverted');
+    advntx.asyncRefocusTerminal();
   },
 
   refocusTerminal() {

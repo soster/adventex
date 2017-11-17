@@ -36,7 +36,7 @@ var assert = chai.assert;
 window.advntx = (function (my) {
   var parser;
 
-
+  
 
 
   my.echo = function (text, color) {
@@ -53,6 +53,7 @@ window.advntx = (function (my) {
 
 before(function (done) {
   var advntx = window.advntx;
+  advntx.currentGame = 'json/escape';
   // waits until done is called (async!)
   function async_done(bool) {
     advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
