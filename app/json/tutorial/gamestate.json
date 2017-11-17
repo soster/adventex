@@ -9,12 +9,22 @@
 	"locations": {
 		"start_location": {
 			"name": "Start",
-			"description": "This is the adventex tutorial. However, there is not much to see right now.",
+			"description": "This is the adventex tutorial. There is a room to the east from you.",
 			"objects": [
 				"table"
 			],
 			"states": {},
-			"connections": {}
+			"connections": {
+				"east": "room_two"
+			}
+		},
+		"room_two": {
+			"name": "Second Room",
+			"description": "The starting room is to the west from you.",
+			"connections": {
+				"west": "start_location"
+			}
+
 		}
 	},
 	"objects": {
