@@ -68,8 +68,8 @@ window.advntx = {
       
       var description = advntx.locationHandler.getLocationDescription(locationId);
       // loop through possible directions:
-      for (var i=0;i<advntx.vocabulary.directions.length;i++) {
-        var direction = advntx.vocabulary.directions[i];
+      for (var key in loc.connections) {
+        var direction = key;
         description = description.replace(direction,'[[!;;;;javascript:advntx.terminalLink(\' '+direction+' \');]'+direction+']');
       }
 
@@ -108,7 +108,7 @@ window.advntx = {
         if (key=='default') {
           continue;
         }
-        var $button = $('<button type="button" class="btn btn-secondary btn-sm" id="btn_escape" onclick="advntx.initGame(true,\''+key+'\');">'+advntx.games[key].name+'</button>');
+        var $button = $('<button type="button" class="btn btn-secondary btn-sm" id="btn_escape" onclick="advntx.initGame(true,\''+advntx.games[key].path+'\');">'+advntx.games[key].name+'</button>');
         var $space = $('<span>&nbsp;</span>');
         $button.appendTo($('#game_buttons'));
         $space.appendTo($('#game_buttons'));
@@ -137,7 +137,6 @@ window.advntx = {
 
   terminalLink(name) {
     advntx.term.insert(name);
-    advntx.asyncRefocusTerminal();
   },
 
   executeLink(name) {
@@ -282,6 +281,7 @@ $(document).ready(function () {
   $('#btn_help').click(function () {
     advntx.term.exec(advntx.messages.verb_help, false);
     advntx.initInventory();
+    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_load_storage').click(function () {
@@ -291,6 +291,7 @@ $(document).ready(function () {
 
   $('#btn_list_storage').click(function () {
     advntx.term.exec(advntx.messages.verb_list);
+    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_save_storage').click(function () {

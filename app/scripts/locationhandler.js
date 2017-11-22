@@ -66,7 +66,7 @@ export default class LocationHandler {
     getLocationDescription (location_id) {
       var loc = this.state.locations[location_id];
       var description = getDescription(this.state.locations, location_id);
-      return description += '\n';
+      return description;
     }
 
     getLocationById (location_id) {
