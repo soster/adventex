@@ -1,3 +1,6 @@
+import {getJSON as getJSON} from 'app/scripts/helper.js';
+
+
 export default function parseJson(asyncInit, advntx) {
 
   const j_vocabulary = advntx.currentGame+'/vocabulary.json';
@@ -12,15 +15,6 @@ export default function parseJson(asyncInit, advntx) {
 
 
   const parameter = '?v=' + advntx.version;
-
-  function getJSON(url, result) {
-    // new fetch api of ecma6:
-    fetch(url).then(function(response) {
-      return response.json();
-    }).then(function(json) {
-      result(json);
-    });
-  }
 
   function asyncInitLocal() {
     advntx.vocabulary.objects = [];
@@ -72,3 +66,4 @@ export default function parseJson(asyncInit, advntx) {
     });
 
 }
+

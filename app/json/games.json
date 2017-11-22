@@ -1,0 +1,14 @@
+{
+
+    "default":"escape",
+    
+    "tutorial": {
+        "name": "Tutorial",
+        "path": "tutorial"
+    },
+
+    "escape": {
+        "name": "Escape Game",
+        "path": "escape"
+    }
+}
