@@ -5,7 +5,7 @@ import 'jquery.terminal/css/jquery.terminal.min.css!';
 import $ from 'jquery';
 import terminal from 'jquery.terminal';
 import Parser from 'app/scripts/parser.js';
-import {default as parseJson} from 'app/scripts/json.js';
+import { default as parseJson } from 'app/scripts/json.js';
 import {
   checkSynonyms,
   findFirstMatch,
@@ -40,97 +40,176 @@ import Interpreter from 'app/scripts/interpreter.js'
 window.advntx = {
 
 
-  echo (text, color, clazz, bold) {
-    if (color!=undefined||clazz!=undefined) {
+  echo(text, color, clazz, bold) {
+    if (color != undefined || clazz != undefined || bold != undefined) {
       if (clazz === undefined) {
-        clazz='';
+        clazz = '';
       }
       if (color === undefined) {
         color = '';
       }
-      var formatting='';
+      var formatting = '';
       if (bold) {
         formatting = 'b';
       }
-      text = '[['+formatting+';'+color+';;'+clazz+']'+text+']';
+      text = '[[' + formatting + ';' + color + ';;' + clazz + ']' + text + ']';
     }
+
+    //advntx.term.resume();
+    //var export_data = term.export_view();
+    var old_prompt = advntx.term.get_prompt();
+    var less = true;
+    var cols = advntx.term.cols();
+    var rows = advntx.term.rows()-2;
+    var lines = text.split('\n');
+    var numLines = 0;
+    for (var i = 0; i < lines.length; i++) {
+      numLines++;
+      //numLines += Math.floor(lines[i].length / rows) - 1;
+    }
+
+    // https://codepen.io/jcubic/pen/zEyxjJ?editors=0010
+    if (numLines >= rows) {
+      var pos = 0;
+      var left = 0;
+      function print() {
+        var to_print = lines.slice(pos, pos+rows-1);
+        var format_start_re = /^(\[\[[!gbiuso]*;[^;]*;[^\]]*\])/i;
+
+        advntx.term.echo(to_print.join('\n'), {
+          keepWords: true
+        });
+      }
+
+      print();
+
+      advntx.term.push($.noop, {
+        keydown: function (e) {
+          pos += rows;
+          if (pos > lines.length-1) {
+            pos = lines.length;
+            advntx.term.pop();
+            advntx.term.set_prompt(old_prompt);
+            return false;
+          }
+          print();
+
+        }
+      });
+
+      advntx.term.set_prompt('press any key');
+
+    } else {
+      advntx.term.echo(text, {
+        keepWords: true
+      });
+    }
+
+
+
+    /*
     advntx.term.echo(text,{
       keepWords: true
     });
+    */
+
+
   },
-  
-  describeLocationEcho (locationId, alwaysShowFullDescription) {
+
+  formatHeadline(text) {
+    var lines = text.split('\n');
+    for (var i=0;i<lines.length;i++) {
+      lines[i] = lines[i].replace('\n','');
+      lines[i] = '[[;;;headline]' + lines[i] + ']';
+    }
+    return lines.join('\n');
+  },
+
+  describeLocationEcho(locationId, alwaysShowFullDescription, preEventText, postEventText) {
     var loc = advntx.locationHandler.getLocationById(locationId);
     var name = getName(advntx.state.locations, locationId);
-    
+    var headline = '';
+    var description = '';
+
     if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
-      advntx.echo(name, loc.color, 'headline');
-      
-      var description = advntx.locationHandler.getLocationDescription(locationId);
+      headline = advntx.formatHeadline(name);
+      description = advntx.locationHandler.getLocationDescription(locationId);
       // loop through possible directions:
       for (var key in loc.connections) {
         var direction = key;
-        description = description.replace(direction,'[[!;;;;javascript:advntx.terminalLink(\' '+direction+' \');]'+direction+']');
+        description = description.replace(direction, '[[!;;;;javascript:advntx.terminalLink(\' ' + direction + ' \');]' + direction + ']');
       }
-
-      advntx.echo(description);
     }
-    var prompt = name+'>';
-    advntx.term.set_prompt('[[b;;]'+prompt+']');
+    var prompt = name + '>';
+    advntx.term.set_prompt('[[b;;]' + prompt + ']');
 
     var objects = loc.objects;
     var message = advntx.messages.info_you_see;
     var objectsMessage = listFormattedObjects(objects, advntx.state.objects, advntx.inventoryHandler);
-    
-    
-    if (!isEmpty(objectsMessage)) {
-      advntx.echo(message);
-      advntx.echo(objectsMessage);
-    } else {
-      advntx.echo(advntx.messages.info_you_see_nothing)
+
+    var text = '';
+
+    if (!isEmpty(preEventText)) {
+      text = preEventText+'\n';
     }
-    
+    text += headline+'\n'+description+'\n';
+
+
+    if (!isEmpty(objectsMessage)) {
+      text+=message+'\n'+objectsMessage;
+    } else {
+      text+=advntx.messages.info_you_see_nothing;
+    }
+
+    if (!isEmpty(postEventText)) {
+      text+=postEventText;
+    }
+
+    advntx.echo(text);
+
   },
 
-  addToInventoryEcho (item) {
+  addToInventoryEcho(item) {
     advntx.inventoryHandler.addToInventory(item);
     advntx.initInventory();
   },
 
-  initGame (refreshJson,gameId) {
+  initGame(refreshJson, gameId) {
     // version string, add to json calls to avoid browser caching:
     advntx.version = g_ver;
 
-    getJSON('json/games.json',function (result) {
-       advntx.games = result;
-       $('#game_buttons').children().remove();
-       for (var key in advntx.games) {
-        if (key=='default') {
+    getJSON('json/games.json', function (result) {
+      advntx.games = result;
+      $('#game_buttons').children().remove();
+      for (var key in advntx.games) {
+        if (key == 'default') {
           continue;
         }
-        var $button = $('<button type="button" class="btn btn-secondary btn-sm" id="btn_escape" onclick="advntx.initGame(true,\''+advntx.games[key].path+'\');">'+advntx.games[key].name+'</button>');
+        var $button = $('<button type="button" class="btn btn-secondary btn-sm" id="btn_escape" onclick="advntx.initGame(true,\'' + advntx.games[key].path + '\');">' + advntx.games[key].name + '</button>');
         var $space = $('<span>&nbsp;</span>');
         $button.appendTo($('#game_buttons'));
         $space.appendTo($('#game_buttons'));
       }
 
-       if (isEmpty(gameId)) {
+      if (isEmpty(gameId)) {
         gameId = result.default;
-       }
-       advntx.currentGame = 'json/'+result[gameId].path;
-       if (advntx.term!=undefined) {
+      }
+      advntx.currentGame = 'json/' + result[gameId].path;
+      if (advntx.term != undefined) {
         advntx.term.clear();
       }
-      
-  
-      if (refreshJson==true) {
+
+
+      if (refreshJson == true) {
         parseJson(advntx.initGameAsync, advntx);
       } else {
         advntx.initGameAsync(false);
       }
-     
+
     });
-    
+
+
+
 
 
   },
@@ -151,7 +230,7 @@ window.advntx = {
   },
 
   load(name) {
-    var retrievedObject = localStorage.getItem('advntx'+name);
+    var retrievedObject = localStorage.getItem('advntx' + name);
     if (retrievedObject != undefined) {
       advntx.state = JSON.parse(retrievedObject);
       advntx.echo(advntx.messages.info_game_loaded.format(name));
@@ -161,73 +240,76 @@ window.advntx = {
   },
 
   save(name) {
-    localStorage.setItem('advntx'+name, JSON.stringify(advntx.state));
+    localStorage.setItem('advntx' + name, JSON.stringify(advntx.state));
     advntx.echo(advntx.messages.info_game_saved.format(name));
     advntx.initInventory();
     advntx.asyncRefocusTerminal();
   },
 
   listSavegames() {
-    for(var i in localStorage)
-    {
-        if (i.startsWith('advntx')) {
-          var name = i.replace('advntx','');
-          var link = name;
-          if (isEmpty(name)) {
-            name = 'default';
-          }
-          advntx.echo('[[!;;;;javascript:advntx.terminalLink(\'load '+link+'\');]'+name+']');
-        }  
+    for (var i in localStorage) {
+      if (i.startsWith('advntx')) {
+        var name = i.replace('advntx', '');
+        var link = name;
+        if (isEmpty(name)) {
+          name = 'default';
+        }
+        advntx.echo('[[!;;;;javascript:advntx.terminalLink(\'load ' + link + '\');]' + name + ']');
+      }
     }
   },
 
-  initGameAsync (reset) {
+  initGameAsync(reset) {
 
-    if (advntx.term===undefined) {
-    advntx.term = $('#terminal').terminal(function (command) {
-      var echo = advntx.echo;
-      advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame, advntx.load, advntx.save, advntx.listSavegames);
-    }, {
-        greetings: '',
-        name: advntx.messages.name,
-        prompt: advntx.config.console.prompt,
-        height: advntx.config.console.height,
-        completion: advntx.vocabulary.verbs.concat(advntx.vocabulary.directions).concat(advntx.vocabulary.prepositions).concat(getObjectNameArray(advntx.state.objects))
-      });
+    if (advntx.term === undefined) {
+      advntx.term = $('#terminal').terminal(function (command) {
+        var echo = advntx.echo;
+
+        advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame, advntx.load, advntx.save, advntx.listSavegames);
+      }, {
+          greetings: '',
+          name: advntx.messages.name,
+          prompt: advntx.config.console.prompt,
+          height: advntx.config.console.height,
+          completion: advntx.vocabulary.verbs.concat(advntx.vocabulary.directions).concat(advntx.vocabulary.prepositions).concat(getObjectNameArray(advntx.state.objects))
+        });
     }
 
 
     $('#inventory_container').css('max-height', advntx.config.console.height + 'px');
 
-    advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, 
+    advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions,
       advntx.vocabulary.adjectives, advntx.vocabulary.objects, advntx.state.objects);
     advntx.inventoryHandler = new InventoryHandler(advntx.state, advntx.initInventory);
     advntx.interpreter = new Interpreter(advntx);
     advntx.locationHandler = new LocationHandler(advntx.state);
     advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, advntx.initInventory);
 
-    advntx.echo(advntx.messages.greetings.format(advntx.version)+'\n',undefined,'headline');
 
-    advntx.initInventory();
-    if (reset) {
-      var startEvent = advntx.state.events['start_event'];
-      advntx.eventHandler.executeEvent(startEvent, advntx.echo);
-    }
-    
-    advntx.describeLocationEcho(advntx.state.location);
 
-    if (advntx.htmlInitialized===undefined) {
+    if (advntx.htmlInitialized === undefined) {
       $('textarea.clipboard').attr('autocomplete', 'off');
       $('textarea.clipboard').attr('autocorrect', 'off');
       $('textarea.clipboard').attr('autocapitalize', 'off');
       $('textarea.clipboard').attr('spellcheck', 'off');
       $('#options').toggle();
-      
+
       // set color scheme for terminal:
       $('#terminal').toggleClass('termcolor');
       $('.cmd').toggleClass('termcolor');
       advntx.htmlInitialized = true;
     }
+
+    var text = advntx.formatHeadline(advntx.messages.greetings.format(advntx.version))+'\n';
+    advntx.initInventory();
+    if (reset) {
+      var startEvent = advntx.state.events['start_event'];
+      advntx.eventHandler.executeEvent(startEvent, function(eventText) {
+        text += eventText;
+      });
+    }
+
+    advntx.describeLocationEcho(advntx.state.location,false,text,undefined);
 
 
 
@@ -245,20 +327,20 @@ window.advntx = {
   refocusTerminal() {
     advntx.term.focus();
   },
-  
+
   asyncRefocusTerminal() {
     window.setTimeout('advntx.refocusTerminal()', 250);
   },
-  
-  inventoryClick (item) {
+
+  inventoryClick(item) {
     advntx.term.insert(' ' + item + ' ');
     advntx.asyncRefocusTerminal();
   },
-  
+
   initInventory() {
     $('#inventory > .inventory_item').remove();
-    if (advntx.state.inventory.length==0) {
-      $('#inventory').append('<p class="inventory_item">'+advntx.messages.info_inventory_empty+'</p>');
+    if (advntx.state.inventory.length == 0) {
+      $('#inventory').append('<p class="inventory_item">' + advntx.messages.info_inventory_empty + '</p>');
     }
     for (var i = 0; i < advntx.state.inventory.length; i++) {
       var item = advntx.state.inventory[i];

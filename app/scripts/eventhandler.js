@@ -351,7 +351,7 @@ export default class EventHandler {
 
     }
     if (!isEmpty(event.description)) {
-      echo(event.description + '\n');
+      echo(event.description);
     }
 
     if (!isEmpty(event.action_set_state_items)) {
