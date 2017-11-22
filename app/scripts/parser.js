@@ -30,8 +30,8 @@ export default class Parser {
         var directions = [];
         var prepositions = [];
         var adjectives = [];
-        var misc = [];
         var objects = [];
+        var misc = [];
         
         for (var i = 0; i < words.length; i++) {
             var word_consumed = false;
