@@ -69,6 +69,15 @@ export function findFirstMatch(words, type, objects) {
   return '';
 }
 
+export function getJSON(url, result) {
+  // new fetch api of ecma6:
+  fetch(url).then(function(response) {
+    return response.json();
+  }).then(function(json) {
+    result(json);
+  });
+}
+
 export function listFormattedObjects(list, list_of_all, inventoryHandler, takeVerb) {
   var message = '';
   if (list !== undefined && list.length > 0) {

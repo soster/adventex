@@ -5,7 +5,7 @@ import 'jquery.terminal/css/jquery.terminal.min.css!';
 import $ from 'jquery';
 import terminal from 'jquery.terminal';
 import Parser from 'app/scripts/parser.js';
-import parseJson from 'app/scripts/json.js';
+import {default as parseJson} from 'app/scripts/json.js';
 import {
   checkSynonyms,
   findFirstMatch,
@@ -21,7 +21,8 @@ import {
   isHidden,
   listFormattedObjects,
   setStateOfObject,
-  getObjectNameArray
+  getObjectNameArray,
+  getJSON
 } from 'app/scripts/helper.js'
 
 import InventoryHandler from 'app/scripts/inventoryhandler.js'
@@ -96,23 +97,42 @@ window.advntx = {
     advntx.initInventory();
   },
 
-  initGame (refreshJson) {
+  initGame (refreshJson,gameId) {
     // version string, add to json calls to avoid browser caching:
     advntx.version = g_ver;
-    if (isEmpty(advntx.currentGame)) {
-      advntx.currentGame = 'json/escape';
-    }
 
-    if (advntx.term!=undefined) {
-      advntx.term.clear();
-    }
+    getJSON('json/games.json',function (result) {
+       advntx.games = result;
+       $('#game_buttons').children().remove();
+       for (var key in advntx.games) {
+        if (key=='default') {
+          continue;
+        }
+        var $button = $('<button type="button" class="btn btn-secondary btn-sm" id="btn_escape" onclick="advntx.initGame(true,\''+key+'\');">'+advntx.games[key].name+'</button>');
+        var $space = $('<span>&nbsp;</span>');
+        $button.appendTo($('#game_buttons'));
+        $space.appendTo($('#game_buttons'));
+      }
+
+       if (isEmpty(gameId)) {
+        gameId = result.default;
+       }
+       advntx.currentGame = 'json/'+result[gameId].path;
+       if (advntx.term!=undefined) {
+        advntx.term.clear();
+      }
+      
+  
+      if (refreshJson==true) {
+        parseJson(advntx.initGameAsync, advntx);
+      } else {
+        advntx.initGameAsync(false);
+      }
+     
+    });
     
 
-    if (refreshJson==true) {
-      parseJson(advntx.initGameAsync, advntx);
-    } else {
-      advntx.initGameAsync(false);
-    }
+
   },
 
   terminalLink(name) {
@@ -262,30 +282,25 @@ $(document).ready(function () {
   $('#btn_help').click(function () {
     advntx.term.exec(advntx.messages.verb_help, false);
     advntx.initInventory();
-    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_load_storage').click(function () {
     advntx.echo(advntx.messages.info_enter_savegame_name);
     advntx.term.insert(advntx.messages.verb_load + ' ');
-    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_list_storage').click(function () {
     advntx.term.exec(advntx.messages.verb_list);
-    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_save_storage').click(function () {
     advntx.echo(advntx.messages.info_enter_savegame_name);
     advntx.term.insert(advntx.messages.verb_save + ' ');
-    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_save').click(function () {
     $('#game_state').val(JSON.stringify(advntx.state));
     advntx.initInventory();
-    advntx.asyncRefocusTerminal();
   });
 
   $('#btn_load').click(function () {
@@ -299,6 +314,9 @@ $(document).ready(function () {
     advntx.initGame(true);
 
   });
+
+
+
   window.setInterval('window.periodicUpdates()', 1000);
   advntx.initGame(true);
 });
