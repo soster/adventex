@@ -78,11 +78,13 @@
 			"states": {
 				"open": {
 					"name": "open",
+					"description": "The wardrobe is open.",
 					"with": "key",
 					"error": "It is locked!"
 				},
 				"closed": {
-
+					"name": "closed",
+					"description": "The wardrobe is closed."
 				}
 			},
 			"definite_article": "the",

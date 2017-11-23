@@ -184,6 +184,12 @@ var locations = {
     },
     objects: ['torch']
   },
+  room_open_close: {
+    name: 'room 4',
+    description: 'x',
+    objects: ['chest']
+  },
+
   room_connections: {
     name: 'room with connections',
     state: 'con',
