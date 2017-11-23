@@ -62,6 +62,17 @@ export default class Interpreter {
     var executedPreEvents = [];
     var foundEvent = false;
 
+    var firstObject = undefined;
+    if (itemIds.length>0) {
+      firstObject = itemIds[0];
+    }
+    var withObject = undefined;
+    if (itemIds.length>1 && preposition==advntx.messages.with) {
+      withObject = itemIds[1];
+    }
+
+
+
     var direction = getFirstOfType(words, 'directions');
 
     // check if the player entered a direction, then artificially add the verb for 'go'.
@@ -107,16 +118,20 @@ export default class Interpreter {
       } else if (checkSynonyms(advntx.messages.verb_drop, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.drop(objects, itemIdsFromInventory);
         // restart
-      } else if (checkSynonyms(advntx.messages.verb_restart, firstVerb, this.advntx.vocabulary.synonyms)) {
-        this.echo('\n');
-        this.initGame(true);
+      } else if (checkSynonyms(advntx.messages.verb_open, firstVerb, this.advntx.vocabulary.synonyms)) {
+        this.interactWithObjectState(advntx.messages.verb_open,firstObject,withObject);
+      } else if (checkSynonyms(advntx.messages.verb_close, firstVerb, this.advntx.vocabulary.synonyms)) {
+        this.interactWithObjectState(advntx.messages.verb_close,firstObject,withObject);
       } else if (checkSynonyms(advntx.messages.verb_load, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.load(secondWord);
       } else if (checkSynonyms(advntx.messages.verb_save, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.save(secondWord);
       } else if (checkSynonyms(advntx.messages.verb_list, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.listSaveGames();
-      }
+      } else if (checkSynonyms(advntx.messages.verb_restart, firstVerb, this.advntx.vocabulary.synonyms)) {
+        this.echo('\n');
+        this.initGame(true);
+      } 
 
       else {// I give up... however, there might be an event to execute.
         foundNothing = true;
@@ -201,6 +216,29 @@ export default class Interpreter {
     // otherwise:
     this.echo(this.advntx.messages.help);
   }
+
+  // open + close
+  interactWithObjectState(verb,firstObjectId, withObjectId) {
+    if (isEmpty(firstObjectId)) {
+      this.echo(this.advntx.messages.error_generic_open_close.format(verb),this.advntx.config.warn_color);
+      return;
+    }
+    if (this.advntx.inventoryHandler.hasState(firstObjectId, verb)) {
+      var needed = this.advntx.inventoryHandler.needItemForState(firstObjectId, verb);
+      if (needed===undefined||needed==withObjectId) {
+        this.advntx.inventoryHandler.setState(firstObjectId,verb);
+      } else {
+        var error = this.advntx.inventoryHandler.getErrorOfState(firstObjectId, verb);
+        if (isEmpty(error)) {
+          error = this.advntx.messages.error_verb_object.format(verb+' ',getName(this.advntx.state.objects,firstObjectId),'');
+        }
+        this.echo(error,this.advntx.config.warn_color);
+      }
+    } else {
+      this.echo(this.advntx.messages.error_verb_object.format(verb+' ',getName(this.advntx.state.objects,firstObjectId),' '),this.advntx.config.warn_color);
+    }
+  }
+
 
   move(direction, item_ids, misc) {
     var new_location = undefined;
