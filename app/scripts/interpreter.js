@@ -219,16 +219,30 @@ export default class Interpreter {
 
   // open + close
   interactWithObjectState(verb,firstObjectId, withObjectId) {
+    var state = '';
+    if (verb==this.advntx.messages.verb_open) {
+      state = 'open';
+    }
+    if (verb==this.advntx.messages.verb_close) {
+      state = 'closed';
+    }
+
+
     if (isEmpty(firstObjectId)) {
       this.echo(this.advntx.messages.error_generic_open_close.format(verb),this.advntx.config.warn_color);
       return;
     }
-    if (this.advntx.inventoryHandler.hasState(firstObjectId, verb)) {
-      var needed = this.advntx.inventoryHandler.needItemForState(firstObjectId, verb);
+    if (this.advntx.inventoryHandler.hasState(firstObjectId, state)) {
+      var needed = this.advntx.inventoryHandler.needItemForState(firstObjectId, state);
       if (needed===undefined||needed==withObjectId) {
-        this.advntx.inventoryHandler.setState(firstObjectId,verb);
+        this.advntx.inventoryHandler.setState(firstObjectId,state);
+        var text = advntx.inventoryHandler.getDescriptionOfState(firstObjectId, state);
+        if (text===undefined) {
+          text = advntx.messages.info_success;
+        }
+        this.echo(text);
       } else {
-        var error = this.advntx.inventoryHandler.getErrorOfState(firstObjectId, verb);
+        var error = this.advntx.inventoryHandler.getErrorOfState(firstObjectId, state);
         if (isEmpty(error)) {
           error = this.advntx.messages.error_verb_object.format(verb+' ',getName(this.advntx.state.objects,firstObjectId),'');
         }

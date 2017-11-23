@@ -79,6 +79,17 @@ export default class InventoryHandler {
       return object.states[state].name;
     }
 
+    getDescriptionOfState(itemId, state) {
+      var object = this.l_state.objects[itemId];
+      if (state!='none'&&object.states[state]===undefined) {
+        throw state+' is not an allowed state for '+itemId;
+      }
+      if (state=='none') {
+        return '';
+      }
+      return object.states[state].description;
+    }
+
     getErrorOfState(itemId, state) {
       var object = this.l_state.objects[itemId];
       if (state!='none'&&object.states[state]===undefined) {
@@ -92,7 +103,7 @@ export default class InventoryHandler {
 
     hasState(itemId, state) {
       var object = this.l_state.objects[itemId];
-      if (state!='none'&&object.states[state]===undefined) {
+      if (state!='none'&&(object.states===undefined||object.states[state]===undefined)) {
         return false;
       }
       return true;
