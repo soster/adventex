@@ -62,7 +62,8 @@ window.advntx = {
     var lines = text.split('\n');
     var numLines = lines.length;
     for (var i=0;i<lines.length;i++) {
-      numLines += Math.floor(lines[i].length/rows)-1
+      var textWithoutFormatting = $.terminal.strip(lines[i])
+      numLines += Math.floor(textWithoutFormatting.length/(cols+1));
     }
 
     // if number of lines to big, stop after some lines to display "press any key":
