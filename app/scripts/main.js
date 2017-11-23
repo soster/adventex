@@ -55,27 +55,36 @@ window.advntx = {
       text = '[[' + formatting + ';' + color + ';;' + clazz + ']' + text + ']';
     }
 
-    //advntx.term.resume();
-    //var export_data = term.export_view();
     var old_prompt = advntx.term.get_prompt();
     var less = true;
     var cols = advntx.term.cols();
     var rows = advntx.term.rows()-2;
     var lines = text.split('\n');
-    var numLines = 0;
-    for (var i = 0; i < lines.length; i++) {
-      numLines++;
-      //numLines += Math.floor(lines[i].length / rows) - 1;
+    var numLines = lines.length;
+    for (var i=0;i<lines.length;i++) {
+      numLines += Math.floor(lines[i].length/rows)-1
     }
 
-    // https://codepen.io/jcubic/pen/zEyxjJ?editors=0010
+    // if number of lines to big, stop after some lines to display "press any key":
     if (numLines >= rows) {
       var pos = 0;
       var left = 0;
+      advntx.waitForKey = true;
       function print() {
-        var to_print = lines.slice(pos, pos+rows-1);
-        var format_start_re = /^(\[\[[!gbiuso]*;[^;]*;[^\]]*\])/i;
-
+        var to_print = [];
+        var numOfLines = 0;
+        var origLinesPrinted = 0;
+        for (var i=pos;i<lines.length;i++) {
+          numOfLines++;
+          var textWithoutFormatting = $.terminal.strip(lines[i])
+          numOfLines += Math.floor(textWithoutFormatting.length/(cols+1));
+          origLinesPrinted+=1;
+          to_print.push(lines[i]);
+          if (numOfLines>=rows) {
+            break;
+          }
+        }
+        pos+=origLinesPrinted;
         advntx.term.echo(to_print.join('\n'), {
           keepWords: true
         });
@@ -85,35 +94,24 @@ window.advntx = {
 
       advntx.term.push($.noop, {
         keydown: function (e) {
-          pos += rows;
-          if (pos > lines.length-1) {
-            pos = lines.length;
+          print();
+          if (pos >= lines.length) {
             advntx.term.pop();
             advntx.term.set_prompt(old_prompt);
+            advntx.waitForKey = false;
             return false;
           }
-          print();
 
         }
       });
 
-      advntx.term.set_prompt('press any key');
+      advntx.term.set_prompt(advntx.messages.info_press_key);
 
     } else {
       advntx.term.echo(text, {
         keepWords: true
       });
     }
-
-
-
-    /*
-    advntx.term.echo(text,{
-      keepWords: true
-    });
-    */
-
-
   },
 
   formatHeadline(text) {
@@ -207,11 +205,6 @@ window.advntx = {
       }
 
     });
-
-
-
-
-
   },
 
   terminalLink(name) {
@@ -224,8 +217,14 @@ window.advntx = {
   },
 
   executeCurrent() {
-    advntx.term.exec(advntx.term.get_command());
-    advntx.term.set_command('');
+    if (advntx.waitForKey) {
+      // simulate backspace key:
+      var e = $.Event("keydown", { keyCode: 8});
+      advntx.term.trigger(e);
+    } else {
+      advntx.term.exec(advntx.term.get_command());
+      advntx.term.set_command('');
+    }
     advntx.asyncRefocusTerminal();
   },
 
