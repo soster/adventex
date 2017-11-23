@@ -79,6 +79,45 @@ export default class InventoryHandler {
       return object.states[state].name;
     }
 
+    getErrorOfState(itemId, state) {
+      var object = this.l_state.objects[itemId];
+      if (state!='none'&&object.states[state]===undefined) {
+        throw state+' is not an allowed state for '+itemId;
+      }
+      if (state=='none') {
+        return '';
+      }
+      return object.states[state].error;
+    }
+
+    hasState(itemId, state) {
+      var object = this.l_state.objects[itemId];
+      if (state!='none'&&object.states[state]===undefined) {
+        return false;
+      }
+      return true;
+    }
+
+    setState(itemId, state) {
+      var object = this.l_state.objects[itemId];
+      if (this.hasState(itemId, state)) {
+        object.state = state;
+      }
+    }
+
+    getStateObject(itemId, state) {
+      if (this.hasState(itemId, state)) {
+        return this.l_state.objects[itemId].states[state];
+      }
+    }
+
+    needItemForState(itemId, state) {
+      if (this.hasState(itemId, state)) {
+        return this.l_state.objects[itemId].states[state].with;
+      }
+      return undefined;
+    }
+
     getStateString(itemId) {
       var stateName = this.getNameOfState(itemId, this.getStateOfObject(itemId));
       var stateString = '';
