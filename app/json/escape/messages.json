@@ -13,6 +13,8 @@
     "error_verb_object": "You can't {0}{1}{2}!",
     "error_verb": "You can't {0} here!",
     "error": "I don't understand \"{0}\", sorry.",
+    "error_generic_open_close": "You can't just {0} without naming an object!",
+    "error_open_close_with": "{0} doesn't work on {1}",
     "verb_help": "help",
     "verb_debug": "debug",
     "verb_go": "go",
@@ -36,6 +38,7 @@
     "info_you_win": "You have won! Congratulations.\nMoves: {0}, Points: {1}",
     "info_inventory_empty": "Your inventory is empty.",
     "info_press_key": "press any key or tap enter button",
+    "info_success": "done",
     "greetings": "Escape Game\nVersion: {0}\nType \"help\" for help.",
     "greetings_old": "               .___                    __                 \n    _____    __| ____  __ ____   _____/  |_  ____ ___  ___\n    \\__  \\  / __ |\\  \\/ _/ __ \\ /    \\   ___/ __ \\\\  \\/  /\n     / __ \\/ /_/ | \\   /\\  ___/|   |  |  | \\  ___/ >    < \n    (____  \\____ |  \\_/  \\___  |___|  |__|  \\___  /__/\\_ \\\n         \\/     \\/           \\/     \\/          \\/      \\/\n V{0}. Type \"help\" for help.\n"
 }

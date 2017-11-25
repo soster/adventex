@@ -56,7 +56,8 @@ before(function (done) {
   advntx.currentGame = 'json/escape';
   // waits until done is called (async!)
   function async_done(bool) {
-    advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, advntx.vocabulary.objects);
+    var objectIds = Object.keys(objects);
+    advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, objectIds);
     
     var dummy = function()  {
 
@@ -70,7 +71,10 @@ before(function (done) {
   parseJson(async_done, advntx);
 });
 
-function echo(string) { };
+function echo(string) {
+  console.log(string);
+
+ };
 
 // set up some testing events:
 var events = {
@@ -186,7 +190,7 @@ var locations = {
   },
   room_open_close: {
     name: 'room 4',
-    description: 'x',
+    description: 'a room with nested objects.',
     objects: ['chest']
   },
 
@@ -247,6 +251,19 @@ var objects = {
       }
     },
     state: 'burning'
+  },
+  chest: {
+    name: 'chest',
+    state: 'closed',
+    states: {
+      'open': {
+        name: 'open',
+        objects: ['ring']
+      }, 
+      'closed': {
+        name: 'closed'
+      }
+    }
   }
 };
 
@@ -288,6 +305,20 @@ describe('advntx test suite', function () {
 
     var location = advntx.state.locations['room_connections'];
     assert.equal('room_two', advntx.locationHandler.findConnectionsForDirection(location, 'north'));
+  });
+
+  it('testing open, close and objects in another objects', function () {
+    advntx.state.inventory = [];
+    advntx.state.objects = objects;
+    advntx.state.locations = locations;
+    advntx.state.location = 'room_open_close';
+    advntx.interpreter.interpret('open chest', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('open',advntx.state.objects['chest'].state);
+    advntx.interpreter.interpret('take ring', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal(0,advntx.state.objects['chest'].states['open'].objects.length);
+    assert.equal('ring', advntx.state.inventory[0]);
+    advntx.interpreter.interpret('close chest', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('closed',advntx.state.objects['chest'].state);
   });
 
   it('find events', function () {

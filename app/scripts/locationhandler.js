@@ -14,6 +14,7 @@ import {
   getSecondOfType,
   isHidden,
   listFormattedObjects,
+  getObjectIdsForState,
   setStateOfObject
 } from 'app/scripts/helper.js'
 
@@ -26,10 +27,20 @@ export default class LocationHandler {
 
     removeItemFromLocation (location, item) {
       var place = this.state.locations[location];
-      if (place !== undefined) {
+      if (place !== undefined && place.objects !== undefined) {
         var loc = place.objects.indexOf(item);
         if (loc != -1) {
           place.objects.splice(loc, 1);
+        }
+
+        for (var i=0;i<place.objects.length;i++) {
+          var obj = this.state.objects[place.objects[i]];
+          if (!isEmpty(obj.state)&&obj.state!='none'&&obj.states[obj.state].objects!==undefined) {
+            var loc = obj.states[obj.state].objects.indexOf(item);
+            if (loc!=-1) {
+              obj.states[obj.state].objects.splice(loc,1);
+            }
+          }
         }
       }
     }
@@ -51,12 +62,47 @@ export default class LocationHandler {
 
     }
 
+
     //FIXME
     findItemIdsInLocation (names, location) {
       if (location==undefined) {
         return [];
       }
-      return findItemIds(names, location.objects, this.state.objects);
+      var itemIds = findItemIds(names, location.objects, this.state.objects);
+
+      if (location.objects!==undefined) {
+        for (var i=0;i<location.objects.length;i++) {
+          var obj = this.state.objects[location.objects[i]];
+          if (!isEmpty(obj.state)&&obj.state!='none') {
+            itemIds = itemIds.concat(findItemIds(names, obj.states[obj.state].objects, this.state.objects));
+          }
+        }
+      }
+
+      if (!isEmpty(location.state)&&location.state!='none') {
+        itemIds = itemIds.concat(findItemIds(names,location.states[location.state], this.state.objects));
+      }
+      return itemIds;
+    }
+
+    getItemIdsFromLocation(location) {
+      var itemIds = [];
+      if (location.objects!=undefined) {
+        itemIds = itemIds.concat(location.objects);
+      }
+
+      if (!isEmpty(location.state)&&location.state!='none') {
+        itemIds = itemIds.concat(getObjectIdsForState(location.states[location.state]));
+      }
+
+      for (var i=0;i<location.objects.length;i++) {
+        var obj = this.state.objects[location.objects[i]];
+        if (!isEmpty(obj.state)&&obj.state!='none') {
+          itemIds = itemIds.concat(getObjectIdsForState(obj.states[obj.state]));
+        }
+      }
+
+      return itemIds;
     }
 
     setLocation (location_id) {

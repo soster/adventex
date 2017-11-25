@@ -24,6 +24,10 @@ export default class InventoryHandler {
       if (this.l_state.objects[itemId] === undefined) {
         return false; 
       }
+
+      if (this.l_state.objects[itemId].portable === undefined) {
+        return true;
+      }
       return this.l_state.objects[itemId].portable; 
     }
 

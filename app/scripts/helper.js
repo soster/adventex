@@ -59,6 +59,18 @@ export function getOfType(words, type, number) {
   return '';
 }
 
+export function getObjectIdsForState(state) {
+  var ids = [];
+  if (state===undefined||state.objects===undefined) {
+    return ids;
+  }
+
+  for (var i=0;i<state.objects.length;i++) {
+    ids.push(state.objects[i]);
+  }
+  return ids;
+}
+
 
 export function findFirstMatch(words, type, objects) {
   for (var i = 0; i < words[type].length; i++) {
