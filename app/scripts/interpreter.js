@@ -9,7 +9,8 @@ import {
   getDescription,
   getFirstOfType,
   getLastOfType,
-  getName
+  getName,
+  listFormattedObjects
 } from 'app/scripts/helper.js'
 
 export default class Interpreter {
@@ -102,26 +103,26 @@ export default class Interpreter {
 
     // check for 'standard' verbs, all other verbs are dealt with in the events.
     if (!foundEvent || doContinue) {
-      // help
       if (checkSynonyms(advntx.messages.verb_help, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.help(secondWord);
-        // go
       } else if (checkSynonyms(advntx.messages.verb_go, firstVerb, this.advntx.vocabulary.synonyms)) {
+        // go / move
         this.move(direction, itemIdsFromLocation, misc);
-        // take
       } else if (checkSynonyms(advntx.messages.verb_take, firstVerb, this.advntx.vocabulary.synonyms)) {
+        // take/get
         this.getItem(objects, itemIdsFromLocation);
-        // examine
       } else if (checkSynonyms(advntx.messages.verb_examine, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.examine(objects, itemIds);
-        // drop
       } else if (checkSynonyms(advntx.messages.verb_drop, firstVerb, this.advntx.vocabulary.synonyms)) {
+        // drop
         this.drop(objects, itemIdsFromInventory);
-        // restart
-      } else if (checkSynonyms(advntx.messages.verb_open, firstVerb, this.advntx.vocabulary.synonyms)) {
+        
+      } else if (checkSynonyms(advntx.messages.verb_open, firstVerb, this.advntx.vocabulary.synonyms) || checkSynonyms(advntx.messages.verb_unlock, firstVerb, this.advntx.vocabulary.synonyms)) {
+        // open / unlock (maybe handle unlock differently to open, therefore not in synonyms)
         this.interactWithObjectState(advntx.messages.verb_open,firstObject,withObject);
       } else if (checkSynonyms(advntx.messages.verb_close, firstVerb, this.advntx.vocabulary.synonyms)) {
-        this.interactWithObjectState(advntx.messages.verb_close,firstObject,withObject);
+        // close
+        this.interactWithObjectState(advntx.messages.verb_close,firstObject,withObject);  
       } else if (checkSynonyms(advntx.messages.verb_load, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.load(secondWord);
       } else if (checkSynonyms(advntx.messages.verb_save, firstVerb, this.advntx.vocabulary.synonyms)) {
@@ -217,14 +218,15 @@ export default class Interpreter {
     this.echo(this.advntx.messages.help);
   }
 
-  // open + close
+  // open/unlock and close
   interactWithObjectState(verb,firstObjectId, withObjectId) {
     var state = '';
     if (verb==this.advntx.messages.verb_open) {
-      state = 'open';
-    }
-    if (verb==this.advntx.messages.verb_close) {
-      state = 'closed';
+      state = this.advntx.messages.state_open;
+    } else if (verb==this.advntx.messages.verb_close) {
+      state = this.advntx.messages.state_closed;
+    } else if (verb==this.advntx.messages.verb_unlock) {
+      state = this.advntx.messages.state_open;
     }
 
 
@@ -241,6 +243,13 @@ export default class Interpreter {
           text = advntx.messages.info_success;
         }
         this.echo(text);
+
+        var objects = advntx.state.objects[firstObjectId].states[state].objects;
+        if (objects!==undefined&&objects.length>0) {
+          this.echo(advntx.messages.info_you_see);
+          this.echo(listFormattedObjects(objects, advntx.state.objects, advntx.inventoryHandler));
+        }
+        
       } else {
         var error = this.advntx.inventoryHandler.getErrorOfState(firstObjectId, state);
         if (isEmpty(error)) {
