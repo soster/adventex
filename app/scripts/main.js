@@ -142,7 +142,7 @@ window.advntx = {
     var prompt = name + '>';
     advntx.term.set_prompt('[[b;;]' + prompt + ']');
 
-    var objects = loc.objects;
+    var objects = advntx.locationHandler.getItemIdsFromLocation(advntx.state.locations[locationId]);
     var message = advntx.messages.info_you_see;
     var objectsMessage = listFormattedObjects(objects, advntx.state.objects, advntx.inventoryHandler);
 

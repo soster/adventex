@@ -14,7 +14,7 @@
     "error_verb": "You can't {0} here!",
     "error": "I don't understand \"{0}\", sorry.",
     "error_generic_open_close": "You can't just {0} without naming an object!",
-    "error_open_close_with": "{0} doesn't work on {1}",    
+    "error_open_close_with": "{0} doesn't work on {1}",
     "verb_help": "help",
     "verb_debug": "debug",
     "verb_go": "go",

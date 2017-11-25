@@ -80,7 +80,10 @@
 					"name": "open",
 					"description": "The wardrobe is open.",
 					"with": "key",
-					"error": "It is locked!"
+					"error": "It is locked!",
+					"objects": [
+						"shirt"
+					]
 				},
 				"closed": {
 					"name": "closed",
@@ -89,6 +92,12 @@
 			},
 			"definite_article": "the",
 			"indefinite_article": "a"
+		},
+		"shirt": {
+			"name": "shirt",
+			"description": "A black shirt.",
+			"portable": true,
+			"hidden": false
 		}
 	},
 	"events": {
