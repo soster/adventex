@@ -23,7 +23,7 @@
 		},
 		"room_two": {
 			"name": "Another room",
-			"description": "You are in another unadorned, rectangular room. There is a passage to the west. In the opposite direction you see a large wardrobe (Pax?).",
+			"description": "You are in another unadorned, rectangular room. There is a passage to the west. In the opposite direction you see a large wardrobe.",
 			"connections": {
 				"west": "start_location"
 			},
@@ -105,6 +105,16 @@
 			"name": "Awake",
 			"description": "Welcome to the adventex tutorial!\nAdventex is a simple text adventure (also called 'interactive fiction').\nYou can:\nExplore different locations, pick up items (into your 'inventory') and interact with objects and the environment to solve puzzles.\nYou interact with your environment by entering simple sentences, starting with a verb.\nFor a list of possible verbs, enter 'help verbs'.\nOften it is useful to examine objects: 'examine table'. If you want to see the description of the current location, enter 'look'.\nSome objects are portable, to pick up a book, enter 'take book'\nStart with exploring your enviromnent by visiting the other room. To do so, enter 'go east'\n",
 			"action_move_to_location": "start_location"
+		},
+		"tutorial_openclose": {
+			"description": "Tutorial: Try to open the wardrobe and take whatever is inside.",
+			"prereq_location": "room_two",
+			"trigger_once": true
+		},
+		"tutorial_shirt": {
+			"description": "Tutorial: Very good! You took the shirt from the wardrobe.",
+			"prereq_inventory_items": ["shirt"],
+			"trigger_once": true
 		}
 	}
 }
