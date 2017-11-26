@@ -357,7 +357,17 @@
 			"indefinite_article": "a",
 			"states": {
 				"open": {
-					"description": "A large portal with two door leafs. The left leaf is open."
+					"with": "key",
+					"description": "You open the left door leaf with the key.",
+					"connections": {
+						"south":"outside"
+					},
+					"reversed_connections": {
+						"north":"entrance_corridor"
+					}
+				},
+				"closed": {
+					"description": "Both door leafs are closed now."
 				}
 			}
 		},
@@ -608,23 +618,13 @@
 		},
 
 		"open_portal": {
-			"description": "You open the left door leaf with the key from the guard.",
-			"prereq_location_items": ["portal|none"],
-			"prereq_verb": "open",
-			"prereq_used_items": ["portal|none"],
-			"prereq_inventory_items": ["key"],
-			"action_set_state_items": ["portal|open"],
-			"action_new_connections": ["entrance_corridor:south:outside"],
+			"description": "Directly after opening the portal an old woman comes through the opening.\nShe does not wear the clothes of a guard but a large backpack, she appears to be a traveling merchant.\nShe says:\n- \"Who are you? You look like a prisoner.\n  do you know a reason why I should not alarm the guards right away?\"",
+			"prereq_location_items": ["portal|open"],
 			"trigger_once": true,
-			"action_trigger_event": "merchant",
+			"action_add_items":["location:merchant"],
 			"action_points": 5
 		},
 
-		"merchant": {
-			"prereq_location": "none",
-			"description": "Directly after opening the portal an old woman comes through the opening.\nShe does not wear the clothes of a guard but a large backpack, she appears to be a traveling merchant.\nShe says:\n- \"Who are you? You look like a prisoner.\n  do you know a reason why I should not alarm the guards right away?\"",
-			"action_add_items":["location:merchant"]
-		},
 
 		"merchant_ring": {
 			"description": "You give her the ring you found.\nShe says:\n- \"Hmm. Ok boy, I keep my mouth shut. Now leave before I change my mind!\"\nShe quickly disappears into the building.",
