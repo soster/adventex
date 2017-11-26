@@ -1,5 +1,5 @@
 # Adventex
-A simple interactive fiction (text adventure) game with its own adventure system. The adventure is defined by a couple of json files.
+Adventex is a simple interactive fiction (text adventure) game with its own adventure system. The adventure is defined by a couple of json files.
 
 ## Prerequisites
 You need node.js and npm
@@ -23,3 +23,5 @@ You can start adventex locally with
 
 Look into the gulp file `gulpfile.js` for other targets. If you want to deploy adventex to a server you can build it using this command:
 `gulp build`
+
+The files in the folder `dist` can be served by any web server (like Apache or nginx).
