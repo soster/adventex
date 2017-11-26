@@ -134,6 +134,9 @@ export default class EventHandler {
     var arr = prereq.split('|');
     if (arr.length == 2) {
       var location = this.state.locations[arr[0]];
+      if (location===undefined) {
+        return false;
+      }
       if (location.state == arr[1]) {
         return true;
       } else if (location.state === undefined && arr[1] == 'none') {
