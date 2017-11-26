@@ -127,8 +127,21 @@ export default class LocationHandler {
           return stateObj.connections[direction];
         }
       }
-      if (location.connections[direction] !== undefined) {
+      if (location.connections !== undefined && location.connections[direction] !== undefined) {
         return (location.connections[direction]);
+      }
+
+      for (var i=0;i<location.objects.length;i++) {
+        var obj = this.state.objects[location.objects[i]];
+        if (!isEmpty(obj.state)&&obj.state!='none') {
+          var connections = obj.states[obj.state].connections;
+          if (connections!== undefined) {
+            var connection = connections[direction];
+            if (connection!==undefined) {
+              return connection;
+            }
+          }
+        }
       }
       return undefined;
     }

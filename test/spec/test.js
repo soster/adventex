@@ -191,7 +191,10 @@ var locations = {
   room_open_close: {
     name: 'room 4',
     description: 'a room with nested objects.',
-    objects: ['chest']
+    objects: ['chest','portal'],
+    connections: {
+
+    }
   },
 
   room_connections: {
@@ -243,10 +246,25 @@ var objects = {
     }
   },
   door: { name: 'door' },
+  portal: {
+    name: 'portal',
+    states: {
+      name: 'closed',
+      open: {
+        connections: {
+          north: ['room_two']
+        }
+      },
+      closed: {
+        name: 'closed'
+      }
+    },
+    state: 'closed'
+  },
   torch: {
     name: 'torch',
     states: {
-      'burning': {
+      burning: {
         name: 'burniiiiing'
       }
     },
@@ -256,11 +274,11 @@ var objects = {
     name: 'chest',
     state: 'closed',
     states: {
-      'open': {
+      open: {
         name: 'open',
         objects: ['ring']
       }, 
-      'closed': {
+      closed: {
         name: 'closed'
       }
     }
@@ -319,6 +337,13 @@ describe('advntx test suite', function () {
     assert.equal('ring', advntx.state.inventory[0]);
     advntx.interpreter.interpret('close chest', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
     assert.equal('closed',advntx.state.objects['chest'].state);
+    advntx.interpreter.interpret('north', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('room_open_close',advntx.state.location);
+    advntx.interpreter.interpret('open portal', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('open',advntx.state.objects['portal'].state);
+    advntx.interpreter.interpret('north', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('room_two',advntx.state.location);
+
   });
 
   it('find events', function () {
