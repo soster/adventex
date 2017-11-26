@@ -18,14 +18,6 @@
 				"cell_door",
 				"trap_door"
 			],
-			"states": {
-				"trapdoor_open": {
-					"description":"It is moist and dark. In the weak light of the small barred window, you see an open trap door in the ground among some other things.",
-					"connections": {
-						"down":"lower_cell"
-					}
-				}
-			},
 			"connections": {}
 		},
 		"lower_cell": {
@@ -36,13 +28,6 @@
 				"unlocked_cell_door"
 			],
 			"connections": {
-			},
-			"states": {
-				"celldoor_open": {
-					"connections": {
-						"north":"corridor"
-					}
-				}
 			}
 		},
 		
@@ -56,9 +41,9 @@
 			],
 			"connections": {
 				"east": "forward_corridor",
-				"west": "backward_corridor",
-				"south": "lower_cell"
-			}
+				"west": "backward_corridor"
+			},
+			"reversed": ["unlocked_cell_door"]
 		},
 		"forward_corridor": {
 			"name": "Narrow and dirty corridor",
@@ -198,6 +183,20 @@
 			"description": "After removing the straw, you can see a trap door in the floor.",
 			"portable": false,
 			"hidden": true,
+			"state": "closed",
+			"states": {
+				"open": {
+					"name": "open",
+					"description": "You open the trap door with its large metal ring. The opening reveals a small corridor below your cell.",
+					"connections": {
+						"down":"lower_cell"
+					}
+				},
+				"closed": {
+					"name": "closed"
+				}
+			},
+
 			"definite_article": "the",
 			"indefinite_article": "a"
 		},
@@ -219,7 +218,17 @@
 			"states": {
 				"open":{
 					"name":"open",
-					"description": "The massive cell door is open."
+					"description": "The massive cell door is open.",
+					"connections": {
+						"north":"corridor"
+					},
+					"reversed_connections": {
+						"south":"lower_cell"
+					}
+				},
+				"closed": {
+					"name":"closed",
+					"description": "The massive cell door is closed."
 				}
 			},
 			"definite_article": "the",
@@ -392,17 +401,6 @@
 			"description": "The barrel is too heavy for that!",
 			"prereq_verb": "empty",
 			"prereq_used_items":["barrel"]
-		},
-
-		"trapdoor": {
-			"name": "Open trapdoor",
-			"description": "You open the trap door with its large metal ring. The opening reveals a small corridor below your cell.",
-			"trigger_once": true,
-			"prereq_verb": "open",
-			"prereq_location": "dungeon_cell",
-			"prereq_used_items": ["trap_door"],
-			"action_set_state_locations": ["dungeon_cell|trapdoor_open"],
-			"action_points": 5
 		},
 
 		"get_torch": {
@@ -607,15 +605,6 @@
 			"prereq_location_items": ["guard|none"],
 			"only_before": true,
 			"action_trigger_event": "arest"
-		},
-
-		"open_unlocked_cell_door": {
-			"description": "You open the massive cell door.",
-			"prereq_verb": "open",
-			"prereq_used_items": ["unlocked_cell_door"],
-			"action_set_state_items": ["unlocked_cell_door|open"],
-			"action_set_state_locations": ["lower_cell|celldoor_open"],
-			"action_points": 5
 		},
 
 		"open_portal": {

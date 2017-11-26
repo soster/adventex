@@ -178,7 +178,8 @@ var locations = {
     connections: {
       west: 'room'
     },
-    objects: []
+    objects: ['portal'],
+    reversed: ['portal']
   },
   room_three: {
     name: 'room 3',
@@ -253,6 +254,9 @@ var objects = {
       open: {
         connections: {
           north: ['room_two']
+        },
+        reversed_connections: {
+          south: ['room_open_close']
         }
       },
       closed: {
@@ -343,7 +347,9 @@ describe('advntx test suite', function () {
     assert.equal('open',advntx.state.objects['portal'].state);
     advntx.interpreter.interpret('north', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
     assert.equal('room_two',advntx.state.location);
-
+    // testing reversed direction of portal:
+    advntx.interpreter.interpret('south', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('room_open_close',advntx.state.location);
   });
 
   it('find events', function () {
@@ -373,7 +379,7 @@ describe('advntx test suite', function () {
     assert.equal(1, locations['room'].objects.length);
     advntx.state.location = 'room_two';
     eventHandler.executeEvent(events['add_stone'], echo);
-    assert.equal(1, locations['room_two'].objects.length);
+    assert.equal(2, locations['room_two'].objects.length);
     advntx.state = save;
   });
 
