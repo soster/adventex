@@ -79,7 +79,7 @@ export default class LocationHandler {
       }
     }
 
-    if (!isEmpty(location.state) && location.state != 'none' && location.states[location.state].objects!==undefined) {
+    if (!isEmpty(location.state) && location.state != 'none' && location.states[location.state].objects !== undefined) {
       itemIds = itemIds.concat(findItemIds(names, location.states[location.state], this.state.objects));
     }
     return itemIds;
@@ -95,10 +95,13 @@ export default class LocationHandler {
       itemIds = itemIds.concat(getObjectIdsForState(location.states[location.state]));
     }
 
-    for (var i = 0; i < location.objects.length; i++) {
-      var obj = this.state.objects[location.objects[i]];
-      if (!isEmpty(obj.state) && obj.state != 'none') {
-        itemIds = itemIds.concat(getObjectIdsForState(obj.states[obj.state]));
+    if (location.objects !== undefined) {
+
+      for (var i = 0; i < location.objects.length; i++) {
+        var obj = this.state.objects[location.objects[i]];
+        if (!isEmpty(obj.state) && obj.state != 'none') {
+          itemIds = itemIds.concat(getObjectIdsForState(obj.states[obj.state]));
+        }
       }
     }
 
@@ -135,11 +138,11 @@ export default class LocationHandler {
       var obj = this.state.objects[location.objects[i]];
       if (!isEmpty(obj.state) && obj.state != 'none') {
         var connections = obj.states[obj.state].connections;
-        if (connections !== undefined && (location.reversed===undefined || location.reversed.indexOf(location.objects[i]) == -1)) {
+        if (connections !== undefined && (location.reversed === undefined || location.reversed.indexOf(location.objects[i]) == -1)) {
           return connections[direction];
         }
 
-        if (location.reversed !== undefined && location.reversed.indexOf(location.objects[i]) != -1 &&obj.states[obj.state].reversed_connections!==undefined) {
+        if (location.reversed !== undefined && location.reversed.indexOf(location.objects[i]) != -1 && obj.states[obj.state].reversed_connections !== undefined) {
           return obj.states[obj.state].reversed_connections[direction];
         }
       }
