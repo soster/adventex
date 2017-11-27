@@ -169,26 +169,13 @@ export default class InventoryHandler {
       return getFromStateOrObject(itemId,'color', this.l_state.objects);
     }
 
-    getNameIndefinitive (itemId) {
-      var item = this.l_state.objects[itemId];
-      if (item===undefined) {
-        return '';
-      }
-      var article = item.indefinite_article; 
-      var name = item.name; 
-      if ( ! isEmpty(article)) {
-        return article + ' ' + name; 
-      }else {
-        return name; 
-      }
-    }
 
-    getNameDefinitive (itemId) {
+    getNameWithArticle (itemId) {
       var item = this.l_state.objects[itemId];
       if (item===undefined) {
         return '';
       }
-      var article = item.definite_article; 
+      var article = item.article; 
       var name = item.name; 
       if ( ! isEmpty(article)) {
         return article + ' ' + name; 

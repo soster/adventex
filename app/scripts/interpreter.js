@@ -172,7 +172,7 @@ export default class Interpreter {
         if (!isEmpty(preposition)) {
           placeholder = ' ' + preposition + ' ';
         }
-        echo(this.advntx.messages.error_verb_object.format(firstVerb, placeholder, this.advntx.inventoryHandler.getNameDefinitive(itemId)), this.errorColor);
+        echo(this.advntx.messages.error_verb_object.format(firstVerb, placeholder, this.advntx.inventoryHandler.getNameWithArticle(itemId)), this.errorColor);
       }
     } else if (foundNothing && !foundEvent) {
       if (!isEmpty(firstVerb)) {
@@ -289,7 +289,7 @@ export default class Interpreter {
     if (isEmpty(direction)) {
       if (item_ids.length > 0) {
         var item_id = item_ids[0];
-        this.advntx.interpreter.echo(this.advntx.messages.error_movement_thing.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)), this.warnColor);
+        this.advntx.interpreter.echo(this.advntx.messages.error_movement_thing.format(this.advntx.inventoryHandler.getNameWithArticle(item_id)), this.warnColor);
         return;
       }
       if (this.advntx.config.debug && misc.length > 0) {
@@ -330,12 +330,12 @@ export default class Interpreter {
         if (!isEmpty(portable_error)) {
           this.echo(portable_error, this.warnColor);
         } else {
-          var indevname = this.advntx.inventoryHandler.getNameIndefinitive(item_id);
+          var indevname = this.advntx.inventoryHandler.getNameWithArticle(item_id);
           this.echo(this.advntx.messages.error_portable.format(indevname), this.warnColor);
         }
 
       } else {
-        this.echo(this.advntx.messages.info_you_took.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)));
+        this.echo(this.advntx.messages.info_you_took.format(this.advntx.inventoryHandler.getNameWithArticle(item_id)));
         this.advntx.inventoryHandler.addToInventory(item_id);
         this.initInventory();
         this.advntx.locationHandler.removeItemFromLocation(this.advntx.state.location, item_id);
@@ -375,7 +375,7 @@ export default class Interpreter {
       } else {
         this.advntx.inventoryHandler.removeFromInventory(item_id);
         this.advntx.locationHandler.addItemToLocation(this.advntx.state.location, item_id);
-        this.echo(this.advntx.messages.info_you_dropped.format(this.advntx.inventoryHandler.getNameDefinitive(item_id)));
+        this.echo(this.advntx.messages.info_you_dropped.format(this.advntx.inventoryHandler.getNameWithArticle(item_id)));
       }
     }
 
