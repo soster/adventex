@@ -120,6 +120,13 @@ export default class InventoryHandler {
       }
     }
 
+    lock(itemId, lock) {
+      var object = this.l_state.objects[itemId];
+      if (object!==undefined) {
+        object.locked = lock;
+      }
+    }
+
     getStateObject(itemId, state) {
       if (this.hasState(itemId, state)) {
         return this.l_state.objects[itemId].states[state];
@@ -131,6 +138,18 @@ export default class InventoryHandler {
         return this.l_state.objects[itemId].states[state].with;
       }
       return undefined;
+    }
+
+    isLocked(itemId) {
+      return this.l_state.objects[itemId].locked;
+    }
+
+    getLockUnlockItem(itemId) {
+      return this.l_state.objects[itemId].lock_object;
+    }
+
+    getLockedError(itemId) {
+      return this.l_state.objects[itemId].lock_error;
     }
 
     getStateString(itemId) {

@@ -31,6 +31,17 @@
 				"wardrobe"
 			]
 
+		},
+		"hidden_room": {
+			"name": "A hidden room",
+			"description": "You are in another unadorned, rectangular room. There is a passage to the west.",
+			"objects": [
+				"wardrobe"
+			],
+			"reversed": [
+				"wardrobe"
+			]
+
 		}
 	},
 	"objects": {
@@ -75,15 +86,23 @@
 			"hidden": false,
 			"error_portable": "You try to pick up the wardrobe... Well... no.",
 			"state": "closed",
+			"locked": true,
+			"lock_object": "key",
+			"lock_error": "The wardrobe is locked!",
 			"states": {
 				"open": {
 					"name": "open",
 					"description": "The wardrobe is open.",
-					"with": "key",
 					"error": "It is locked!",
 					"objects": [
-						"shirt"
-					]
+						"coat"
+					],
+					"connections": {
+						"east": "hidden_room"
+					},
+					"reversed_connections": {
+						"west":"room_two"
+					}
 				},
 				"closed": {
 					"name": "closed",
@@ -93,9 +112,9 @@
 			"definite_article": "the",
 			"indefinite_article": "a"
 		},
-		"shirt": {
-			"name": "shirt",
-			"description": "A black shirt.",
+		"coat": {
+			"name": "coat",
+			"description": "A large, black coat.",
 			"portable": true,
 			"hidden": false
 		}
@@ -107,13 +126,13 @@
 			"action_move_to_location": "start_location"
 		},
 		"tutorial_openclose": {
-			"description": "Tutorial: Try to open the wardrobe and take whatever is inside.",
+			"description": "Tutorial: You are in a new location. You see a wardrobe in the list of objects.\nTry to open the wardrobe and take whatever is inside.",
 			"prereq_location": "room_two",
 			"trigger_once": true
 		},
-		"tutorial_shirt": {
-			"description": "Tutorial: Very good! You took the shirt from the wardrobe.",
-			"prereq_inventory_items": ["shirt"],
+		"tutorial_coat": {
+			"description": "Tutorial: Very good! You successfully took the coat out of the wardrobe.\nAfter taking the coat, you recognise a hidden passage in the wardrobe. The passage leads east.\nGo through the hidden passage!",
+			"prereq_inventory_items": ["coat"],
 			"trigger_once": true
 		}
 	}

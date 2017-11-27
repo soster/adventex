@@ -117,7 +117,9 @@ export default class Interpreter {
         // drop
         this.drop(objects, itemIdsFromInventory);
         
-      } else if (checkSynonyms(advntx.messages.verb_open, firstVerb, this.advntx.vocabulary.synonyms) || checkSynonyms(advntx.messages.verb_unlock, firstVerb, this.advntx.vocabulary.synonyms)) {
+      } else if (checkSynonyms(advntx.messages.verb_open, firstVerb, this.advntx.vocabulary.synonyms) ||
+        checkSynonyms(advntx.messages.verb_unlock, firstVerb, this.advntx.vocabulary.synonyms) ||
+        checkSynonyms(advntx.messages.verb_lock, firstVerb, this.advntx.vocabulary.synonyms)) {
         // open / unlock (maybe handle unlock differently to open, therefore not in synonyms)
         this.interactWithObjectState(advntx.messages.verb_open,firstObject,withObject);
       } else if (checkSynonyms(advntx.messages.verb_close, firstVerb, this.advntx.vocabulary.synonyms)) {
@@ -227,6 +229,8 @@ export default class Interpreter {
       state = this.advntx.messages.state_closed;
     } else if (verb==this.advntx.messages.verb_unlock) {
       state = this.advntx.messages.state_open;
+    } else if (verb==this.advntx.messages.verb_lock) {
+      state = this.advntx.messages.state_close;
     }
 
 
@@ -235,9 +239,26 @@ export default class Interpreter {
       return;
     }
     if (this.advntx.inventoryHandler.hasState(firstObjectId, state)) {
-      var needed = this.advntx.inventoryHandler.needItemForState(firstObjectId, state);
+      var needed;
+      if (state==this.advntx.messages.state_open && this.advntx.inventoryHandler.isLocked(firstObjectId)) {
+        needed = this.advntx.inventoryHandler.getLockUnlockItem(firstObjectId);
+      } else {
+        needed = this.advntx.inventoryHandler.needItemForState(firstObjectId, state);
+      }
+
       if (needed===undefined||needed==withObjectId) {
         this.advntx.inventoryHandler.setState(firstObjectId,state);
+
+        if (state==this.advntx.messages.state_open && withObjectId!==undefined){
+          // unlock
+          this.advntx.inventoryHandler.lock(firstObjectId, false);
+        }
+
+        if (state==this.advntx.messages.state_closed && withObjectId==this.advntx.inventoryHandler.getLockUnlockItem(firstObjectId)) {
+          // lock
+          this.advntx.inventoryHandler.lock(firstObjectId, true);
+        }
+
         var text = advntx.inventoryHandler.getDescriptionOfState(firstObjectId, state);
         if (text===undefined) {
           text = advntx.messages.info_success;
