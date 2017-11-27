@@ -224,8 +224,6 @@ var objects = {
     name: 'barrel',
     description: 'A large barrel, approx. half your height. It is very heavy, it seems to be filled with water.',
     portable: false,
-    definite_article: 'the',
-    indefinite_article: 'a',
     states: {
       open: {
         name: 'open',
@@ -237,8 +235,6 @@ var objects = {
     name: 'ring',
     description: 'A golden ring.\nIt looks very valuable!',
     state: 'dirty',
-    definite_article: 'the',
-    indefinite_article: 'a',
     states: {
       dirty: {
         name: 'dirty',
@@ -249,21 +245,22 @@ var objects = {
   door: { name: 'door' },
   portal: {
     name: 'portal',
+    state: 'closed',
+    locked: true,
+    lock_object: 'key',
     states: {
-      name: 'closed',
       open: {
         connections: {
-          north: ['room_two']
+          north: 'room_two'
         },
         reversed_connections: {
-          south: ['room_open_close']
+          south: 'room_open_close'
         }
       },
       closed: {
         name: 'closed'
       }
-    },
-    state: 'closed'
+    }
   },
   torch: {
     name: 'torch',
@@ -286,6 +283,9 @@ var objects = {
         name: 'closed'
       }
     }
+  },
+  key: {
+    name: 'key'
   }
 };
 
@@ -330,9 +330,21 @@ describe('advntx test suite', function () {
   });
 
   it('testing open, close and objects in another objects', function () {
+    var save = advntx.state;
+
+    // mock everything:
+    advntx.state = {
+      steps: 0
+    };
     advntx.state.inventory = [];
     advntx.state.objects = objects;
     advntx.state.locations = locations;
+    advntx.state.events = [];
+    advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, function()  { });
+    advntx.inventoryHandler = new InventoryHandler(advntx.state,function() {});
+    advntx.locationHandler = new LocationHandler(advntx.state);
+
+    
     advntx.state.location = 'room_open_close';
     advntx.interpreter.interpret('open chest', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
     assert.equal('open',advntx.state.objects['chest'].state);
@@ -343,13 +355,25 @@ describe('advntx test suite', function () {
     assert.equal('closed',advntx.state.objects['chest'].state);
     advntx.interpreter.interpret('north', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
     assert.equal('room_open_close',advntx.state.location);
+    // magically give the player the portal key:
+    advntx.state.inventory.push('key');
     advntx.interpreter.interpret('open portal', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    // still closed, because locked:
+    assert.equal('closed',advntx.state.objects['portal'].state);
+    advntx.interpreter.interpret('open portal with key', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    // now open:
     assert.equal('open',advntx.state.objects['portal'].state);
+    assert.equal(false,advntx.state.objects['portal'].locked);
     advntx.interpreter.interpret('north', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
     assert.equal('room_two',advntx.state.location);
     // testing reversed direction of portal:
     advntx.interpreter.interpret('south', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
     assert.equal('room_open_close',advntx.state.location);
+    // lock portal:
+    advntx.interpreter.interpret('close portal with key', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('closed',advntx.state.objects['portal'].state);
+    assert.equal(true,advntx.state.objects['portal'].locked);
+    advntx.state = save;
   });
 
   it('find events', function () {

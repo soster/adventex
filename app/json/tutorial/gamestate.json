@@ -51,8 +51,7 @@
 			"portable": false,
 			"error_portable": "Guess what: The table is to heavy to carry around.",
 			"hidden": false,
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"light": {
 			"name": "light bulb",
@@ -60,24 +59,21 @@
 			"portable": false,
 			"error_portable": "How many players of interactive fiction does it take to unscrew this light bulb? Apparently, more than one.",
 			"hidden": false,
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"book": {
 			"name": "book",
 			"description": "A book, the title reads: '101 things to do in adventure games.'",
 			"portable": true,
 			"hidden": false,
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"key": {
 			"name": "key",
 			"description": "A small key.",
 			"portable": true,
 			"hidden": false,
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"wardrobe": {
 			"name": "wardrobe",
@@ -109,8 +105,7 @@
 					"description": "The wardrobe is closed."
 				}
 			},
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"coat": {
 			"name": "coat",

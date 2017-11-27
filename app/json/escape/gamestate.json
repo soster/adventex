@@ -141,8 +141,7 @@
 			"portable": false,
 			"error_portable": "While touching the rotten straw you feel an iron ring which belongs to a hidden trap door!\nBut it makes no sense to fill your pockets with the straw, so you leave it where it is.",
 			"hidden": false,
-			"definite_article": "the",
-			"indefinite_article": "some",
+			"article": "the",
 			"state":"rotten",
 			"states": {
 				"rotten":{
@@ -157,8 +156,7 @@
 			"portable": false,
 			"error_portable": "Trust me, you DON'T want to carry THAT around! It is nearly full with... you know.",
 			"hidden": false,
-			"definite_article": "the",
-			"indefinite_article": "a",
+			"article": "the",
 			"state":"full",
 			"states": {
 				"full":{
@@ -175,8 +173,7 @@
 			"description": "A bunk bed. Comfortable as a wooden board. Maybe due to the fact that it IS a wooden board.\nIt is mounted on the wall.",
 			"portable": false,
 			"hidden": false,
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"trap_door": {
 			"name": "trap door",
@@ -197,8 +194,7 @@
 				}
 			},
 
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"cell_door": {
 			"name": "cell door",
@@ -206,8 +202,7 @@
 			"error_portable": "I can't imagine a reason to carry around a door down here!",
 			"portable": false,
 			"hidden": false,
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"unlocked_cell_door": {
 			"name": "cell door",
@@ -231,16 +226,14 @@
 					"description": "The massive cell door is closed."
 				}
 			},
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"barred_window": {
 			"name": "barred window",
 			"description": "It is too high for you, you can't reach it!",
 			"error_portable": "It is too high for you, you can't reach it!\nBesides, carrying a window around? Seriously?",
 			"portable": false,
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"torch": {
 			"name": "torch",
@@ -252,16 +245,14 @@
 				"name": "burning",
 				"effect": "fire"
 			}},
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"article": "the"
 		},
 		"barrel": {
 			"name": "barrel",
 			"description": "A large barrel, approx. half your height. It is very heavy, but you can't look inside because it is closed.",
 			"portable": false,
 			"synonyms": ["water"],
-			"definite_article": "the",
-			"indefinite_article": "a",
+			"article": "the",
 			"states": {
 				"open": {
 					"name": "open",
@@ -279,11 +270,11 @@
 			"states": {
 				"unconscious": {
 					"name":"unconscious",
-					"description":"A big, dim looking guard. But he is harmless now, due to his unconciousness.\nIt might be a good idea to search him."
+					"description":"A big, dim looking guard. But he is harmless now, due to his unconciousness.\nIt might be a good idea to search him.",
+					"objects": ["key"]
 				}
 			},
-			"definite_article": "the",
-			"indefinite_article": "a",
+			"article": "the",
 			"person": "true"
 		},
 
@@ -292,8 +283,7 @@
 			"description": "A small, grim looking guard with a ferret face.",
 			"error_portable": "He is not your type!",
 			"portable": false,
-			"definite_article": "the",
-			"indefinite_article": "a",
+			"article": "the",
 			"person": "true"
 		},
 
@@ -302,8 +292,7 @@
 			"description": "A hefty guard with broad shoulders.",
 			"error_portable": "He is not your type!",
 			"portable": false,
-			"definite_article": "the",
-			"indefinite_article": "a",
+			"article": "the",
 			"person": "true"
 		},
 
@@ -311,8 +300,7 @@
 			"name": "stone",
 			"description": "A stone the size of a fist.",
 			"portable": true,
-			"definite_article": "the",
-			"indefinite_article": "a",
+			"article": "the",
 			"custom_errors": {
 				"throw": "Leave it, you throw like a girl. Besides, where do you wanna throw it?"
 			}
@@ -321,8 +309,8 @@
 			"name": "key",
 			"description": "A large, slightly rusty key.",
 			"portable": true,
-			"definite_article": "the",
-			"indefinite_article": "a"
+			"hidden": true,
+			"article": "the"
 		},
 		"latrine": {
 			"name": "latrine",
@@ -338,8 +326,7 @@
 			"name": "ring",
 			"description": "A golden ring.\nIt looks very valuable!",
 			"state":"dirty",
-			"definite_article": "the",
-			"indefinite_article": "a",
+			"article": "the",
 			"states": {
 				"dirty": {
 					"name":"dirty",
@@ -353,11 +340,12 @@
 			"name": "portal",
 			"description": "A large portal with two door leafs. The left one has a large keyhole. The doors are locked.",
 			"portable": true,
-			"definite_article": "the",
-			"indefinite_article": "a",
+			"article": "the",
+			"locked": true,
+			"lock_object": "key",
+			"lock_error": "The portal is locked!",
 			"states": {
 				"open": {
-					"with": "key",
 					"description": "You open the left door leaf with the key.",
 					"connections": {
 						"south":"outside"
@@ -367,7 +355,7 @@
 					}
 				},
 				"closed": {
-					"description": "Both door leafs are closed now."
+					"description": "Both door leafs are closed."
 				}
 			}
 		},
@@ -517,10 +505,7 @@
 		"search_guard": {
 			"description": "The guard has a key chained on his belt.",
 			"prereq_verb": "search",
-			"prereq_used_items": ["guard|unconscious"],
-			"trigger_once": true,
-			"action_add_items":["location:key"],
-			"action_points": 5
+			"prereq_used_items": ["guard|unconscious"]
 		},
 
 		"arest": {

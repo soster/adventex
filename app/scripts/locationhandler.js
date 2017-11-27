@@ -68,6 +68,11 @@ export default class LocationHandler {
     if (location == undefined) {
       return [];
     }
+
+    if (names===undefined||names.length==0) {
+      return [];
+    }
+
     var itemIds = findItemIds(names, location.objects, this.state.objects);
 
     if (location.objects !== undefined) {
