@@ -60,19 +60,6 @@
         "backward",
         "away"
     ],
-    "opposite_directions": {
-        "north":"south",
-        "east":"west",
-        "south":"north",
-        "west":"east",
-        "up":"down",
-        "down":"up",
-        "left":"right",
-        "right":"left",
-        "forward":"backward",
-        "backward":"forward",
-        "away":"away"
-    },
     "prepositions": [
         "from",
         "to",
@@ -91,7 +78,9 @@
         "over",
         "under",
         "behind",
-        "through"
+        "through",
+        "inside",
+        "into"
     ],
     "adjectives": [
         "black",
@@ -146,8 +135,7 @@
             "drive",
             "climb"
         ],
-        "examine": [
-            "look",
+        "look": [
             "watch"
         ],
         "push": [
@@ -158,6 +146,9 @@
         ],
         "clean": [
             "wash"
+        ],
+        "into": [
+            "inside"
         ]
     }
 }

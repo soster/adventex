@@ -10,7 +10,8 @@ import {
   getFirstOfType,
   getLastOfType,
   getName,
-  listFormattedObjects
+  listFormattedObjects,
+  getObjectIdsForState
 } from 'app/scripts/helper.js'
 
 export default class Interpreter {
@@ -20,6 +21,7 @@ export default class Interpreter {
     this.textColor = advntx.config.text_color;
     this.errorColor = advntx.config.error_color;
     this.warnColor = advntx.config.warn_color;
+    this.previousObject = undefined;
   }
 
 
@@ -112,7 +114,9 @@ export default class Interpreter {
         // take/get
         this.getItem(objects, itemIdsFromLocation);
       } else if (checkSynonyms(advntx.messages.verb_examine, firstVerb, this.advntx.vocabulary.synonyms)) {
-        this.examine(objects, itemIds);
+        this.examine(firstObject);
+      } else if (checkSynonyms(advntx.messages.verb_look, firstVerb, this.advntx.vocabulary.synonyms)) {
+        this.look(firstObject, preposition);
       } else if (checkSynonyms(advntx.messages.verb_drop, firstVerb, this.advntx.vocabulary.synonyms)) {
         // drop
         this.drop(objects, itemIdsFromInventory);
@@ -140,6 +144,8 @@ export default class Interpreter {
         foundNothing = true;
       }
     }
+
+    this.previousObject = firstObject;
 
     locationObject = this.advntx.state.locations[this.advntx.state.location];
 
@@ -233,6 +239,10 @@ export default class Interpreter {
       state = this.advntx.messages.state_close;
     }
 
+
+    if (isEmpty(firstObjectId) && !isEmpty(this.previousObject)) {
+      firstObjectId = this.previousObject;
+    }
 
     if (isEmpty(firstObjectId)) {
       this.echo(this.advntx.messages.error_generic_open_close.format(verb),this.advntx.config.warn_color);
@@ -343,19 +353,38 @@ export default class Interpreter {
     }
   }
 
-  examine(objects, item_ids) {
-    if (objects.length == 0) {
+  examine(firstObject) {
+    if (firstObject===undefined) {
+      this.echo(advntx.messages.error_examine, this.errorColor);
+      return;
+    }
+
+    var desc = getDescription(this.advntx.state.objects, firstObject);
+    this.echo(desc);
+  }
+
+  look(firstObject, preposition) {
+    if (firstObject===undefined && preposition===undefined) {
       this.describeLocationEcho(this.advntx.state.location, true);
     } else {
-      var item_id = item_ids[0];
-      var object = objects[0];
-      if (!isEmpty(item_id)) {
-        var desc = getDescription(this.advntx.state.objects, item_id);
+      if (firstObject===undefined && preposition !== undefined && this.previousObject!==undefined) {
+        firstObject = this.previousObject;
+      }
+
+      if (firstObject!==undefined && preposition==this.advntx.messages.preposition_at) {
+        var desc = getDescription(this.advntx.state.objects, firstObject);
         this.echo(desc);
-      } else if (!isEmpty(object)) {
-        this.echo(this.advntx.messages.error_thing.format(object), this.errorColor);
+      } else if (firstObject!==undefined && preposition==this.advntx.messages.preposition_inside) {
+        var object = advntx.state.objects[firstObject];
+        if (object.state!==undefined && object.state!='none') {
+          var ids = getObjectIdsForState(object.states[object.state]);
+          var objectsMessage = listFormattedObjects(ids, advntx.state.objects, advntx.inventoryHandler);
+          this.echo(advntx.messages.info_inside_you_see.format(advntx.inventoryHandler.getNameWithArticle(firstObject)));
+          this.echo(objectsMessage);
+        }
+        
       } else {
-        this.standardError(command);
+        this.echo(advntx.messages.error_look);
       }
     }
   }
