@@ -251,14 +251,24 @@
 			"name": "barrel",
 			"description": "A large barrel, approx. half your height. It is very heavy, but you can't look inside because it is closed.",
 			"portable": false,
-			"synonyms": ["water"],
 			"article": "the",
 			"states": {
 				"open": {
 					"name": "open",
-					"description": "A large barrel, approx. half your height. The lid is open and you see that it is filled with water."
+					"description": "A large barrel, approx. half your height. The lid is open and you see that it is filled with water.",
+					"objects": ["water"]
+				},
+				"closed": {
+					"name": "closed"
 				}
 			}
+		},
+
+		"water": {
+			"name": "water",
+			"description": "Clean drinking water inside a barrel.",
+			"article": "the",
+			"portable": false
 		},
 
 
@@ -448,24 +458,10 @@
 			"action_set_state_locations": ["backward_corridor|none"]
 		},
 
-		"open_barrel": {
-			"description": "You open the barrel. It is filled with water.",
-			"prereq_verb": "open",
-			"prereq_used_items": ["barrel|none"],
-			"action_set_state_items": ["barrel|open"]
-		},
-
-		"close_barrel": {
-			"description": "You close the barrel.",
-			"prereq_verb": "close",
-			"prereq_used_items": ["barrel|open"],
-			"action_set_state_items": ["barrel|none"]
-		},
-
 		"clean_ring": {
 			"description": "You clean the ring. It looks like it is pure gold!",
 			"prereq_verb": "clean",
-			"prereq_used_items": ["ring|dirty","barrel|open"],
+			"prereq_used_items": ["ring|dirty","water"],
 			"action_set_state_items": ["ring|none"]
 		},
 
