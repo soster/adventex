@@ -184,7 +184,7 @@
 			"states": {
 				"open": {
 					"name": "open",
-					"description": "You open the trap door with its large metal ring. The opening reveals a small corridor below your cell.",
+					"description": "The trap door is now open. The opening reveals a small corridor below your cell.",
 					"connections": {
 						"down":"lower_cell"
 					}

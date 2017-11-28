@@ -364,17 +364,17 @@ export default class Interpreter {
   }
 
   look(firstObject, preposition) {
-    if (firstObject===undefined && preposition===undefined) {
+    if (isEmpty(firstObject) && (isEmpty(preposition) || preposition==advntx.messages.preposition_around)) {
       this.describeLocationEcho(this.advntx.state.location, true);
     } else {
-      if (firstObject===undefined && preposition !== undefined && this.previousObject!==undefined) {
+      if (isEmpty(firstObject) && !isEmpty(preposition)  && !isEmpty(this.previousObject)) {
         firstObject = this.previousObject;
       }
 
-      if (firstObject!==undefined && preposition==this.advntx.messages.preposition_at) {
+      if (!isEmpty(firstObject) && preposition==this.advntx.messages.preposition_at) {
         var desc = getDescription(this.advntx.state.objects, firstObject);
         this.echo(desc);
-      } else if (firstObject!==undefined && preposition==this.advntx.messages.preposition_inside) {
+      } else if (!isEmpty(firstObject) && preposition==this.advntx.messages.preposition_inside) {
         var object = advntx.state.objects[firstObject];
         if (object.state!==undefined && object.state!='none') {
           var ids = getObjectIdsForState(object.states[object.state]);

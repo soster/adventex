@@ -35,6 +35,7 @@
     "with": "with",
     "preposition_inside": "inside",
     "preposition_at": "at",
+    "preposition_around": "around",
     "state_closed": "closed",
     "state_open": "open",
     "info_enter_savegame_name": "Enter savegame name and hit enter:",
