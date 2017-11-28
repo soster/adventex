@@ -72,26 +72,45 @@ export default class InventoryHandler {
       return object.state;
     }
 
-    getNameOfState(itemId, state) {
+
+    getSpecificStateOfObject(itemId, state) {
       var object = this.l_state.objects[itemId];
-      if (state!='none'&&object.states[state]===undefined) {
-        throw state+' is not an allowed state for '+itemId;
+
+      if (object===undefined || object.states === undefined) {
+        return undefined;
       }
-      if (state=='none') {
+
+      if (state!='none'&&object.states[state]===undefined) {
+        return undefined;
+      }
+      if (state===undefined || state=='none') {
+        return undefined;
+      }
+      return object.states[state];
+    }
+
+    getNameOfState(itemId, state) {
+      var sobj = this.getSpecificStateOfObject(itemId, state);
+      if (sobj===undefined) {
         return '';
       }
-      return object.states[state].name;
+      return sobj.name;
     }
 
     getDescriptionOfState(itemId, state) {
-      var object = this.l_state.objects[itemId];
-      if (state!='none'&&object.states[state]===undefined) {
-        throw state+' is not an allowed state for '+itemId;
-      }
-      if (state=='none') {
+      var sobj = this.getSpecificStateOfObject(itemId, state);
+      if (sobj===undefined) {
         return '';
       }
-      return object.states[state].description;
+      return sobj.description;
+    }
+
+    getReadOfState(itemId, state) {
+      var sobj = this.getSpecificStateOfObject(itemId, state);
+      if (sobj===undefined) {
+        return '';
+      }
+      return sobj.read;
     }
 
     getErrorOfState(itemId, state) {

@@ -135,6 +135,8 @@ export default class Interpreter {
         this.save(secondWord);
       } else if (checkSynonyms(advntx.messages.verb_list, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.listSaveGames();
+      } else if (checkSynonyms(advntx.messages.verb_read, firstVerb, this.advntx.vocabulary.synonyms)) {
+        this.read(firstObject);
       } else if (checkSynonyms(advntx.messages.verb_restart, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.echo('\n');
         this.initGame(true);
@@ -224,6 +226,23 @@ export default class Interpreter {
     }
     // otherwise:
     this.echo(this.advntx.messages.help);
+  }
+
+
+  read(firstObjectId) {
+    if (!isEmpty(firstObjectId)) {
+      var obj = this.advntx.state.objects[firstObjectId];
+      var read = this.advntx.inventoryHandler.getReadOfState(firstObjectId,obj.state);
+      if (isEmpty(read)) {
+        read = obj.read;
+      }
+
+      if (!isEmpty(read)) {
+        this.echo(read);
+      } else {
+        this.echo(advntx.messages.error_read);
+      }
+    }
   }
 
   // open/unlock and close

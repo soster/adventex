@@ -32,6 +32,7 @@
     "verb_load": "load",
     "verb_save": "save",
     "verb_list": "list",
+    "verb_read": "read",
     "with": "with",
     "preposition_inside": "inside",
     "preposition_at": "at",

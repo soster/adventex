@@ -193,6 +193,7 @@ window.advntx = {
       if (isEmpty(gameId)) {
         gameId = result.default;
       }
+      advntx.gameId = gameId;
       advntx.currentGame = 'json/' + result[gameId].path;
       if (advntx.term != undefined) {
         advntx.term.clear();
@@ -394,7 +395,7 @@ $(document).ready(function () {
   });
 
   $('#btn_restart').click(function () {
-    advntx.initGame(true);
+    advntx.initGame(true,advntx.gameId);
 
   });
 
