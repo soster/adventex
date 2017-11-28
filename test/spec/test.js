@@ -286,6 +286,11 @@ var objects = {
   },
   key: {
     name: 'key'
+  },
+  newspaper: {
+    name: 'newspaper',
+    desription: 'A large tabloid',
+    read: 'This is the text which you can read.'
   }
 };
 
@@ -374,6 +379,29 @@ describe('advntx test suite', function () {
     assert.equal('closed',advntx.state.objects['portal'].state);
     assert.equal(true,advntx.state.objects['portal'].locked);
     advntx.state = save;
+  });
+
+  it('read something', function() {
+    var save = advntx.state;
+    
+        // mock everything:
+        advntx.state = {
+          steps: 0
+        };
+        advntx.state.inventory = ['newspaper'];
+        advntx.state.objects = objects;
+        advntx.state.locations = locations;
+        advntx.state.events = [];
+        advntx.state.location = 'room_open_close';
+        advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, function()  { });
+        advntx.inventoryHandler = new InventoryHandler(advntx.state,function() {});
+        advntx.locationHandler = new LocationHandler(advntx.state);
+
+        advntx.interpreter.interpret('read newspaper', function(){}, function(){}, function(text){
+          assert.equal(objects['newspaper'].read,text);
+        }, function(){}, function(){}, function(){}, function(){});
+
+        advntx.state = save;
   });
 
   it('find events', function () {
