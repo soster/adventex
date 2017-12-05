@@ -140,7 +140,9 @@ export default class Interpreter {
       } else if (checkSynonyms(advntx.messages.verb_restart, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.echo('\n');
         this.initGame(true);
-      } 
+      } else if (checkSynonyms(advntx.messages.verb_inventory, firstVerb, this.advntx.vocabulary.synonyms)) {
+        this.echo(listFormattedObjects(advntx.state.inventory, advntx.state.objects, advntx.inventoryHandler));
+      }
 
       else {// I give up... however, there might be an event to execute.
         foundNothing = true;

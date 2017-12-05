@@ -34,6 +34,7 @@
     "verb_save": "save",
     "verb_list": "list",
     "verb_read": "read",
+    "verb_inventory": "inventory",
     "with": "with",
     "preposition_inside": "inside",
     "preposition_at": "at",
