@@ -47,7 +47,7 @@
             <button type="button" class="btn btn-secondary btn-sm" id="btn_open" onclick="advntx.terminalLink('open');">Open</button>&nbsp;
             <button type="button" class="btn btn-secondary btn-sm" id="btn_close" onclick="advntx.terminalLink('close');">Close</button>&nbsp;
             <button type="button" class="btn btn-secondary btn-sm" id="btn_examine" onclick="advntx.terminalLink('examine');">Examine</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_examine" onclick="advntx.executeCurrent();">↵</button>&nbsp;
+            <button type="button" class="btn btn-secondary btn-sm" id="btn_enter" onclick="advntx.executeCurrent();">↵</button>&nbsp;
           </p>
         </div>
       </div>
@@ -73,20 +73,23 @@
           <div class="btn-group" role="group" aria-label="">
             <p>
               <button type="button" class="btn btn-secondary btn-sm" id="btn_invert" onclick="advntx.toggleTerminalColors();">Invert colors</button>&nbsp;
-              <button type="button" class="btn btn-secondary btn-sm" id="btn_save">Save (text)</button>&nbsp;
-              <button type="button" class="btn btn-secondary btn-sm" id="btn_load">Load (text)</button>&nbsp;
             </p>
             </div>
             <div class="btn-group" role="group" aria-label="">
             <p id="game_buttons">
+                
             </p>
           </div>
-            <div class="form-group">
-              <p>
-              <label for="game_state">Game state text field:</label>
-              <textarea class="form-control" id="game_state" rows="3"></textarea>
-              </p>
-            </div>
+          <div class="btn-gropu" role="group">
+            <p>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn_save_file">Download savegame</button>
+                <span class="btn btn-secondary btn-sm">
+                    <input type="file" id="selectFiles" value="Import" />
+                </span>&nbsp;
+                <button type="button" class="btn btn-secondary btn-sm" id="btn_load_file">Load game from file</button>
+            </p>
+
+          </div>
         </div>
     </div>
     <div class="footer smalltext alert-warning">

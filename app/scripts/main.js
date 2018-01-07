@@ -382,16 +382,36 @@ $(document).ready(function () {
     advntx.term.insert(advntx.messages.verb_save + ' ');
   });
 
-  $('#btn_save').click(function () {
-    $('#game_state').val(JSON.stringify(advntx.state));
-    advntx.initInventory();
+  $('#btn_load_file').click(function () {
+    var files = document.getElementById('selectFiles').files;
+    if (files===undefined || files.length <= 0) {
+      return false;
+    }
+    
+    var fr = new FileReader();
+
+    fr.onload = function(e) { 
+      console.log(e);
+        var result = JSON.parse(e.target.result);
+        advntx.state = result;
+        advntx.term.exec('clear');
+        advntx.initGame(false);
+    }
+
+    fr.readAsText(files.item(0));
+
   });
 
-  $('#btn_load').click(function () {
-    advntx.state = $.parseJSON($('#game_state').val());
-    advntx.term.exec('clear');
-    advntx.initGame(false);
-
+  $('#btn_save_file').click(function() {
+    // does not work on firefox.
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(advntx.state, null, 2));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute('href',     dataStr);
+    var date = new Date();
+		var df = date.getMonth()+'-'+date.getDate()+'-'+date.getYear()+' '+(date.getHours()+1)+'_'+date.getMinutes()
+    downloadAnchorNode.setAttribute('download', 'advntx_' + df + '.json');
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
   });
 
   $('#btn_restart').click(function () {
