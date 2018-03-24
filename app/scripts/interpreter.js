@@ -11,7 +11,8 @@ import {
   getLastOfType,
   getName,
   listFormattedObjects,
-  getObjectIdsForState
+  getObjectIdsForState,
+  removeTargetFromLinks
 } from 'app/scripts/helper.js'
 
 export default class Interpreter {
@@ -40,6 +41,7 @@ export default class Interpreter {
     command = command.toLowerCase().replace('\\', '').trim();
 
     if (isEmpty(command)) {
+      removeTargetFromLinks();
       return;
     }
     var words = this.advntx.parser.parse(command);
@@ -203,7 +205,7 @@ export default class Interpreter {
       this.initInventory();
     }
 
-
+    removeTargetFromLinks();
   }
 
   getSecondWord(command) {

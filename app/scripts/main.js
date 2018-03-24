@@ -22,7 +22,8 @@ import {
   listFormattedObjects,
   setStateOfObject,
   getObjectNameArray,
-  getJSON
+  getJSON,
+  removeTargetFromLinks
 } from 'app/scripts/helper.js'
 
 import InventoryHandler from 'app/scripts/inventoryhandler.js'
@@ -100,6 +101,7 @@ window.advntx = {
             advntx.term.pop();
             advntx.term.set_prompt(old_prompt);
             advntx.waitForKey = false;
+            removeTargetFromLinks();
             return false;
           }
 
@@ -113,6 +115,8 @@ window.advntx = {
         keepWords: true
       });
     }
+    removeTargetFromLinks();
+
   },
 
   formatHeadline(text) {
@@ -166,12 +170,18 @@ window.advntx = {
 
     advntx.echo(text);
 
+
   },
 
   addToInventoryEcho(item) {
     advntx.inventoryHandler.addToInventory(item);
     advntx.initInventory();
   },
+
+
+  removeTargetBlank() {
+
+  }, 
 
   initGame(refreshJson, gameId) {
     // version string, add to json calls to avoid browser caching:
@@ -207,6 +217,7 @@ window.advntx = {
       }
 
     });
+    removeTargetFromLinks();
   },
 
   terminalLink(name) {
@@ -313,7 +324,7 @@ window.advntx = {
     advntx.describeLocationEcho(advntx.state.location,false,text,undefined);
 
 
-
+    removeTargetFromLinks();
     advntx.asyncRefocusTerminal();
   },
 

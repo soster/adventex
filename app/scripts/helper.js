@@ -197,3 +197,8 @@ export function getFromStateOrObject(objectId, property, objects) {
   return effect;
 }
 
+export function removeTargetFromLinks() {
+      // HACK, remove target=blank for firefox
+      $('#terminal a[target="_blank"]').removeAttr('target');
+}
+
