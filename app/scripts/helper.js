@@ -33,12 +33,12 @@ export function getProperty(objects, property, id) {
   var obj = objects[id];
   var state = constants.NONE;
 
-  if (obj.state !== undefined) {
+  if (obj !== undefined && obj.state !== undefined) {
     state = obj.state;
   }
 
   // name can not be overriden by state.
-  if (property !== 'name' && obj.states !== undefined && obj.states[state] !== undefined) {
+  if (property !== 'name' && obj !== undefined && obj.states !== undefined && obj.states[state] !== undefined) {
     var retVal = obj.states[state][property];
     if (retVal !== undefined) {
       return retVal;
@@ -202,6 +202,11 @@ export function getObjectNameArray(objects) {
 
 export function getFromStateOrObject(objectId, property, objects) {
   var object = objects[objectId];
+
+  if (object === undefined) {
+    return '';
+  }
+
   var state = object.state;
   var effect;
   if (!isEmpty(state) && state != constants.NONE && object.states[state] != undefined) {

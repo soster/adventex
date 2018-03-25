@@ -2,7 +2,8 @@
 
 import {
   checkSynonyms,
-  setStateOfObject
+  setStateOfObject,
+  listFormattedObjects
 } from 'app/scripts/helper.js'
 
 import InventoryHandler from 'app/scripts/inventoryhandler.js';
@@ -271,6 +272,8 @@ export default class EventHandler {
 
 
   executeEvent(event, echo) {
+    var location = this.state.locations[this.state.location];
+    var objects_message_before = listFormattedObjects(location.objects, this.state.objects, this.inventoryHandler);
 
     for (var property in event) {
       if (event.hasOwnProperty(property)) {
@@ -293,6 +296,11 @@ export default class EventHandler {
     if (!isEmpty(event.action_trigger_event)) {
       var nevent = this.state.events[event.action_trigger_event];
       return this.executeEvent(nevent, echo);
+    }
+
+    var objects_message = listFormattedObjects(location.objects, this.state.objects, this.inventoryHandler);
+    if (objects_message !== objects_message_before && objects_message.length > 0) {
+      echo(advntx.messages.info_you_see+'\n'+ objects_message);
     }
 
     if (!isEmpty(event.action_continue) && event.action_continue) {
