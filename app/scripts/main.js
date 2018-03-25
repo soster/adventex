@@ -416,14 +416,19 @@ $(document).ready(function () {
 
   $('#btn_save_file').click(function() {
     // does not work on firefox.
+    
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(advntx.state, null, 2));
     var downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute('href',     dataStr);
     var date = new Date();
-		var df = date.getMonth()+'-'+date.getDate()+'-'+date.getYear()+' '+(date.getHours()+1)+'_'+date.getMinutes()
+		var df = date.getMonth()+'-'+date.getDate()+'-'+date.getYear()+' '+(date.getHours()+1)+'_'+date.getMinutes();
     downloadAnchorNode.setAttribute('download', 'advntx_' + df + '.json');
+    
+    document.body.appendChild(downloadAnchorNode);
+    
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
+
   });
 
   $('#btn_restart').click(function () {

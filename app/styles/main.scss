@@ -75,7 +75,16 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
   font-size: 125%;
 }
 
+div.scroller {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
 
+div.scroller .btn-group {
+  display: inline-block;
+  float: none;
+}
 
 .browserupgrade {
   margin: 0.2em 0;
