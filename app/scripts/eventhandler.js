@@ -7,8 +7,12 @@ import {
 
 import InventoryHandler from 'app/scripts/inventoryhandler.js';
 import LocationHandler from 'app/scripts/locationhandler.js';
+import EventActionHandler from 'app/scripts/eventactionhandler.js';
 
 import * as constants from 'app/scripts/const.js';
+
+
+
 
 export default class EventHandler {
 
@@ -20,6 +24,8 @@ export default class EventHandler {
     this.inventoryHandler = new InventoryHandler(state, initInventory);
     this.locationHandler = new LocationHandler(state);
 
+    // ActionEventHandler as object properties, later it should be possible to have new ActionEvents per game:
+    EventActionHandler.create_action_handler_properties(this, this.state, this.vocabulary, this.inventoryHandler, this.locationHandler, this.echo);
   }
 
   checkEventPrereq(prereq, to_check) {
@@ -262,181 +268,27 @@ export default class EventHandler {
     return false;
   }
 
-  add_items(action) {
-    // into the inventory
-    for (var i = 0; i < action.length; i++) {
-      var temp = action[i].split(':');
-      if (temp.length == 1 || (temp.length == 2 && temp[0]==constants.INVENTORY) ) {//inventory
-        var obj = temp[0];
-        if (temp.length == 2) {
-          obj = temp[1];
-        }
-        var stateSplit = obj.split('|');
-        if (stateSplit.length == 2) {
-          this.state.objects[stateSplit[0]].state = stateSplit[1];
-        }
-        this.inventoryHandler.addToInventory(stateSplit[0]);
-      } else if (temp.length == 2) {//location
-        var location;
-        if (temp[0] == constants.LOCATION) {
-          location = this.state.locations[this.state.location];
-        } else {
-          location = this.state.locations[temp[0]];
-        }
 
-        var stateSplit = temp[1].split('|');
-        if (stateSplit.length == 2) {
-          this.state.objects[stateSplit[0]].state = stateSplit[1];
-        }
-
-        if (location.objects[stateSplit[0]] === undefined) {
-          location.objects.push(stateSplit[0]);
-        }
-      }
-    }
-  }
-
-  remove_items(action) {
-    var removed = false;
-
-    for (var i = 0; i < action.length; i++) {
-      var temp = action[i].split(':');
-      if (temp.length == 1 || (temp.length == 2 && temp[0]==constants.INVENTORY) ) {//inventory
-        var ilength = this.state.inventory.length;
-        var obj = temp[0];
-        if (temp.length == 2) {
-          obj = temp[1];
-        }
-        this.inventoryHandler.removeFromInventory(obj);
-        if (this.state.inventory.length < ilength) {
-          removed = true;
-        }
-      } else if (temp.length == 2) {
-        var location;
-        if (temp[0] == constants.LOCATION) {
-          location = this.state.locations[this.state.location];
-        } else {
-          location = this.state.locations[temp[0]];
-        }
-        var olength = location.objects.length;
-        location.objects.remove(temp[1]);
-        if (location.objects.length < olength) {
-          removed = true;
-        }
-      }
-    }
-    return removed;
-  }
-
-  move_items(action) {
-    for (var i = 0; i < action.length; i++) {
-      var temp = action[i].split(':');
-      if (temp.length == 3) {
-        var obj = temp[0];
-        var from = temp[1];
-        var to = temp[2];
-        var removed = false;
-
-        if (from === constants.INVENTORY) {
-          removed = this.remove_items(obj);
-        } else {
-          removed = this.remove_items([from + ':' + obj]);
-        }
-
-        if (to === constants.INVENTORY && removed) {
-          this.add_items(obj);
-        } else if (removed) {
-          this.add_items([to+':'+obj]);
-        }
-      }
-    }
-  }
 
   executeEvent(event, echo) {
-    if (!isEmpty(event.action_move_items)) {
-      this.move_items(event.action_move_items);
-    }
 
-
-    if (!isEmpty(event.action_add_items)) {
-      this.add_items(event.action_add_items);
-    }
-
-    if (!isEmpty(event.action_remove_items)) {
-      this.remove_items(event.action_remove_items);
-    }
-
-
-
-    if (!isEmpty(event.action_new_connections)) {
-      for (var i = 0; i < event.action_new_connections.length; i++) {
-        var temp = event.action_new_connections[i].split(':');
-        var place = this.state.locations[temp[0]];
-        var direction = temp[1];
-        var to = temp[2];
-        place.connections[direction] = to;
-      }
-    }
-
-    if (!isEmpty(event.action_move_to_location)) {
-      this.locationHandler.setLocation(event.action_move_to_location);
-    }
-
-    if (!isEmpty(event.action_disable_events)) {
-      for (var i = 0; i < event.action_disable_events.length; i++) {
-        var nevent = this.state.events[event.action_disable_events[i]];
-        nevent.disabled = true;
-      }
-    }
-
-    if (!isEmpty(event.action_enable_events)) {
-      for (var i = 0; i < event.action_enable_events.length; i++) {
-        var nevent = this.state.events[event.action_enable_events[i]];
-        if (nevent != undefined) {
-          nevent.disabled = false;
-          nevent.triggered_steps = this.state.steps;
+    for (var property in event) {
+      if (event.hasOwnProperty(property)) {
+        if (property.startsWith(constants.ACTION_PREFIX)) {
+          var handler = this[property];
+          if (handler !== undefined) {
+            handler.execute_action(event[property]);
+          }
         }
       }
-
     }
 
-    if (!isEmpty(event.action_untrigger_events)) {
-      for (var i = 0; i < event.action_untrigger_events.length; i++) {
-        var nevent = this.state.events[event.action_untrigger_events[i]];
-        if (nevent != undefined) {
-          nevent.triggered = false;
-          nevent.triggered_steps = 0;
-        }
-      }
-
-    }
     if (!isEmpty(event.description)) {
       echo(event.description);
     }
 
-    if (!isEmpty(event.action_set_state_items)) {
-      for (var i = 0; i < event.action_set_state_items.length; i++) {
-        var arr = event.action_set_state_items[i].split('|');
-        setStateOfObject(arr[0], arr[1], this.state.objects);
-      }
-    }
-
-    if (!isEmpty(event.action_set_state_locations)) {
-      for (var i = 0; i < event.action_set_state_locations.length; i++) {
-        var arr = event.action_set_state_locations[i].split('|');
-        setStateOfObject(arr[0], arr[1], this.state.locations);
-      }
-    }
-
-    if (!isEmpty(event.action_points)) {
-      this.state.points += event.action_points;
-    }
-
-
     event.triggered = true;
     event.triggered_steps = this.state.steps;
-
-
 
     if (!isEmpty(event.action_trigger_event)) {
       var nevent = this.state.events[event.action_trigger_event];
