@@ -29,6 +29,19 @@ export function isHidden(objects, id) {
 export function getProperty(objects, property, id) {
   id = id.toLowerCase();
   var obj = objects[id];
+  var state = 'none';
+
+  if (obj.state !== undefined) {
+    state = obj.state;
+  }
+
+  if (obj.states !== undefined && obj.states[state] !== undefined) {
+    var retVal = obj.states[state][property];
+    if (retVal !== undefined) {
+      return retVal;
+    }
+  }
+
   if (obj === undefined) {
     return '';
   }

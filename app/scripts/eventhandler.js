@@ -134,7 +134,7 @@ export default class EventHandler {
     var arr = prereq.split('|');
     if (arr.length == 2) {
       var location = this.state.locations[arr[0]];
-      if (location===undefined) {
+      if (location === undefined) {
         return false;
       }
       if (location.state == arr[1]) {
@@ -187,9 +187,9 @@ export default class EventHandler {
           }
         }
 
-        
+
         // none of them
-        if (condition && event.not!=undefined) {
+        if (condition && event.not != undefined) {
           keyNames = Object.keys(event.not);
           for (var i = 0; i < keyNames.length; i++) {
             var name = keyNames[i];
@@ -202,9 +202,9 @@ export default class EventHandler {
           }
         }
 
-        
+
         // any of them
-        if (condition && event.any!=undefined) {
+        if (condition && event.any != undefined) {
           keyNames = Object.keys(event.any);
           for (var i = 0; i < keyNames.length; i++) {
             var name = keyNames[i];
@@ -261,54 +261,102 @@ export default class EventHandler {
     return false;
   }
 
-  executeEvent(event, echo) {
-    if (!isEmpty(event.action_add_items)) {
-      // into the inventory
-      for (var i = 0; i < event.action_add_items.length; i++) {
-        var temp = event.action_add_items[i].split(':');
-        if (temp.length == 1) {//inventory
-          var stateSplit = temp[0].split('|');
-          if (stateSplit.length == 2) {
-            this.state.objects[stateSplit[0]].state = stateSplit[1];
-          }
-          this.inventoryHandler.addToInventory(stateSplit[0]);
-        } else if (temp.length == 2) {//location
-          var location;
-          if (temp[0] == 'location') {
-            location = this.state.locations[this.state.location];
-          } else {
-            location = this.state.locations[temp[0]];
-          }
+  add_items(action) {
+    // into the inventory
+    for (var i = 0; i < action.length; i++) {
+      var temp = action[i].split(':');
+      if (temp.length == 1) {//inventory
+        var stateSplit = temp[0].split('|');
+        if (stateSplit.length == 2) {
+          this.state.objects[stateSplit[0]].state = stateSplit[1];
+        }
+        this.inventoryHandler.addToInventory(stateSplit[0]);
+      } else if (temp.length == 2) {//location
+        var location;
+        if (temp[0] == 'location') {
+          location = this.state.locations[this.state.location];
+        } else {
+          location = this.state.locations[temp[0]];
+        }
 
-          var stateSplit = temp[1].split('|');
-          if (stateSplit.length == 2) {
-            this.state.objects[stateSplit[0]].state = stateSplit[1];
-          }
+        var stateSplit = temp[1].split('|');
+        if (stateSplit.length == 2) {
+          this.state.objects[stateSplit[0]].state = stateSplit[1];
+        }
 
-          if (location.objects[stateSplit[0]] === undefined) {
-            location.objects.push(stateSplit[0]);
-          }
+        if (location.objects[stateSplit[0]] === undefined) {
+          location.objects.push(stateSplit[0]);
         }
       }
+    }
+  }
+
+  remove_items(action) {
+    // from the inventory
+    for (var i = 0; i < action.length; i++) {
+      var temp = action[i].split(':');
+      if (temp.length == 1) {//inventory
+        var ilength = this.state.inventory.length;
+        this.inventoryHandler.removeFromInventory(temp[0]);
+        if (this.state.inventory.length < ilength) {
+          return true;
+        }
+        return false;
+      } else if (temp.length == 2) {
+        var location;
+        if (temp[0] == 'location') {
+          location = this.state.locations[this.state.location];
+        } else {
+          location = this.state.locations[temp[0]];
+        }
+        var olength = location.objects.length;
+        location.objects.remove(temp[1]);
+        if (location.objects.length < olength) {
+          return true;
+        }
+        return false;
+      }
+    }
+  }
+
+  move_items(action) {
+    for (var i = 0; i < action.length; i++) {
+      var temp = action[i].split(':');
+      if (temp.length == 3) {
+        var obj = temp[0];
+        var from = temp[1];
+        var to = temp[2];
+        var removed = false;
+
+        if (from === 'inventory') {
+          removed = this.remove_items(obj);
+        } else {
+          removed = this.remove_items([from + ':' + obj]);
+        }
+
+        if (to === 'inventory' && removed) {
+          this.add_items(obj);
+        } else if (removed) {
+          this.add_items([to+':'+obj]);
+        }
+      }
+    }
+  }
+
+  executeEvent(event, echo) {
+    if (!isEmpty(event.action_move_items)) {
+      this.move_items(event.action_move_items);
+    }
+
+
+    if (!isEmpty(event.action_add_items)) {
+      this.add_items(event.action_add_items);
     }
 
     if (!isEmpty(event.action_remove_items)) {
-      // from the inventory
-      for (var i = 0; i < event.action_remove_items.length; i++) {
-        var temp = event.action_remove_items[i].split(':');
-        if (temp.length == 1) {//inventory
-          this.inventoryHandler.removeFromInventory(temp[0]);
-        } else if (temp.length == 2) {
-          var location;
-          if (temp[0] == 'location') {
-            location = this.state.locations[this.state.location];
-          } else {
-            location = this.state.locations[temp[0]];
-          }
-          location.objects.remove(temp[1]);
-        }
-      }
+      this.remove_items(event.action_remove_items);
     }
+
 
 
     if (!isEmpty(event.action_new_connections)) {

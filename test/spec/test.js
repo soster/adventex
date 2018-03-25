@@ -147,6 +147,13 @@ var events = {
     action_set_state_items: ['torch|none']
   },
 
+  move_book: {
+    name: 'move book',
+    prereq_verb: 'move',
+    prereq_used_items: ['book'],
+    action_move_items: ['book:room_two:room_three']
+  },
+
   throw_stone_at_guard: {
     description: '',
     prereq_verb: 'throw',
@@ -178,7 +185,7 @@ var locations = {
     connections: {
       west: 'room'
     },
-    objects: ['portal'],
+    objects: ['portal', 'book'],
     reversed: ['portal']
   },
   room_three: {
@@ -412,6 +419,7 @@ describe('advntx test suite', function () {
 
   });
 
+
   it('execute some events', function () {
     var save = advntx.state;
     advntx.state = {
@@ -422,6 +430,11 @@ describe('advntx test suite', function () {
     advntx.state.locations = locations;
     advntx.state.location = 'room';
     var eventHandler = new EventHandler(advntx.state, advntx.vocabulary, function()  { });
+
+    assert.equal(2,locations['room_two'].objects.length);
+    eventHandler.executeEvent(events['move_book'], echo);
+    assert.equal(1,locations['room_two'].objects.length, 'move action not successful');
+    assert.equal(2,locations['room_three'].objects.length);
 
     eventHandler.executeEvent(events['open_door'], echo);
     assert.equal(1, Object.keys(locations['room'].connections).length);

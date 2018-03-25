@@ -48,7 +48,7 @@
 		"forward_corridor": {
 			"name": "Narrow and dirty corridor",
 			"description": "Coming from the west, it stretches further to the east, leading to a staircase.\nThere is some debris on the floor, but it is too dark to see any details.",
-			"objects": [],
+			"objects": ["stone"],
 			"connections": {
 				"west": "corridor",
 				"east": "staircase"
@@ -311,6 +311,15 @@
 			"description": "A stone the size of a fist.",
 			"portable": true,
 			"article": "the",
+			"state": "hidden",
+			"states": {
+				"none": {
+					"hidden": false
+				},
+				"hidden": {
+					"hidden": true
+				}
+			},
 			"custom_errors": {
 				"throw": "Leave it, you throw like a girl. Besides, where do you wanna throw it?"
 			}
@@ -418,7 +427,6 @@
 			"not": {
 				"prereq_inventory_items": ["torch"]
 			},
-			"action_add_items": ["forward_corridor:stone"],
 			"action_continue": true
 		},
 
@@ -427,8 +435,15 @@
 			"prereq_verb": "drop",
 			"prereq_used_items": ["torch"],
 			"prereq_inventory_items": ["torch"],
-			"action_remove_items": ["torch","forward_corridor:stone"],
 			"action_continue": true
+		},
+
+		"stone_visible_with_torch": {
+			"description": "The light of the torch reveals a stone lying on the ground.",
+			"prereq_inventory_items": ["torch"],
+			"prereq_location": "forward_corridor",
+			"prereq_location_items": ["stone|hidden"],
+			"action_set_state_items": ["stone|none"]
 		},
 
 		"guard_trigger": {
