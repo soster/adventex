@@ -3,7 +3,9 @@
 import {
   findItemIds,
   getFromStateOrObject
-} from 'app/scripts/helper.js'
+} from 'app/scripts/helper.js';
+
+import * as constants from 'app/scripts/const.js';
 
 export default class InventoryHandler {
   constructor(state, initInventory) {
@@ -64,10 +66,10 @@ export default class InventoryHandler {
     getStateOfObject(itemId) {
       var object = this.l_state.objects[itemId];
       if (object===undefined) {
-        return 'none';
+        return constants.NONE;
       }
       if (isEmpty(object.state)) {
-        return 'none';
+        return constants.NONE;
       }
       return object.state;
     }
@@ -80,10 +82,10 @@ export default class InventoryHandler {
         return undefined;
       }
 
-      if (state!='none'&&object.states[state]===undefined) {
+      if (state!=constants.NONE&&object.states[state]===undefined) {
         return undefined;
       }
-      if (state===undefined || state=='none') {
+      if (state===undefined || state==constants.NONE) {
         return undefined;
       }
       return object.states[state];
@@ -115,10 +117,10 @@ export default class InventoryHandler {
 
     getErrorOfState(itemId, state) {
       var object = this.l_state.objects[itemId];
-      if (state!='none'&&object.states[state]===undefined) {
+      if (state!=constants.NONE&&object.states[state]===undefined) {
         throw state+' is not an allowed state for '+itemId;
       }
-      if (state=='none') {
+      if (state==constants.NONE) {
         return '';
       }
       return object.states[state].error;
@@ -126,7 +128,7 @@ export default class InventoryHandler {
 
     hasState(itemId, state) {
       var object = this.l_state.objects[itemId];
-      if (state!='none'&&(object.states===undefined||object.states[state]===undefined)) {
+      if (state!=constants.NONE&&(object.states===undefined||object.states[state]===undefined)) {
         return false;
       }
       return true;

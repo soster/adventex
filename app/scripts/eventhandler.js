@@ -8,6 +8,7 @@ import {
 import InventoryHandler from 'app/scripts/inventoryhandler.js';
 import LocationHandler from 'app/scripts/locationhandler.js';
 
+import * as constants from 'app/scripts/const.js';
 
 export default class EventHandler {
 
@@ -52,7 +53,7 @@ export default class EventHandler {
       } else {
         if (arr.length > 1) {
           var state = this.inventoryHandler.getStateOfObject(arr[0]);
-          if (state == undefined && arr[1] == 'none') {
+          if (state == undefined && arr[1] == constants.NONE) {
             continue;
           }
           if (state != arr[1]) {
@@ -139,7 +140,7 @@ export default class EventHandler {
       }
       if (location.state == arr[1]) {
         return true;
-      } else if (location.state === undefined && arr[1] == 'none') {
+      } else if (location.state === undefined && arr[1] == constants.NONE) {
         return true;
       }
     } else {
@@ -273,7 +274,7 @@ export default class EventHandler {
         this.inventoryHandler.addToInventory(stateSplit[0]);
       } else if (temp.length == 2) {//location
         var location;
-        if (temp[0] == 'location') {
+        if (temp[0] == constants.LOCATION) {
           location = this.state.locations[this.state.location];
         } else {
           location = this.state.locations[temp[0]];
@@ -304,7 +305,7 @@ export default class EventHandler {
         return false;
       } else if (temp.length == 2) {
         var location;
-        if (temp[0] == 'location') {
+        if (temp[0] == constants.LOCATION) {
           location = this.state.locations[this.state.location];
         } else {
           location = this.state.locations[temp[0]];
@@ -328,13 +329,13 @@ export default class EventHandler {
         var to = temp[2];
         var removed = false;
 
-        if (from === 'inventory') {
+        if (from === constants.INVENTORY) {
           removed = this.remove_items(obj);
         } else {
           removed = this.remove_items([from + ':' + obj]);
         }
 
-        if (to === 'inventory' && removed) {
+        if (to === constants.INVENTORY && removed) {
           this.add_items(obj);
         } else if (removed) {
           this.add_items([to+':'+obj]);

@@ -16,7 +16,9 @@ import {
   listFormattedObjects,
   getObjectIdsForState,
   setStateOfObject
-} from 'app/scripts/helper.js'
+} from 'app/scripts/helper.js';
+
+import * as constants from 'app/scripts/const.js';
 
 export default class LocationHandler {
 
@@ -35,7 +37,7 @@ export default class LocationHandler {
 
       for (var i = 0; i < place.objects.length; i++) {
         var obj = this.state.objects[place.objects[i]];
-        if (!isEmpty(obj.state) && obj.state != 'none' && obj.states[obj.state].objects !== undefined) {
+        if (!isEmpty(obj.state) && obj.state != constants.NONE && obj.states[obj.state].objects !== undefined) {
           var loc = obj.states[obj.state].objects.indexOf(item);
           if (loc != -1) {
             obj.states[obj.state].objects.splice(loc, 1);
@@ -78,13 +80,13 @@ export default class LocationHandler {
     if (location.objects !== undefined) {
       for (var i = 0; i < location.objects.length; i++) {
         var obj = this.state.objects[location.objects[i]];
-        if (!isEmpty(obj.state) && obj.state != 'none') {
+        if (!isEmpty(obj.state) && obj.state != constants.NONE) {
           itemIds = itemIds.concat(findItemIds(names, obj.states[obj.state].objects, this.state.objects));
         }
       }
     }
 
-    if (!isEmpty(location.state) && location.state != 'none' && location.states[location.state].objects !== undefined) {
+    if (!isEmpty(location.state) && location.state != constants.NONE && location.states[location.state].objects !== undefined) {
       itemIds = itemIds.concat(findItemIds(names, location.states[location.state], this.state.objects));
     }
     return itemIds;
@@ -96,7 +98,7 @@ export default class LocationHandler {
       itemIds = itemIds.concat(location.objects);
     }
 
-    if (!isEmpty(location.state) && location.state != 'none') {
+    if (!isEmpty(location.state) && location.state != constants.NONE) {
       itemIds = itemIds.concat(getObjectIdsForState(location.states[location.state]));
     }
 
@@ -104,7 +106,7 @@ export default class LocationHandler {
 
       for (var i = 0; i < location.objects.length; i++) {
         var obj = this.state.objects[location.objects[i]];
-        if (!isEmpty(obj.state) && obj.state != 'none') {
+        if (!isEmpty(obj.state) && obj.state != constants.NONE) {
           itemIds = itemIds.concat(getObjectIdsForState(obj.states[obj.state]));
         }
       }
@@ -141,7 +143,7 @@ export default class LocationHandler {
 
     for (var i = 0; i < location.objects.length; i++) {
       var obj = this.state.objects[location.objects[i]];
-      if (!isEmpty(obj.state) && obj.state != 'none') {
+      if (!isEmpty(obj.state) && obj.state != constants.NONE) {
         var connections = obj.states[obj.state].connections;
         if (connections !== undefined && (location.reversed === undefined || location.reversed.indexOf(location.objects[i]) == -1)) {
           return connections[direction];

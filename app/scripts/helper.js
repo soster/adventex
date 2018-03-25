@@ -4,9 +4,11 @@
 'use strict';
 
 
+import * as constants from 'app/scripts/const.js'
+
 export function getDescription(objects, id) {
   var obj = objects[id];
-  if (obj != undefined && !isEmpty(obj.state) && obj.state != 'none' && obj.states != undefined) {
+  if (obj != undefined && !isEmpty(obj.state) && obj.state != constants.NONE && obj.states != undefined) {
     var state = obj.states[obj.state];
     var desc = state['description'];
     if (!isEmpty(desc)) {
@@ -29,7 +31,7 @@ export function isHidden(objects, id) {
 export function getProperty(objects, property, id) {
   id = id.toLowerCase();
   var obj = objects[id];
-  var state = 'none';
+  var state = constants.NONE;
 
   if (obj.state !== undefined) {
     state = obj.state;
@@ -172,7 +174,7 @@ export function findItemIds(names, objects, allObjects) {
 
 export function setStateOfObject(id, state, objects) {
   var object = objects[id];
-  if (state != 'none' && object.states[state] === undefined) {
+  if (state != constants.NONE && object.states[state] === undefined) {
     throw state + ' is not an allowed state for ' + id;
   }
   return object.state = state;
@@ -202,7 +204,7 @@ export function getFromStateOrObject(objectId, property, objects) {
   var object = objects[objectId];
   var state = object.state;
   var effect;
-  if (!isEmpty(state) && state != 'none' && object.states[state] != undefined) {
+  if (!isEmpty(state) && state != constants.NONE && object.states[state] != undefined) {
     effect = object.states[state][property];
   }
   if (effect === undefined) {

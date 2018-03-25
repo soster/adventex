@@ -34,13 +34,14 @@ import Interpreter from 'app/scripts/interpreter.js'
 
 
 
+
+
 /**
  * Set advntx as global variable. 
  * window is needed because of system.js.
  */
 window.advntx = {
-
-
+  
   echo(text, color, clazz, bold) {
     if (color != undefined || clazz != undefined || bold != undefined) {
       if (clazz === undefined) {
