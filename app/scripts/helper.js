@@ -35,7 +35,8 @@ export function getProperty(objects, property, id) {
     state = obj.state;
   }
 
-  if (obj.states !== undefined && obj.states[state] !== undefined) {
+  // name can not be overriden by state.
+  if (property !== 'name' && obj.states !== undefined && obj.states[state] !== undefined) {
     var retVal = obj.states[state][property];
     if (retVal !== undefined) {
       return retVal;
