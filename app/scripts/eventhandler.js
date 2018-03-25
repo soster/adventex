@@ -266,8 +266,12 @@ export default class EventHandler {
     // into the inventory
     for (var i = 0; i < action.length; i++) {
       var temp = action[i].split(':');
-      if (temp.length == 1) {//inventory
-        var stateSplit = temp[0].split('|');
+      if (temp.length == 1 || (temp.length == 2 && temp[0]==constants.INVENTORY) ) {//inventory
+        var obj = temp[0];
+        if (temp.length == 2) {
+          obj = temp[1];
+        }
+        var stateSplit = obj.split('|');
         if (stateSplit.length == 2) {
           this.state.objects[stateSplit[0]].state = stateSplit[1];
         }
@@ -293,16 +297,20 @@ export default class EventHandler {
   }
 
   remove_items(action) {
-    // from the inventory
+    var removed = false;
+
     for (var i = 0; i < action.length; i++) {
       var temp = action[i].split(':');
-      if (temp.length == 1) {//inventory
+      if (temp.length == 1 || (temp.length == 2 && temp[0]==constants.INVENTORY) ) {//inventory
         var ilength = this.state.inventory.length;
-        this.inventoryHandler.removeFromInventory(temp[0]);
-        if (this.state.inventory.length < ilength) {
-          return true;
+        var obj = temp[0];
+        if (temp.length == 2) {
+          obj = temp[1];
         }
-        return false;
+        this.inventoryHandler.removeFromInventory(obj);
+        if (this.state.inventory.length < ilength) {
+          removed = true;
+        }
       } else if (temp.length == 2) {
         var location;
         if (temp[0] == constants.LOCATION) {
@@ -313,11 +321,11 @@ export default class EventHandler {
         var olength = location.objects.length;
         location.objects.remove(temp[1]);
         if (location.objects.length < olength) {
-          return true;
+          removed = true;
         }
-        return false;
       }
     }
+    return removed;
   }
 
   move_items(action) {

@@ -627,7 +627,7 @@
 			"prereq_location_items": ["merchant"],
 			"prereq_verb": "give",
 			"prereq_used_items": ["ring|none"],
-			"action_remove_items": ["entrance_corridor:merchant"]
+			"action_remove_items": ["entrance_corridor:merchant","inventory:ring"]
 		},
 
 		"merchant_ring_dirty": {
