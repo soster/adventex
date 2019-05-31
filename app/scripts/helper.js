@@ -184,8 +184,14 @@ export function findItemIdsForName(name, objects) {
   var itemIds = [];
   for (var property in objects) {
     var item = objects[property];
-    if (item.name.endsWith(name) && itemIds.indexOf(item.name) == -1) {
+    if (stringEquals(item.name,name)) {
       itemIds.push(property);
+    }
+    for (var synid in item.synonyms) {
+      var syn = item.synonyms[synid];
+      if (stringEquals(syn, name)) {
+        itemIds.push(property);
+      }
     }
   }
   return itemIds;

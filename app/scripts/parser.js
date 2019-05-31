@@ -91,7 +91,12 @@ export default class Parser {
     }
 
     isInArray(value, array) {
-        return array.indexOf(value) > -1;
+        for (var i=0;i<array.length;i++) {
+            if (stringEquals(array[i],value)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

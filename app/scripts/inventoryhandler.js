@@ -191,13 +191,20 @@ export default class InventoryHandler {
     }
 
 
-    getNameWithArticle (itemId) {
+    getNameWithArticle (itemId, accusativ) {
       var item = this.l_state.objects[itemId];
       if (item===undefined) {
         return '';
       }
-      var article = item.article; 
+      var article = item.article;
+      
+      if (accusativ === true && item.article_acc != undefined) {
+        article = item.article_acc;
+      }
+
       var name = item.name; 
+
+
       if ( ! isEmpty(article)) {
         return article + ' ' + name; 
       }else {

@@ -1,0 +1,12 @@
+{
+"console": {
+    "height": 320,
+    "prompt": "advntx de> "
+  },
+  "standard_wait_eventtext": 1000,
+  "text_color": "white",
+  "error_color": "red",
+  "warn_color": "coral",
+  "win_color": "navy",
+  "debug": false
+}

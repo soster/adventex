@@ -226,7 +226,9 @@ var locations = {
 // set up the objects:
 var objects = {
   guard: { name: 'guard' },
-  unconscious_guard: { name: 'unconscious guard' },
+  unconscious_guard: { 
+    name: 'unconscious guard',
+    synonyms: ['guard'] },
   barrel: {
     name: 'barrel',
     description: 'A large barrel, approx. half your height. It is very heavy, it seems to be filled with water.',

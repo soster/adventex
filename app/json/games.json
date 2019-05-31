@@ -6,8 +6,15 @@
         "path": "tutorial"
     },
 
+    "deutsch": {
+        "name": "Tutorial auf Deutsch",
+        "path": "de"
+    },
+
     "escape": {
         "name": "Escape Game",
         "path": "escape"
     }
+
+
 }

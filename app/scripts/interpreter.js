@@ -127,10 +127,10 @@ export default class Interpreter {
         checkSynonyms(advntx.messages.verb_unlock, firstVerb, this.advntx.vocabulary.synonyms) ||
         checkSynonyms(advntx.messages.verb_lock, firstVerb, this.advntx.vocabulary.synonyms)) {
         // open / unlock (maybe handle unlock differently to open, therefore not in synonyms)
-        this.interactWithObjectState(advntx.messages.verb_open,firstObject,withObject);
+        this.interactWithObjectState(advntx.messages.verb_open,firstObject,withObject,preposition);
       } else if (checkSynonyms(advntx.messages.verb_close, firstVerb, this.advntx.vocabulary.synonyms)) {
         // close
-        this.interactWithObjectState(advntx.messages.verb_close,firstObject,withObject);  
+        this.interactWithObjectState(advntx.messages.verb_close,firstObject,withObject,preposition);  
       } else if (checkSynonyms(advntx.messages.verb_load, firstVerb, this.advntx.vocabulary.synonyms)) {
         this.load(secondWord);
       } else if (checkSynonyms(advntx.messages.verb_save, firstVerb, this.advntx.vocabulary.synonyms)) {
@@ -250,8 +250,9 @@ export default class Interpreter {
   }
 
   // open/unlock and close
-  interactWithObjectState(verb,firstObjectId, withObjectId) {
+  interactWithObjectState(verb,firstObjectId, withObjectId, preposition) {
     var state = '';
+
     if (verb==this.advntx.messages.verb_open) {
       state = this.advntx.messages.state_open;
     } else if (verb==this.advntx.messages.verb_close) {
@@ -354,7 +355,7 @@ export default class Interpreter {
     if (item_ids.length == 0 && objects.length > 0) {
       this.echo(this.advntx.messages.error_specific_get.format(objects[0]), this.errorColor)
     } else if (objects.length == 0) {
-      this.echo(this.advntx.messages.error_specific_get.format('this'), this.errorColor);
+      this.echo(this.advntx.messages.error_specific_get.format(this.advntx.messages.this), this.errorColor);
     }
     for (var i = 0; i < item_ids.length; i++) {
       var item_id = item_ids[i];
@@ -368,7 +369,7 @@ export default class Interpreter {
         }
 
       } else {
-        this.echo(this.advntx.messages.info_you_took.format(this.advntx.inventoryHandler.getNameWithArticle(item_id)));
+        this.echo(this.advntx.messages.info_you_took.format(this.advntx.inventoryHandler.getNameWithArticle(item_id, true)));
         this.advntx.inventoryHandler.addToInventory(item_id);
         this.initInventory();
         this.advntx.locationHandler.removeItemFromLocation(this.advntx.state.location, item_id);
@@ -414,9 +415,9 @@ export default class Interpreter {
 
   drop(objects, item_ids) {
     if (item_ids.length == 0 && objects.length > 0) {
-      this.echo(this.advntx.messages.error_specific_get.format(objects[0]))
+      this.echo(this.advntx.messages.error_drop.format(objects[0]))
     } else if (objects.length == 0) {
-      this.echo(this.advntx.messages.error_specific_get.format('this'));
+      this.echo(this.advntx.messages.error_drop.format(this.advntx.messages.this));
     }
 
     for (var i = 0; i < item_ids.length; i++) {
@@ -427,7 +428,7 @@ export default class Interpreter {
       } else {
         this.advntx.inventoryHandler.removeFromInventory(item_id);
         this.advntx.locationHandler.addItemToLocation(this.advntx.state.location, item_id);
-        this.echo(this.advntx.messages.info_you_dropped.format(this.advntx.inventoryHandler.getNameWithArticle(item_id)));
+        this.echo(this.advntx.messages.info_you_dropped.format(this.advntx.inventoryHandler.getNameWithArticle(item_id, true)));
       }
     }
 

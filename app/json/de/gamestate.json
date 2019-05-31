@@ -1,0 +1,139 @@
+{
+	"timestamp": "1999-12-30T23:00:00.000Z",
+	"inventory": [],
+	"location": "start_location",
+	"seconds": 0,
+	"steps": 0,
+	"hints": 0,
+	"points": 0,
+	"locations": {
+		"start_location": {
+			"name": "Startraum",
+			"description": "Du befindest Dich in einem kahlen Raum.\nEine alte Glühbirne hängt von der Decke. Sie ist die einzige Lichtquelle im Raum.\nNach Osten gibt es einen Durchgang, vermutlich in einen ähnlich kargen Raum.",
+			"objects": [
+				"tisch",
+				"licht",
+				"buch",
+				"schluessel"
+			],
+			"states": {},
+			"connections": {
+				"osten": "room_two"
+			}
+		},
+		"room_two": {
+			"name": "Ein zweiter Raum",
+			"description": "Du befindest Dich in einem weiteren kargen Raum. Ein Durchgang führt nach Westen. An der gegenüberliegenden Wand steht ein großer, schmuckloser Kleiderschrank.",
+			"connections": {
+				"westen": "start_location"
+			},
+			"objects": [
+				"kleiderschrank"
+			]
+
+		},
+		"hidden_room": {
+			"name": "Ein versteckter Raum",
+			"description": "Du befindest Dich in einem kleinen, kargen Raum. Ein enger Weg führt nach Westen.",
+			"objects": [
+				"kleiderschrank"
+			],
+			"reversed": [
+				"kleiderschrank"
+			]
+
+		}
+	},
+	"objects": {
+		"tisch": {
+			"name": "Tisch",
+			"description": "Dies ist ein einfacher Holztisch.",
+			"portable": false,
+			"error_portable": "Dieser Tisch ist etwas zu schwer, um ihn herumzutragen.",
+			"hidden": false,
+			"article": "der"
+		},
+		"licht": {
+			"name": "Glühbirne",
+			"description": "Eine altmodische Glühbirne mit der Aufschrift: 60W.",
+			"portable": false,
+			"error_portable": "Wie viele Textadventure-Spieler benötigt man, um eine Birne auszuwechseln? Scheinbar mehr als einen.",
+			"hidden": false,
+			"article": "die"
+		},
+		"buch": {
+			"name": "Buch",
+			"description": "Ein Buch. Auf dem Umschlag steht in großen, freundlichen Buchstaben: '101 things to do in adventure games.'",
+			"portable": true,
+			"hidden": false,
+			"article": "das"
+
+		},
+		"schluessel": {
+			"name": "Schlüssel",
+			"description": "Ein kleiner Schlüssel.",
+			"portable": true,
+			"hidden": false,
+			"article": "der",
+			"article_acc": "den"
+		},
+		"kleiderschrank": {
+			"name": "Kleiderschrank",
+			"description": "Ein großer, weißer Kleiderschrank. Scheinbar von Ikea.",
+			"synonyms": ["Schrank"],
+			"portable": false,
+			"hidden": false,
+			"error_portable": "Du versuchst es erst gar nicht. Er sieht sehr schwer aus...",
+			"state": "closed",
+			"locked": true,
+			"lock_object": "schluessel",
+			"lock_error": "Der Kleiderschrank ist verschlossen!",
+			"states": {
+				"open": {
+					"name": "offen",
+					"description": "Der Kleiderschrank ist offen!",
+					"error": "Er ist abgeschlossen!",
+					"objects": [
+						"mantel"
+					],
+					"connections": {
+						"osten": "hidden_room"
+					},
+					"reversed_connections": {
+						"westen":"room_two"
+					}
+				},
+				"closed": {
+					"name": "verschlossen",
+					"description": "Der Kleiderschrank ist verschlossen."
+				}
+			},
+			"article": "der"
+		},
+		"mantel": {
+			"name": "Mantel",
+			"description": "Ein großer, schwarzer Mantel.",
+			"portable": true,
+			"hidden": false,
+			"article": "der",
+			"article_acc": "den"
+		}
+	},
+	"events": {
+		"start_event": {
+			"name": "Erwacht",
+			"description": "Willkommen zum Adventex Tutorial!\nAdventex ist ein einfaches Textadventure.\nDu kannst:\nOrte erforschen, Gegenstände aufheben (in Dein Inventar) sowie mit Gegenständen sowie der Umgebung interagieren, um Rätsel zu lösen.\nDies machst Du, indem Du einfache Sätze mit Verben und Objekten eingibst.\nFor a list of possible verbs, enter 'help verbs'.\nOften it is useful to examine objects: 'examine table'. If you want to see the description of the current location, enter 'look'.\nSome objects are portable, to pick up a book, enter 'take book'\nStart with exploring your enviromnent by visiting the other room. To do so, enter 'go east'\n",
+			"action_move_to_location": "start_location"
+		},
+		"tutorial_openclose": {
+			"description": "Tutorial: Du befindest Dich an einem neuen Ort. Du siehst einen Kleiderschrank in der Objektliste.\nVersuche ihn zu öffnen und was immer drin ist an Dich zu nehmen.",
+			"prereq_location": "room_two",
+			"trigger_once": true
+		},
+		"tutorial_coat": {
+			"description": "Tutorial: Sehr gut! Du hast den Mantel aus dem Schrank genommen.\nNachdem der Mantel nicht mehr im Schrank hängt, siehst Du eine Art Geheimgang. Er führt nach Osten.\nGehe hindurch!",
+			"prereq_inventory_items": ["mantel"],
+			"trigger_once": true
+		}
+	}
+}

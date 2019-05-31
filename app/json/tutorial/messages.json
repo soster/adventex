@@ -18,6 +18,7 @@
     "error_look": "You can't look at that!",
     "error_examine": "What do you want to examine?",
     "error_read": "You can't read that!",
+    "this": "this",
     "verb_help": "help",
     "verb_debug": "debug",
     "verb_go": "go",

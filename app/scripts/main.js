@@ -180,10 +180,6 @@ window.advntx = {
   },
 
 
-  removeTargetBlank() {
-
-  }, 
-
   initGame(refreshJson, gameId) {
     // version string, add to json calls to avoid browser caching:
     advntx.version = g_ver;
@@ -195,7 +191,7 @@ window.advntx = {
         if (key == 'default') {
           continue;
         }
-        var $button = $('<button type="button" class="btn btn-secondary btn-sm" id="btn_escape" onclick="advntx.initGame(true,\'' + advntx.games[key].path + '\');">' + advntx.games[key].name + '</button>');
+        var $button = $('<button type="button" class="btn btn-secondary btn-sm" id="btn_escape" onclick="advntx.initGame(true,\'' + key + '\');">' + advntx.games[key].name + '</button>');
         var $space = $('<span>&nbsp;</span>');
         $button.appendTo($('#game_buttons'));
         $space.appendTo($('#game_buttons'));
@@ -414,9 +410,7 @@ $(document).ready(function () {
 
   });
 
-  $('#btn_save_file').click(function() {
-    // does not work on firefox.
-    
+  $('#btn_save_file').click(function() {    
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(advntx.state, null, 2));
     var downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute('href',     dataStr);

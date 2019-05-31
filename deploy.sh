@@ -1,3 +1,3 @@
 #!/bin/bash
 gulp
-scp -r dist/* oster@thoster.net:/var/www/thoster.net/web/adventex/
+scp -r dist/* root@thoster.net:/root/server-setup/www/wordpress/adventex

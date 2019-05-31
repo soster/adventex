@@ -1,0 +1,145 @@
+{
+    "verbs": [
+        "öffne",
+        "schließe",
+        "nimm",
+        "gib",
+        "untersuche",
+        "schaue",
+        "lege",
+        "drücke",
+        "ziehe",
+        "entzünde",
+        "lösche",
+        "benutze",
+        "zerstöre",
+        "löse",
+        "stecke",
+        "zerlege",
+        "befestige",
+        "zerschneide",
+        "frage",
+        "gehe",
+        "gib",
+        "wirf",
+        "lies",
+        "drehe",
+        "warte",
+        "schiebe",
+        "leere",
+        "fülle",
+        "säubere",
+        "wasche",
+        "trinke",
+        "esse",
+        "reibe",
+        "hinweis",
+        "hilfe",
+        "neustart",
+        "lade",
+        "speichere",
+        "liste",
+        "inventar"
+    ],
+    "directions": [
+        "norden",
+        "osten",
+        "süden",
+        "westen",
+        "hoch",
+        "runter",
+        "links",
+        "rechts",
+        "vorwärts",
+        "rückwärts",
+        "weg"
+    ],
+    "prepositions": [
+        "von",
+        "nach",
+        "mit",
+        "herum",
+        "zu",
+        "an",
+        "hindurch",
+        "für",
+        "an",
+        "aus",
+        "in",
+        "aus",
+        "auf",
+        "heraus",
+        "über",
+        "unter",
+        "hinter",
+        "durch"
+    ],
+    "adjectives": [
+        "schwarz",
+        "weiß",
+        "grau",
+        "blau",
+        "gelb",
+        "rot",
+        "braun",
+        "grün",
+        "orange",
+        "lila",
+        "schwer",
+        "leicht",
+        "kaputt",
+        "leuchtend",
+        "hell",
+        "dunkel",
+        "schmutzig",
+        "verfault",
+        "weit",
+        "seltsam",
+        "weit",
+        "stark",
+        "fett",
+        "groß",
+        "riesig",
+        "klein",
+        "hoch",
+        "uralt",
+        "tief",
+        "flach",
+        "shallow",
+        "bitter",
+        "süß",
+        "kalt",
+        "winzig",
+        "nass",
+        "heiß",
+        "bewusstlos",
+        "eisig"
+    ],
+    "synonyms": {
+        "nimm": [
+            "nehme"
+        ],
+        "gehe": [
+            "geh"
+        ],
+        "untersuche": [
+            "betrachte"
+        ],
+        "schaue": [
+            "schau"
+        ],
+        "drücke": [
+            "drück"
+        ],
+        "säubere": [
+            "wasche"
+        ],
+        "in": [
+            "hinein"
+        ],
+        "wirf": [
+            "werfe"
+        ]
+
+    }
+}
