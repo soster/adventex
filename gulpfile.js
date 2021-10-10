@@ -9,7 +9,7 @@ var version = require('gulp-version-number');
 const mocha = require('gulp-mocha');
 var gutil = require('gulp-util');
 var jsonminify = require('gulp-jsonminify');
-var sass = require('gulp-sass');
+var sass = require('gulp-sass')(require('sass'));
 var gulp_jspm = require('gulp-jspm');
 var removeCode = require('gulp-remove-code');
 var uglify = require('gulp-uglify');
@@ -48,7 +48,7 @@ gulp.task('jspm', function(){
 
 gulp.task('sass', function () {
   return gulp.src('app/styles/**/*.scss')
-    .pipe(sass.sync().on('error', sass.logError))
+    .pipe(sass().on('error', sass.logError))
     .pipe($.if(dev, gulp.dest('.tmp/styles'), gulp.dest('dist/styles')))
     .pipe(reload({stream: true}));
 });
@@ -79,7 +79,13 @@ gulp.task('lint:test', () => {
     .pipe(gulp.dest('test/spec'));
 });
 
-gulp.task('html', ['sass', 'jspm', 'json'], () => {
+gulp.task('json', () => {
+  return gulp.src('app/json/**/*')
+    .pipe(jsonminify())
+    .pipe(gulp.dest('dist/json'));
+});
+
+gulp.task('html', gulp.series('sass', 'jspm', 'json', () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
@@ -87,19 +93,14 @@ gulp.task('html', ['sass', 'jspm', 'json'], () => {
     .pipe($.versionNumber(versionConfig))
     .pipe(removeCode({ production: true }))
     .pipe(gulp.dest('dist'));
-});
+}));
 
 gulp.task('images', () => {
   return gulp.src('app/images/**/*')
-    .pipe($.cache($.imagemin()))
     .pipe(gulp.dest('dist/images'));
 });
 
-gulp.task('json', () => {
-  return gulp.src('app/json/**/*')
-    .pipe(jsonminify())
-    .pipe(gulp.dest('dist/json'));
-});
+
 
 gulp.task('fonts', () => {
   return gulp.src(require('main-bower-files')('**/*.{eot,svg,ttf,woff,woff2}', function (err) {})
@@ -118,36 +119,45 @@ gulp.task('extras', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
-gulp.task('serve', () => {
-  runSequence(['clean'], ['sass', 'fonts'], () => {
-    browserSync.init({
-      notify: false,
-      port: 9000,
-      server: {
 
-        baseDir: ['.tmp', '.', 'app'],
-        routes: {
-          '/jspm_packages': 'jspm_packages',
-        }
+
+// Static Server + watching scss/html files
+gulp.task('serve', gulp.series('sass', () => {
+
+  browserSync.init({
+    notify: false,
+    port: 9000,
+    server: {
+
+      baseDir: ['.tmp', '.', 'app'],
+      routes: {
+        '/jspm_packages': 'jspm_packages',
       }
-    });
+    }
+  });
 
-    gulp.watch([
-      'app/*.html',
-      'app/images/**/*',
-      'app/json/*',
-      '.tmp/fonts/**/*'
-    ]).on('change', reload);
+  gulp.watch([
+    'app/*.html',
+    'app/images/**/*',
+    'app/json/*',
+    '.tmp/fonts/**/*'
+  ]).on('change', reload);
 
-    gulp.watch('app/styles/**/*.scss', ['sass']);
-    gulp.watch('app/scripts/**/*.js', ['jspm']);
-    gulp.watch(['app/scripts/**/*.js', 'test/index.html']).on('change', reload);
-    gulp.watch('app/fonts/**/*', ['fonts']);
+  gulp.watch('app/styles/**/*.scss', gulp.series('sass'));
+  gulp.watch('app/scripts/**/*.js', gulp.series('jspm'));
+  gulp.watch(['app/scripts/**/*.js', 'test/index.html']).on('change', reload);
+  gulp.watch('app/fonts/**/*', gulp.series('fonts'));
+}));
 
+
+gulp.task('default', () => {
+  return new Promise(resolve => {
+    dev = false;
+    runSequence(['clean'], 'build', resolve);
   });
 });
 
-gulp.task('serve:dist', ['default'], () => {
+gulp.task('serve:dist', gulp.series('default', () => {
   browserSync.init({
     notify: false,
     port: 9000,
@@ -155,9 +165,9 @@ gulp.task('serve:dist', ['default'], () => {
       baseDir: ['dist']
     }
   });
-});
+}));
 
-gulp.task('serve:test', [], () => {
+gulp.task('serve:test', gulp.series(() => {
   browserSync.init({
     notify: false,
     port: 9000,
@@ -174,17 +184,12 @@ gulp.task('serve:test', [], () => {
 
   gulp.watch(['app/scripts/**/*.js', 'test/index.html']).on('change', reload);
   gulp.watch(['test/spec/**/*.js', 'test/index.html']).on('change', reload);
-  gulp.watch('test/spec/**/*.js', ['lint:test']);
-});
+  gulp.watch('test/spec/**/*.js', gulp.series('lint:test'));
+}));
 
 
-gulp.task('build', ['json', 'html', 'images', 'fonts', 'extras'], () => {
+gulp.task('build', gulp.series('json', 'html', 'images', 'fonts', 'extras', () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
-});
+}));
 
-gulp.task('default', () => {
-  return new Promise(resolve => {
-    dev = false;
-    runSequence(['clean'], 'build', resolve);
-  });
-});
+
