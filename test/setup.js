@@ -2,6 +2,9 @@
 // This tells SystemJS to load the mocha library
 // and allows us to interact with the library below.
 //
+import mocha from 'mocha';
+
+
 
 //
 // This defines the list of test files we want to load and run tests against.
@@ -23,6 +26,7 @@ var allowedMochaGlobals = [
 // Importing mocha with JSPM and ES6 doesn't expose the usual mocha globals.
 // I found this is one way to manually expose the globals, however if you know of a better way please let me know...
 //
+
 mocha.suite.on('pre-require', function(context) {
   var exports = window;
 

@@ -18,11 +18,11 @@ export default class EventActionHandler {
     }
 
     execute_action(action) {
-        throw "executeEvent not implemented!";
+        throw 'executeEvent not implemented!';
     }
 
     static get_name() {
-        throw "get_name not implemented!";
+        throw 'get_name not implemented!';
     }
 
     static create_action_handler_properties(object, state, vocabulary, inventoryHandler, locationHandler, echo) {

@@ -1,21 +1,33 @@
 // generated on 2017-10-16 using generator-webapp 3.0.1
-"use strict";
-const gulp = require('gulp');
-const gulpLoadPlugins = require('gulp-load-plugins');
-const browserSync = require('browser-sync').create();
-const del = require('del');
-const runSequence = require('run-sequence');
-var version = require('gulp-version-number');
-const mocha = require('gulp-mocha');
-var gutil = require('gulp-util');
-var jsonminify = require('gulp-jsonminify');
-var sass = require('gulp-sass')(require('sass'));
-var gulp_jspm = require('gulp-jspm');
-var removeCode = require('gulp-remove-code');
-var uglify = require('gulp-uglify');
+
+import gulp from 'gulp';
+//import gulpLoadPlugins from 'gulp-load-plugins';
+
+// workaround for not using require anymore:
+import { createRequire } from 'module';
+const gulpLoadPlugins = createRequire(import.meta.url)('gulp-load-plugins');
+
+
+import browserSync from 'browser-sync';
+import del from 'del';
+import runSequence from 'run-sequence';
+import version from 'gulp-version-number';
+import mocha from 'gulp-mocha';
+import gutil from 'gulp-util';
+import jsonminify from 'gulp-jsonminify';
+
+import dartSass from 'sass';
+import gulpSass from 'gulp-sass';
+const sass = gulpSass(dartSass);
+
+import gulp_jspm from 'gulp-jspm'
+import removeCode from 'gulp-remove-code';
+import uglify from 'gulp-uglify';
+import mbf from 'main-bower-files';
+
 
 const $ = gulpLoadPlugins();
-const reload = browserSync.reload;
+const reload = browserSync.create().reload;
 
 const versionConfig = {
   'value': '%DT%',
@@ -30,11 +42,7 @@ let dev = true;
 
 
 
-gulp.task('test', function () {
-  return gulp.src(['test/setup.js'])
-  .pipe(mocha({ reporter: 'list'}))
-  .on('warning', gutil.log);
-});
+
 
 gulp.task('jspm', function(){
     return gulp.src('app/scripts/main.js')
@@ -103,7 +111,7 @@ gulp.task('images', () => {
 
 
 gulp.task('fonts', () => {
-  return gulp.src(require('main-bower-files')('**/*.{eot,svg,ttf,woff,woff2}', function (err) {})
+  return gulp.src(mbf('**/*.{eot,svg,ttf,woff,woff2}', function (err) {})
     .concat('app/fonts/**/*'))
     .pipe($.if(dev, gulp.dest('.tmp/fonts'), gulp.dest('dist/fonts')));
 });
@@ -192,4 +200,10 @@ gulp.task('build', gulp.series('json', 'html', 'images', 'fonts', 'extras', () =
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 }));
 
-
+// Test
+gulp.task('test', /*gulp.series(['build', 'lint']), */function() {
+  return gulp.src('test/spec/*.js', { read : false })
+    .pipe(mocha({
+      reporter: 'list'
+    }))
+});

@@ -229,7 +229,7 @@ window.advntx = {
   executeCurrent() {
     if (advntx.waitForKey) {
       // simulate backspace key:
-      var e = $.Event("keydown", { keyCode: 8});
+      var e = $.Event('keydown', { keyCode: 8});
       advntx.term.trigger(e);
     } else {
       advntx.term.exec(advntx.term.get_command());
@@ -411,7 +411,7 @@ $(document).ready(function () {
   });
 
   $('#btn_save_file').click(function() {    
-    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(advntx.state, null, 2));
+    var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(advntx.state, null, 2));
     var downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute('href',     dataStr);
     var date = new Date();
