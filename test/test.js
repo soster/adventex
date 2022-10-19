@@ -2,12 +2,12 @@ import chai, { expect } from 'chai';
 
 import $ from 'jquery';
 import terminal from 'jquery.terminal';
-import Parser from 'app/scripts/parser.js';
-import parseJson from 'app/scripts/json.js';
-import EventHandler from 'app/scripts/eventhandler.js'
-import InventoryHandler from 'app/scripts/inventoryhandler.js'
-import LocationHandler from 'app/scripts/locationhandler.js'
-import Interpreter from 'app/scripts/interpreter.js'
+import Parser from '../app/scripts/parser.js';
+import parseJson from '../app/scripts/json.js';
+import EventHandler from '../app/scripts/eventhandler.js'
+import InventoryHandler from '../app/scripts/inventoryhandler.js'
+import LocationHandler from '../app/scripts/locationhandler.js'
+import Interpreter from '../app/scripts/interpreter.js'
 
 import {
   checkSynonyms,
@@ -22,9 +22,8 @@ import {
   getProperty,
   getSecondOfType,
   isHidden,
-  listObjects,
   setStateOfObject
-} from 'app/scripts/helper.js'
+} from '../app/scripts/helper.js'
 
 
 

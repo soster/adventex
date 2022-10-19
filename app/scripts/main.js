@@ -5,7 +5,7 @@ import 'jquery.terminal/css/jquery.terminal.min.css!';
 import $ from 'jquery';
 import terminal from 'jquery.terminal';
 import Parser from 'app/scripts/parser.js';
-import { default as parseJson } from 'app/scripts/json.js';
+import { default as parseJson } from './json.js';
 import {
   checkSynonyms,
   findFirstMatch,

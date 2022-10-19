@@ -40,7 +40,14 @@ const versionConfig = {
 
 let dev = true;
 
-
+// Test
+gulp.task('test', /*gulp.series(['build', 'lint']), */function() {
+  
+  return gulp.src(['test/test.js','app/scripts'])
+    .pipe(mocha({     
+      reporter: 'list'      
+    }))
+});
 
 
 
@@ -191,8 +198,8 @@ gulp.task('serve:test', gulp.series(() => {
   });
 
   gulp.watch(['app/scripts/**/*.js', 'test/index.html']).on('change', reload);
-  gulp.watch(['test/spec/**/*.js', 'test/index.html']).on('change', reload);
-  gulp.watch('test/spec/**/*.js', gulp.series('lint:test'));
+  gulp.watch(['test/*.js', 'test/index.html']).on('change', reload);
+  gulp.watch('test/*.js', gulp.series('lint:test'));
 }));
 
 
@@ -200,10 +207,4 @@ gulp.task('build', gulp.series('json', 'html', 'images', 'fonts', 'extras', () =
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 }));
 
-// Test
-gulp.task('test', /*gulp.series(['build', 'lint']), */function() {
-  return gulp.src('test/spec/*.js', { read : false })
-    .pipe(mocha({
-      reporter: 'list'
-    }))
-});
+

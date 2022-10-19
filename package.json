@@ -2,7 +2,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-  "test": "mocha --delay test/setup.js"
+  "test": "mocha"
   
  },
   "engines": {

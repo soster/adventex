@@ -19,6 +19,10 @@ After installing jspm you can initialize the jspm dependencies:
 Now you need to install gulp:
 `npm install gulp-cli -g`
 
+## Unit Tests
+Unit tests only work with a real browser. Start them like this:
+`gulp serve:tests`
+
 ## Startup
 You can start adventex locally with
 `gulp serve`
