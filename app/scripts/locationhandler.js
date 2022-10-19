@@ -6,6 +6,7 @@ import {
   findItemIds,
   findItemIdsForName,
   getDescription,
+  getImage,
   getFirstOfType,
   getLastOfType,
   getName,
@@ -123,6 +124,16 @@ export default class LocationHandler {
     var loc = this.state.locations[location_id];
     var description = getDescription(this.state.locations, location_id);
     return description;
+  }
+
+
+  getLocationImage(location_id) {
+    var loc = this.state.locations[location_id];
+    if (loc!=undefined) {
+      var image = getImage(this.state.locations, location_id);
+      return image;
+    }
+    return undefined;
   }
 
   getLocationById(location_id) {

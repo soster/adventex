@@ -134,10 +134,12 @@ window.advntx = {
     var name = getName(advntx.state.locations, locationId);
     var headline = '';
     var description = '';
+    var image = 'fallback.png';
 
     if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
       headline = advntx.formatHeadline(name);
       description = advntx.locationHandler.getLocationDescription(locationId);
+      image = advntx.locationHandler.getLocationImage(locationId);
       // loop through possible directions:
       for (var key in loc.connections) {
         var direction = key;
@@ -170,6 +172,10 @@ window.advntx = {
     }
 
     advntx.echo(text);
+
+    if (!isEmpty(image)) {
+      document.getElementById("imagecontainer").src=image;
+    }
 
 
   },

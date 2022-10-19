@@ -18,9 +18,12 @@ export function getDescription(objects, id) {
   return getProperty(objects, 'description', id)
 }
 
-
 export function getName(objects, id) {
   return getProperty(objects, 'name', id);
+}
+
+export function getImage(objects, id) {
+  return getProperty(objects, 'image', id);
 }
 
 export function isHidden(objects, id) {
