@@ -139,7 +139,7 @@ window.advntx = {
     if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
       headline = advntx.formatHeadline(name);
       description = advntx.locationHandler.getLocationDescription(locationId);
-      image = advntx.locationHandler.getLocationImage(locationId);
+      image = advntx.currentGame+'/'+advntx.locationHandler.getLocationImage(locationId);
       // loop through possible directions:
       for (var key in loc.connections) {
         var direction = key;
@@ -190,7 +190,7 @@ window.advntx = {
     // version string, add to json calls to avoid browser caching:
     advntx.version = g_ver;
 
-    getJSON('json/games.json', function (result) {
+    getJSON('games/games.json', function (result) {
       advntx.games = result;
       $('#game_buttons').children().remove();
       for (var key in advntx.games) {
@@ -207,7 +207,7 @@ window.advntx = {
         gameId = result.default;
       }
       advntx.gameId = gameId;
-      advntx.currentGame = 'json/' + result[gameId].path;
+      advntx.currentGame = 'games/' + result[gameId].path;
       if (advntx.term != undefined) {
         advntx.term.clear();
       }
@@ -322,9 +322,15 @@ window.advntx = {
       advntx.eventHandler.executeEvent(startEvent, function(eventText) {
         text += eventText;
       });
+      advntx.echo(text);
     }
 
-    advntx.describeLocationEcho(advntx.state.location,false,text,undefined);
+    setTimeout(function () {
+            advntx.describeLocationEcho(advntx.state.location,false,undefined,undefined);
+        },1500);
+  
+
+    
 
 
     removeTargetFromLinks();

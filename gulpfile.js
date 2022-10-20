@@ -95,12 +95,17 @@ gulp.task('lint:test', () => {
 });
 
 gulp.task('json', () => {
-  return gulp.src('app/json/**/*')
+  return gulp.src('app/games/**/*.json')
     .pipe(jsonminify())
-    .pipe(gulp.dest('dist/json'));
+    .pipe(gulp.dest('dist/games'));
 });
 
-gulp.task('html', gulp.series('sass', 'jspm', 'json', () => {
+gulp.task('games', () => {
+  return gulp.src(['app/games/**/**','!app/games/**/*.json'])
+    .pipe(gulp.dest('dist/games'));
+});
+
+gulp.task('html', gulp.series('sass', 'jspm', 'json', 'games', () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .on('error', function (err) { gutil.log(gutil.colors.red('[Error]'), err.toString()); })
@@ -112,7 +117,7 @@ gulp.task('html', gulp.series('sass', 'jspm', 'json', () => {
 
 gulp.task('images', () => {
   return gulp.src('app/images/**/*')
-    .pipe(gulp.dest('dist/images'));
+    .pipe(gulp.dest('dist/app/images'));
 });
 
 

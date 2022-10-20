@@ -9,7 +9,7 @@
 	"locations": {
 		"dungeon_cell": {
 			"name": "Dungeon cell",
-			"image": "app/images/cell1.png",
+			"image": "cell1.png",
 			"description": "A weak light shines through a small barred window just below the ceiling.\nYou see the outlines of the few things in your cell.\nThere is a door north from you.\nDirty, half rotten straw is lying on the floor.",
 			"objects": [
 				"straw",
@@ -23,7 +23,7 @@
 		},
 		"lower_cell": {
 			"name": "Another dungeon cell",
-			"image": "app/images/cell2.png",
+			"image": "cell2.png",
 			"description": "It is moist and dark, but a weak light shines through the small open trap door in the ceiling.\nThe hole in the ceiling is too high for you to climb back.\nThe cell door in the north seems very massive.\n\nThe cell is deserted and has not seen a cell dweller in a while.",
 			"objects": [
 				"bed",
@@ -35,7 +35,7 @@
 		
 		"corridor": {
 			"name": "Narrow corridor",
-			"image": "app/images/narrow-passage.png",
+			"image": "narrow-passage.png",
 			"description": "The opened cell door is to the south. The corridor stretches to the east and to the west, slightly curved.\nYou hear a faint noise from the west!",
 			"additional_description": "There is a burning torch on a mount on the wall, it flickers and casts creepy shadows.",
 			"objects": [
