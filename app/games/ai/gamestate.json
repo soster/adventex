@@ -1,0 +1,134 @@
+{
+	"timestamp": "1999-12-30T23:00:00.000Z",
+	"inventory": [],
+	"location": "start_location",
+	"seconds": 0,
+	"steps": 0,
+	"hints": 0,
+	"points": 0,
+	"locations": {
+		"start_location": {
+			"name": "Starting room",
+			"description": "You are in an unadorned, rectangular room without windows.\nA simple light bulb is hanging from the ceiling, the only source of light, casting harsh shadows.\nThere is a passage to the east, apparently to another room much like this.",
+			"objects": [
+				"table",
+				"light",
+				"book",
+				"key"
+			],
+			"states": {},
+			"connections": {
+				"east": "room_two"
+			}
+		},
+		"room_two": {
+			"name": "Another room",
+			"description": "You are in another unadorned, rectangular room. There is a passage to the west. In the opposite direction you see a large wardrobe.",
+			"connections": {
+				"west": "start_location"
+			},
+			"objects": [
+				"wardrobe"
+			]
+
+		},
+		"hidden_room": {
+			"name": "A hidden room",
+			"description": "You are in another unadorned, rectangular room. There is a passage to the west.",
+			"objects": [
+				"wardrobe"
+			],
+			"reversed": [
+				"wardrobe"
+			]
+
+		}
+	},
+	"objects": {
+		"table": {
+			"name": "table",
+			"description": "This is a simple, wooden table.",
+			"portable": false,
+			"error_portable": "Guess what: The table is to heavy to carry around.",
+			"hidden": false,
+			"article": "the"
+		},
+		"light": {
+			"name": "light bulb",
+			"description": "A simple light bulb. It reads: 60W.",
+			"portable": false,
+			"error_portable": "How many players of interactive fiction does it take to unscrew this light bulb? Apparently, more than one.",
+			"hidden": false,
+			"article": "the"
+		},
+		"book": {
+			"name": "book",
+			"description": "A book, the title reads: '101 things to do in adventure games.'",
+			"portable": true,
+			"hidden": false,
+			"article": "the"
+		},
+		"key": {
+			"name": "key",
+			"description": "A small key.",
+			"portable": true,
+			"hidden": false,
+			"article": "the"
+		},
+		"wardrobe": {
+			"name": "wardrobe",
+			"description": "A large, white wardrobe. It looks like an Ikea model.",
+			"portable": false,
+			"hidden": false,
+			"error_portable": "You try to pick up the wardrobe... Well... no.",
+			"state": "closed",
+			"locked": true,
+			"lock_object": "key",
+			"lock_error": "The wardrobe is locked!",
+			"states": {
+				"open": {
+					"name": "open",
+					"description": "The wardrobe is open.",
+					"error": "It is locked!",
+					"objects": [
+						"coat"
+					],
+					"connections": {
+						"east": "hidden_room"
+					},
+					"reversed_connections": {
+						"west":"room_two"
+					}
+				},
+				"closed": {
+					"name": "closed",
+					"description": "The wardrobe is closed."
+				}
+			},
+			"article": "the"
+		},
+		"coat": {
+			"name": "coat",
+			"description": "A large, black coat.",
+			"portable": true,
+			"hidden": false
+		}
+	},
+	"events": {
+		"start_event": {
+			"name": "Awake",
+			"description": "Welcome to the adventex tutorial!\nAdventex is a simple text adventure (also called 'interactive fiction').\nYou can:\nExplore different locations, pick up items (into your 'inventory') and interact with objects and the environment to solve puzzles.\nYou interact with your environment by entering simple sentences, starting with a verb.\nFor a list of possible verbs, enter 'help verbs'.\nOften it is useful to examine objects: 'examine table'. If you want to see the description of the current location, enter 'look'.\nSome objects are portable, to pick up a book, enter 'take book'\nStart with exploring your enviromnent by visiting the other room. To do so, enter 'go east'\n",
+			"action_move_to_location": "start_location"
+		},
+		"tutorial_openclose": {
+			"description": "Tutorial: You are in a new location. You see a wardrobe in the list of objects.\nTry to open the wardrobe and take whatever is inside.",
+			"prereq_location": "room_two",
+			"trigger_once": true
+		},
+		"tutorial_coat": {
+			"description": "Tutorial: Very good! You successfully took the coat out of the wardrobe.\nAfter taking the coat, you recognise a hidden passage in the wardrobe. The passage leads east.\nGo through the hidden passage!",
+			"prereq_inventory_items": ["coat"],
+			"trigger_once": true
+		}
+	}
+}

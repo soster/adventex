@@ -1,5 +1,5 @@
 
-import 'bootstrap/css/bootstrap.css!';
+import 'bootstrap/dist/css/bootstrap.css!';
 import 'jquery.terminal/css/jquery.terminal.min.css!';
 
 import $ from 'jquery';
