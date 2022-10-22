@@ -1,11 +1,11 @@
 
 @import url('https://fonts.googleapis.com/css?family=Open+Sans|Special+Elite');
 
-$term_bg_color: #f2f2f2;
-$term_fg_color: #0d0d0d;
+$termbgcolor: #f2f2f2;
+$termfgcolor: #0d0d0d;
 
-$term_bg_inv: $term_fg_color;
-$term_fg_inv: $term_bg_color;
+$termbginv: $termfgcolor;
+$termfginv: $termbgcolor;
 
 /* effects: */
 .fire {
@@ -21,27 +21,23 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
 }
 
 .blurry-text {
-  text-shadow: 0 0 1.5px $term_fg_color;
+  text-shadow: 0 0 1.5px $termfgcolor;
   color: transparent;
 }
 
 /** overwrite terminal css: */
-
 .terminal {
-  --color: $term_fg_color;
-  --background: $term_bg_color;
+  // weird thing with css and sass variables, see 
+  // https://sass-lang.com/documentation/breaking-changes/css-vars
+  --background: #{$termbgcolor};
+  --color: #{$termfgcolor};
   --size: 14px;
 }
+
 
 .terminal a {
   text-decoration: underline;
 }
-
-.inverted, .inverted a:link, .inverted a:active, .inverted a:hover,.inverted a:visited {
-  --color: $term_bg_color;
-  --background: $term_fg_color;
-}
-
 
 
 /* ---- */

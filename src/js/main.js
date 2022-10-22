@@ -218,6 +218,7 @@ import Interpreter from './interpreter.js'
 
   terminalLink(name) {
     advntx.term.insert(name);
+    advntx.asyncRefocusTerminal();
   },
 
   executeLink(name) {
@@ -279,6 +280,7 @@ import Interpreter from './interpreter.js'
           name: advntx.messages.name,
           prompt: advntx.config.console.prompt,
           height: advntx.config.console.height,
+          anyLinks: true,
           completion: advntx.vocabulary.verbs.concat(advntx.vocabulary.directions).concat(advntx.vocabulary.prepositions).concat(getObjectNameArray(advntx.state.objects))
         });
     }
@@ -340,10 +342,11 @@ import Interpreter from './interpreter.js'
 
   refocusTerminal() {
     advntx.term.focus();
+    removeTargetFromLinks();
   },
 
   asyncRefocusTerminal() {
-    window.setTimeout('advntx.refocusTerminal()', 250);
+    window.setTimeout('advntx.refocusTerminal();', 250);
   },
 
   inventoryClick(item) {
