@@ -1,10 +1,4 @@
-
-import 'bootstrap/dist/css/bootstrap.css!';
-import 'jquery.terminal/css/jquery.terminal.min.css!';
-
-import $ from 'jquery';
-import terminal from 'jquery.terminal';
-import Parser from 'app/scripts/parser.js';
+import Parser from './parser.js';
 import { default as parseJson } from './json.js';
 import {
   checkSynonyms,
@@ -24,13 +18,12 @@ import {
   getObjectNameArray,
   getJSON,
   removeTargetFromLinks
-} from 'app/scripts/helper.js'
+} from './helper.js'
 
-import InventoryHandler from 'app/scripts/inventoryhandler.js'
-import LocationHandler from 'app/scripts/locationhandler.js'
-import EventHandler from 'app/scripts/eventhandler.js'
-import Interpreter from 'app/scripts/interpreter.js'
-
+import InventoryHandler from './inventoryhandler.js'
+import LocationHandler from './locationhandler.js'
+import EventHandler from './eventhandler.js'
+import Interpreter from './interpreter.js'
 
 
 
@@ -40,7 +33,7 @@ import Interpreter from 'app/scripts/interpreter.js'
  * Set advntx as global variable. 
  * window is needed because of system.js.
  */
-window.advntx = {
+ window.advntx = {
   
   echo(text, color, clazz, bold) {
     if (color != undefined || clazz != undefined || bold != undefined) {

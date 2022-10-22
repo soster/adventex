@@ -4,7 +4,9 @@
 'use strict';
 
 
-import * as constants from 'app/scripts/const.js'
+import * as constants from './const.js'
+
+
 
 export function getDescription(objects, id) {
   var obj = objects[id];

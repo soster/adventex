@@ -27,29 +27,21 @@ to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em
 
 /** overwrite terminal css: */
 
-
-
-.termcolor, .termcolor a:link, .termcolor a:active, .termcolor a:hover,.termcolor a:visited {
-  /*
-  font-family: 'Open Sans', sans-serif !important;*/
-  color: $term_fg_color !important;
-  background-color: $term_bg_color !important;
+.terminal {
+  --color: $term_fg_color;
+  --background: $term_bg_color;
+  --size: 14px;
 }
 
 .terminal a {
   text-decoration: underline;
 }
 
-
-.cmd, .cmd .prompt, .terminal, .terminal .terminal-output div div {
-  font-size: 14px !important;
-  line-height: 16px !important;
-}
-
 .inverted, .inverted a:link, .inverted a:active, .inverted a:hover,.inverted a:visited {
-  background-color: $term_fg_color !important;
-  color: $term_bg_color !important;
+  --color: $term_bg_color;
+  --background: $term_fg_color;
 }
+
 
 
 /* ---- */

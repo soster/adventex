@@ -1,8 +1,9 @@
-bower_components
+# Node
 node_modules
-jspm_packages
 dist
-.tmp
-*.iml
-.idea
-.vscode
+
+## OS X
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes

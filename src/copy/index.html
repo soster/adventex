@@ -7,8 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>adventex</title>
 
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" media="all" href="styles/main.css">
+  <link rel="stylesheet" media="all" href="css/main.css">
+  <link rel="stylesheet" media="all" href="css/jquery.terminal.min.css">
+  <link rel="stylesheet" media="all" href="css/bootstrap.min.css">
 
 
 </head>
@@ -37,7 +38,7 @@
     <div class="row clearfix">
       <div class="col-md-3 wrapper">
         <p>
-        <img id="imagecontainer" src="app/images/adventex.png" width="100%" alt="" />
+        <img id="imagecontainer" src="img/adventex.png" width="100%" alt="" />
       </p>
       </div>
       <div id="inventory_container" class="col-md-6 d-none d-md-block">
@@ -154,34 +155,16 @@
       </div>
     </div>
   </div>
-
-
-  <!-- build:js scripts/app.js -->
-  <script src="scripts/functions.js"></script>
-  <!-- endbuild -->
-
-
-  <!--removeIf(production)-->
-  <script src="jspm_packages/system.js"></script>
-  <script src="config.js"></script>
-  <!--endRemoveIf(production)-->
-
-  <!-- global variable, value is replaced by gulp-version-number -->
+  <!-- FIXME global variable, value is replaced by gulp-version-number -->
   <script>
     var g_ver = 'VERSION_REPLACE';
   </script>
-  <!-- System.js bundle, only for production build: -->
-  <script src="scripts/main.bundle.js"></script>
 
-  <!--removeIf(production)-->
-  <script>
-    System.config({
-    });
-    System.import('scripts/main.js').then(function () {
-
-    });
-  </script>
-  <!--endRemoveIf(production)-->
+  <script src="js/functions.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/jquery.terminal.min.js"></script>
+  <script src="js/main.js"></script>
+  
 </body>
 
 </html>

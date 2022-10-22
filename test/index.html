@@ -4,27 +4,29 @@
 <head>
   <meta charset="utf-8">
   <title>Mocha Spec Runner</title>
-  <link rel="stylesheet" href="/node_modules/mocha/mocha.css">
+  <link rel="stylesheet" href="node_modules/mocha/mocha.css">
 </head>
 
 <body>
   <div id="mocha"></div>
 
-  <script src="app/scripts/functions.js"></script>
-
-  <!--mocha is not working if loading with system.js! -->
   <script src="node_modules/mocha/mocha.js"></script>
-  <script src="jspm_packages/system.js"></script>
-  <script src="config.js"></script>
-  
-
+  <script src="node_modules/chai/chai.js"></script>
   <script>
-    System.import('test/setup.js').then(function() {
-  });
+    const expect = chai.expect;
+    mocha.setup('bdd');
+    // now use SystemJS to load all test files
+
+
   </script>
+  <script src="js/functions.js"></script>
 
-  <script>
-
+  <script src="node_modules/systemjs/dist/system.js"></script>
+  <script src="node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="node_modules/jquery.terminal/js/jquery.terminal.min.js"></script>
+  <script type="module" src="test.mjs"></script>
+  <script class="mocha-exec">
+    mocha.run();
   </script>
 </body>
 

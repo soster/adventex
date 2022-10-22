@@ -13,7 +13,7 @@ import {
   listFormattedObjects,
   getObjectIdsForState,
   removeTargetFromLinks
-} from 'app/scripts/helper.js'
+} from './helper.js'
 
 export default class Interpreter {
   constructor(advntx) {

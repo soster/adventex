@@ -1,4 +1,4 @@
-import {getJSON as getJSON} from 'app/scripts/helper.js';
+import {getJSON as getJSON} from './helper.js';
 
 
 export default function parseJson(asyncInit, advntx) {

@@ -3,9 +3,9 @@
 import {
   findItemIds,
   getFromStateOrObject
-} from 'app/scripts/helper.js';
+} from './helper.js';
 
-import * as constants from 'app/scripts/const.js';
+import * as constants from './const.js';
 
 export default class InventoryHandler {
   constructor(state, initInventory) {

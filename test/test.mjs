@@ -1,13 +1,11 @@
-import chai, { expect } from 'chai';
+//import { chai } from './node_modules/chai/chai.js';
 
-import $ from 'jquery';
-import terminal from 'jquery.terminal';
-import Parser from '../app/scripts/parser.js';
-import parseJson from '../app/scripts/json.js';
-import EventHandler from '../app/scripts/eventhandler.js'
-import InventoryHandler from '../app/scripts/inventoryhandler.js'
-import LocationHandler from '../app/scripts/locationhandler.js'
-import Interpreter from '../app/scripts/interpreter.js'
+import Parser from '../src/js/parser.js';
+import parseJson from '../src/js/json.js';
+import EventHandler from '../src/js/eventhandler.js'
+import InventoryHandler from '../src/js/inventoryhandler.js'
+import LocationHandler from '../src/js/locationhandler.js'
+import Interpreter from '../src/js/interpreter.js'
 
 import {
   checkSynonyms,
@@ -23,7 +21,7 @@ import {
   getSecondOfType,
   isHidden,
   setStateOfObject
-} from '../app/scripts/helper.js'
+} from '../src/js/helper.js'
 
 
 
@@ -31,10 +29,11 @@ var assert = chai.assert;
 
 
 
+
 // some mocking:
 window.advntx = (function (my) {
   var parser;
-
+  
   
 
 
@@ -52,7 +51,7 @@ window.advntx = (function (my) {
 
 before(function (done) {
   var advntx = window.advntx;
-  advntx.currentGame = 'json/escape';
+  advntx.currentGame = 'games/escape';
   // waits until done is called (async!)
   function async_done(bool) {
     var objectIds = Object.keys(objects);

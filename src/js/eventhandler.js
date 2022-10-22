@@ -4,13 +4,13 @@ import {
   checkSynonyms,
   setStateOfObject,
   listFormattedObjects
-} from 'app/scripts/helper.js'
+} from './helper.js'
 
-import InventoryHandler from 'app/scripts/inventoryhandler.js';
-import LocationHandler from 'app/scripts/locationhandler.js';
-import EventActionHandler from 'app/scripts/eventactionhandler.js';
+import InventoryHandler from './inventoryhandler.js';
+import LocationHandler from './locationhandler.js';
+import EventActionHandler from './eventactionhandler.js';
 
-import * as constants from 'app/scripts/const.js';
+import * as constants from './const.js';
 
 
 
