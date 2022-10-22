@@ -4,6 +4,8 @@ Adventex is a simple interactive fiction (text adventure) game with its own adve
 
 It starts with a demo adventure (kind of an escape room game) and a tutorial.
 
+![](screenshot.png)
+
 ## Prerequisites
 
 You need node.js and npm

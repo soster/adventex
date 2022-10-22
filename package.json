@@ -18,7 +18,7 @@
         "svg": "svgo -f src/svg dist/svg -r",
         "statics": "copyfiles -u 3 node_modules/jquery.terminal/js/jquery.terminal.min.js dist/js && copyfiles -u 3 node_modules/jquery/dist/jquery.min.js dist/js && copyfiles -u 4 node_modules/bootstrap/dist/css/bootstrap.min.css dist/css && copyfiles -u 3 node_modules/jquery.terminal/css/jquery.terminal.min.css dist/css",
         "img": "imagemin src/img/* --out-dir=dist/img --plugin=mozjpeg --plugin=pngcrush",
-        "img-copy": "recursive-copy 'src/img' 'dist'",
+        "img-copy": "recursive-copy 'src/img' 'dist/img'",
         "copy": "recursive-copy 'src/copy' 'dist' && recursive-copy 'src/games' 'dist/games' && copyfiles -u 2 src/js/functions.js dist/js",
         "build-dirty": "npm-run-all -p js css img-copy copy statics",
         "build": "npm-run-all -s clean build-dirty",
