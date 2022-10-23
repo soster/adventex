@@ -229,8 +229,9 @@ export function getFromStateOrObject(objectId, property, objects) {
   return effect;
 }
 
+// otherwise clicking on links in the terminal opens a new tab...
 export function removeTargetFromLinks() {
-      // HACK, remove target=blank for firefox
-      $('#terminal a[target="_blank"]').removeAttr('target');
+      Array.from(document.querySelectorAll('#terminal a[target="_blank"]'))
+        .forEach(link => link.removeAttribute('target'));
 }
 
