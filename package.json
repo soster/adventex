@@ -20,7 +20,7 @@
         "img": "imagemin src/img/* --out-dir=dist/img --plugin=mozjpeg --plugin=pngcrush",
         "img-copy": "recursive-copy 'src/img' 'dist/img'",
         "copy": "recursive-copy 'src/copy' 'dist' && recursive-copy 'src/games' 'dist/games' && copyfiles -u 2 src/js/functions.js dist/js",
-        "build-dirty": "npm-run-all -p js css img-copy copy statics",
+        "build-dirty": "npm-run-all -p js css img copy statics",
         "build": "npm-run-all -s clean build-dirty",
         "watch-css": "chokidar './src/**/*.scss' -c 'npm run css'",
         "watch-js": "chokidar './src/**/*.js' -c 'npm run js'",
