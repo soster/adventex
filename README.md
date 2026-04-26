@@ -56,11 +56,50 @@ Type *help verbs* to get a list of possible verbs.
 
 Adventures in Adventex are created / edited using JSON files. Below is a detailed explanation of how to set up an adventure.
 
+There are multiple json files, the most important is the `gamestate.json` which describes events, locations and objects.
+
+### Objects
+
+Objects have states, effects, and interactive behaviors. They can change based on player actions.
+
+```json
+{
+  "objects": {
+    "trap_door": {
+      "name": "trap door",
+      "description": "A hidden trap door.",
+      "portable": false,
+      "states": {
+        "closed": {
+          "description": "The trap door is closed.",
+          "hidden": true
+        },
+        "open": {
+          "description": "The trap door is open.",
+          "connections": {
+            "down": "lower_cell"
+          }
+        }
+      }
+    },
+    "torch": {
+      "name": "torch",
+      "description": "A burning torch.",
+      "portable": true,
+      "states": {
+        "burning": {
+          "effect": "fire",
+          "description": "The torch emits bright light."
+        }
+      }
+    }
+  }
+}
+```
+
 ### Events
 
-Events define the actions and descriptions of different events in the adventure, such as starting the game or interacting with objects.
-
-#### Example: `src/games/tutorial/events.json`
+Events define the actions and descriptions of different events in the adventure, such as starting the game or interacting with objects. The first event in every adventure is called `start_event`.
 
 ```json
 {
@@ -82,8 +121,6 @@ Events define the actions and descriptions of different events in the adventure,
 ### Locations
 
 Locations define the different places in the adventure, including their descriptions and possible exits.
-
-#### Example: `src/games/tutorial/locations.json`
 
 ```json
 {
@@ -181,14 +218,6 @@ Synonyms allow players to use different words for the same action, making the ga
     }
 }
 ```
-
-### Key Components
-
-- **Events**: Define the actions and descriptions of different events in the adventure.
-- **Locations**: Define the different places in the adventure, including their descriptions and possible exits.
-- **Verbs**: Define the actions that players can perform in the game.
-- **Synonyms**: Allow players to use different words for the same action, making the game more flexible and user-friendly.
-
 By configuring these JSON files, you can create and customize your own text adventures in Adventex.
 
 If you need any additional details or modifications, feel free to ask!
