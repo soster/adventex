@@ -107,6 +107,9 @@ export default class LocationHandler {
 
       for (var i = 0; i < location.objects.length; i++) {
         var obj = this.state.objects[location.objects[i]];
+        if (obj===undefined) {
+          throw "object " +location.objects[i] + " does not exist!"
+        }
         if (!isEmpty(obj.state) && obj.state != constants.NONE) {
           itemIds = itemIds.concat(getObjectIdsForState(obj.states[obj.state]));
         }
@@ -154,6 +157,9 @@ export default class LocationHandler {
 
     for (var i = 0; i < location.objects.length; i++) {
       var obj = this.state.objects[location.objects[i]];
+      if (obj=== undefined) {
+        throw "Object" + location.objects[i] + " not found";
+      }
       if (!isEmpty(obj.state) && obj.state != constants.NONE) {
         var connections = obj.states[obj.state].connections;
         if (connections !== undefined && (location.reversed === undefined || location.reversed.indexOf(location.objects[i]) == -1)) {
