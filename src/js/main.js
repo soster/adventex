@@ -31,7 +31,7 @@ import Interpreter from './interpreter.js'
 
 /**
  * Set advntx as global variable. 
- * window is needed because of system.js.
+ * window is needed for global access.
  */
  window.advntx = {
   
