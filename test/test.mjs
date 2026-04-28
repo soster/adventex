@@ -1,4 +1,4 @@
-//import { chai } from './node_modules/chai/chai.js';
+import * as chai from '../node_modules/chai/index.js';
 
 import Parser from '../src/js/parser.js';
 import parseJson from '../src/js/json.js';
@@ -514,4 +514,7 @@ describe('advntx test suite', function () {
   });
 
 });
+
+// Run Mocha after all tests are registered
+mocha.run();
 

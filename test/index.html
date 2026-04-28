@@ -4,30 +4,21 @@
 <head>
   <meta charset="utf-8">
   <title>Mocha Spec Runner</title>
-  <link rel="stylesheet" href="node_modules/mocha/mocha.css">
+  <link rel="stylesheet" href="/node_modules/mocha/mocha.css">
 </head>
 
 <body>
   <div id="mocha"></div>
 
-  <script src="node_modules/mocha/mocha.js"></script>
-  <script src="node_modules/chai/chai.js"></script>
+  <script src="/node_modules/mocha/mocha.js"></script>
   <script>
-    const expect = chai.expect;
     mocha.setup('bdd');
-    // now use SystemJS to load all test files
-
-
   </script>
+
+  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="/node_modules/jquery.terminal/js/jquery.terminal.min.js"></script>
   <script src="js/functions.js"></script>
-
-  <script src="node_modules/systemjs/dist/system.js"></script>
-  <script src="node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="node_modules/jquery.terminal/js/jquery.terminal.min.js"></script>
   <script type="module" src="test.mjs"></script>
-  <script class="mocha-exec">
-    mocha.run();
-  </script>
 </body>
 
 </html>
