@@ -190,7 +190,7 @@ import Interpreter from './interpreter.js'
         if (key == 'default') {
           continue;
         }
-        var $button = $('<button type="button" class="btn btn-secondary btn-sm" id="btn_escape" onclick="advntx.initGame(true,\'' + key + '\');">' + advntx.games[key].name + '</button>');
+        var $button = $('<button type="button" class="btn" id="btn_escape" onclick="advntx.initGame(true,\'' + key + '\');">' + advntx.games[key].name + '</button>');
         var $space = $('<span>&nbsp;</span>');
         $button.appendTo($('#game_buttons'));
         $space.appendTo($('#game_buttons'));
@@ -363,7 +363,7 @@ import Interpreter from './interpreter.js'
       var item = advntx.state.inventory[i];
       var itemName = getName(advntx.state.objects, item);
       var stateString = ' ' + advntx.inventoryHandler.getStateString(item);
-      $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventoryClick(\'' + itemName + '\')" class="btn btn-secondary btn-sm inventory_button">' + itemName + stateString + '</button></p>');
+      $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventoryClick(\'' + itemName + '\')" class="btn inventory_button">' + itemName + stateString + '</button></p>');
     }
   }
 
