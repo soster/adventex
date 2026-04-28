@@ -1,167 +1,245 @@
-
 @import url('https://fonts.googleapis.com/css?family=Open+Sans|Special+Elite');
 
 $termbgcolor: #f2f2f2;
 $termfgcolor: #0d0d0d;
+$gray: #6c757d;
+$gray-light: #e9ecef;
+$gray-dark: #343a40;
+$warning-bg: #fff3cd;
+$warning-border: #ffc107;
 
-$termbginv: $termfgcolor;
-$termfginv: $termbgcolor;
-
-/* effects: */
+/* effects */
 .fire {
-      font-size: 120%;
-      animation: burn 1.5s linear infinite alternate;       
+    font-size: 120%;
+    animation: burn 1.5s linear infinite alternate;
 }
 
 @keyframes burn {
-from { text-shadow: -.1em 0 .3em #fefcc9, .1em -.1em .3em #feec85, -.2em -.2em .4em #ffae34, .2em -.3em .3em #ec760c, -.2em -.4em .4em #cd4606, .1em -.5em .7em #973716, .1em -.7em .7em #451b0e; }
-45%  { text-shadow: .1em -.2em .5em #fefcc9, .15em 0 .4em #feec85, -.1em -.25em .5em #ffae34, .15em -.45em .5em #ec760c, -.1em -.5em .6em #cd4606, 0 -.8em .6em #973716, .2em -1em .8em #451b0e; }
-70%  { text-shadow: -.1em 0 .3em #fefcc9, .1em -.1em .3em #feec85, -.2em -.2em .6em #ffae34, .2em -.3em .4em #ec760c, -.2em -.4em .7em #cd4606, .1em -.5em .7em #973716, .1em -.7em .9em #451b0e; }
-to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em .6em #ffae34, -.15em -.45em .5em #ec760c, .1em -.5em .6em #cd4606, 0 -.8em .6em #973716, -.2em -1em .8em #451b0e; }						
+    from { text-shadow: -.1em 0 .3em #fefcc9, .1em -.1em .3em #feec85, -.2em -.2em .4em #ffae34, .2em -.3em .3em #ec760c, -.2em -.4em .4em #cd4606, .1em -.5em .7em #973716, .1em -.7em .7em #451b0e; }
+    45%  { text-shadow: .1em -.2em .5em #fefcc9, .15em 0 .4em #feec85, -.1em -.25em .5em #ffae34, .15em -.45em .5em #ec760c, -.1em -.5em .6em #cd4606, 0 -.8em .6em #973716, .2em -1em .8em #451b0e; }
+    70%  { text-shadow: -.1em 0 .3em #fefcc9, .1em -.1em .3em #feec85, -.2em -.2em .6em #ffae34, .2em -.3em .4em #ec760c, -.2em -.4em .7em #cd4606, .1em -.5em .7em #973716, .1em -.7em .9em #451b0e; }
+    to   { text-shadow: -.1em -.2em .6em #fefcc9, -.15em 0 .6em #feec85, .1em -.25em .6em #ffae34, -.15em -.45em .5em #ec760c, .1em -.5em .6em #cd4606, 0 -.8em .6em #973716, -.2em -1em .8em #451b0e; }
 }
 
 .blurry-text {
-  text-shadow: 0 0 1.5px $termfgcolor;
-  color: transparent;
+    text-shadow: 0 0 1.5px $termfgcolor;
+    color: transparent;
 }
 
-/** overwrite terminal css: */
+/* terminal overrides */
 .terminal {
-  // weird thing with css and sass variables, see 
-  // https://sass-lang.com/documentation/breaking-changes/css-vars
-  --background: #{$termbgcolor};
-  --color: #{$termfgcolor};
-  --size: 14px;
+    --background: #{$termbgcolor};
+    --color: #{$termfgcolor};
+    --size: 14px;
 }
-
 
 .terminal a {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
-
-/* ---- */
-
-.advntx h1, h2, h3, h4, h5, h6 {
-  font-family: 'Special Elite', cursive !important;
+/* reset */
+*, *::before, *::after {
+    box-sizing: border-box;
 }
 
-.mono {
-  font-family: monospace;
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+    color: #333;
 }
 
-.headline {
-  font-family: 'Special Elite', cursive;
-  font-size: 18px; 
+/* layout */
+.advntx {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem;
 }
 
-.sansserif {
-  font-family: 'Open Sans',sans-serif;
+.advntx h1,
+.advntx h2,
+.advntx h3,
+.advntx h4,
+.advntx h5,
+.advntx h6 {
+    font-family: 'Special Elite', cursive !important;
 }
 
-.bigger {
-  font-size: 125%;
+/* header */
+.header {
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e5e5e5;
+    position: relative;
 }
 
-div.scroller {
-  overflow-x: auto;
-  overflow-y: hidden;
-  white-space: nowrap;
+.header h3 {
+    margin: 0;
+    line-height: 3rem;
 }
 
-div.scroller .btn-group {
-  display: inline-block;
-  float: none;
+/* main grid: sidebar | main content */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
-.browserupgrade {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
+@media (min-width: 768px) {
+    .layout {
+        grid-template-columns: 240px 1fr;
+    }
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sidebar img {
+    width: 100%;
+}
+
+.sidebar #game_buttons .btn {
+    margin: 2px;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+#inventory_container {
+    h3 {
+        margin: 0 0 0.5rem;
+    }
+}
+
+/* buttons */
+.btn {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    margin: 2px;
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: #fff;
+    background-color: $gray;
+    border: 1px solid $gray;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.5;
+
+    &:hover {
+        background-color: $gray-dark;
+        border-color: $gray-dark;
+    }
+
+    input[type="file"] {
+        font-size: inherit;
+    }
+}
+
+.btn-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0;
+}
+
+/* scrollable button rows */
+.scroller {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin-bottom: 0.5rem;
+}
+
+/* options panel */
+.hidden {
+    display: none;
+}
+
+.options-toggle {
+    margin-bottom: 0.5rem;
+}
+
+/* footer */
+.footer {
+    padding-top: 1.5rem;
+    margin-top: 1rem;
+    border-top: 1px solid #e5e5e5;
+    background: $warning-bg;
+    border-color: $warning-border;
+    color: #777;
+}
+
+.footer-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+}
+
+.footer a {
+    color: #777;
+}
+
+/* utilities */
+.text-muted {
+    color: #6c757d;
 }
 
 .smalltext {
-  font-size: .6rem;
+    font-size: 0.6rem;
 }
 
-/* Space out content a bit */
-body {
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
+.mono {
+    font-family: monospace;
 }
 
-/* Everything but the jumbotron gets side spacing for mobile first views */
-.header,
-.marketing,
-.footer {
-  padding-right: 1rem;
-  padding-left: 1rem;
+.headline {
+    font-family: 'Special Elite', cursive;
+    font-size: 18px;
 }
 
-/* Custom page header */
-.header {
-  padding-bottom: 1rem;
-  border-bottom: .05rem solid #e5e5e5;
+.sansserif {
+    font-family: 'Open Sans', sans-serif;
 }
 
-/* Make the masthead heading the same height as the navigation */
-.header h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 3rem;
+.bigger {
+    font-size: 125%;
 }
 
-/* Custom page footer */
-.footer {
-  padding-top: 1.5rem;
-  color: #777;
-  border-top: .05rem solid #e5e5e5;
+.float-end {
+    float: right;
 }
 
-/* Customize container */
-@media (min-width: 48em) {
-  .container {
-    max-width: 70rem;
-  }
-}
-.container-narrow > hr {
-  margin: 2rem 0;
+.browserupgrade {
+    margin: 0.2em 0;
+    background: #ccc;
+    color: #000;
+    padding: 0.2em 0;
 }
 
-/* Main marketing message and sign up button */
-.jumbotron {
-  text-align: center;
-  border-bottom: .05rem solid #e5e5e5;
-}
-.jumbotron .btn {
-  padding: .75rem 1.5rem;
-  font-size: 1.5rem;
+/* responsive visibility */
+.hidden-sm {
+    display: none;
 }
 
-/* Supporting marketing content */
-.marketing {
-  margin: 3rem 0;
-}
-.marketing p + h4 {
-  margin-top: 1.5rem;
+@media (min-width: 768px) {
+    .hidden-sm {
+        display: block;
+    }
 }
 
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 48em) {
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-right: 0;
-    padding-left: 0;
-  }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 2rem;
-  }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
-  }
+/* inventory buttons */
+.inventory_item {
+    margin: 0.25rem 0;
+}
+
+.inventory_button {
+    margin: 2px;
 }

@@ -16,7 +16,7 @@
         "js": "rollup --config",
         "css": "node sass.mjs",
         "svg": "svgo src/svg -o dist/svg --recursive",
-        "statics": "copyfiles -u 3 node_modules/jquery.terminal/js/jquery.terminal.min.js dist/js && copyfiles -u 3 node_modules/jquery/dist/jquery.min.js dist/js && copyfiles -u 4 node_modules/bootstrap/dist/css/bootstrap.min.css dist/css && copyfiles -u 3 node_modules/jquery.terminal/css/jquery.terminal.min.css dist/css",
+        "statics": "copyfiles -u 3 node_modules/jquery.terminal/js/jquery.terminal.min.js dist/js && copyfiles -u 3 node_modules/jquery/dist/jquery.min.js dist/js && copyfiles -u 3 node_modules/jquery.terminal/css/jquery.terminal.min.css dist/css",
         "img": "imagemin src/img/* --out-dir=dist/img --plugin=mozjpeg --plugin=pngcrush",
         "img-copy": "recursive-copy 'src/img' 'dist/img'",
         "copy": "recursive-copy 'src/copy' 'dist' && recursive-copy 'src/games' 'dist/games' && copyfiles -u 2 src/js/functions.js dist/js",
@@ -56,7 +56,6 @@
         "systemjs": "^6.15.1"
     },
     "dependencies": {
-        "bootstrap": "npm:bootstrap@^5.3.8",
         "jquery": "npm:jquery@^4.0.0",
         "jquery.terminal": "npm:jquery.terminal@^2.45.2"
     }

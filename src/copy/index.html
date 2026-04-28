@@ -9,7 +9,6 @@
 
   <link rel="stylesheet" media="all" href="css/main.css">
   <link rel="stylesheet" media="all" href="css/jquery.terminal.min.css">
-  <link rel="stylesheet" media="all" href="css/bootstrap.min.css">
 
 
 </head>
@@ -19,124 +18,78 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-  <div class="container-fluid advntx">
-    <div class="header">
-       <div class="float-end d-none d-lg-block">
+  <div class="advntx">
+    <header class="header">
+       <div class="float-end hidden-sm">
         <a href="https://github.com/soster/adventex">
           <img src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub">
         </a>
       </div>
 
-      <div class="col-md-6 wrapper">
+      <h3 class="text-muted">adventex</h3>
+    </header>
 
-
-        <h3 class="text-muted">adventex</h3>
-      </div>
-
-
-    </div>
-    <div class="row clearfix">
-      <div class="col-md-3 wrapper">
-        <p>
+    <div class="layout">
+      <aside class="sidebar">
         <img id="imagecontainer" src="img/adventex.png" width="100%" alt="" />
-      </p>
-      </div>
-      <div id="inventory_container" class="col-md-6 d-none d-md-block">
-        <h3>Inventory</h3>
-        <div id="inventory">
-          <p class="inventory_item"></p>
-        </div>
-      </div>
-    </div>
-    <div class="row clearfix">
-      <div class="col-md-9 wrapper">
-        <p id="terminal">
-        </p>
-      </div>
-
-    </div>
-    <div class="row">
-      <div class="col-md-12 scroller">
-        <div class="btn-group" role="group" aria-label="">
-          <p>
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_take"
-              onclick="advntx.terminalLink('take');">Take</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_open"
-              onclick="advntx.terminalLink('open');">Open</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_close"
-              onclick="advntx.terminalLink('close');">Close</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_examine"
-              onclick="advntx.terminalLink('examine');">Examine</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_look"
-              onclick="advntx.executeLink('look');">Look</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_enter"
-              onclick="advntx.executeCurrent();">↵</button>&nbsp;
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12 scroller">
-        <div class="btn-group" role="group" aria-label="">
-          <p>
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_help">Help</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_save_storage">Save</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_load_storage">Load</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_list_storage">List</button>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_restart">Restart</button>&nbsp;
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-12">
-      <div class="row">
-        <p>
-          <button type="button" class="btn btn-secondary btn-sm" id="btn_options"
-            onclick="$('#options').toggle();">Options</button>
-        </p>
-      </div>
-    </div>
-
-    <div id="options" class="col-md-12">
-      <div class="row">
-        <div class="btn-group" role="group" aria-label="">
-          <p>
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_invert"
-              onclick="advntx.toggleTerminalColors();">Invert colors</button>&nbsp;
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="btn-group" role="group">
-          <p>
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_save_file">Download savegame</button>&nbsp;
-          </p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="btn-group" role="group">
-          <p>
-            <span class="btn btn-secondary btn-sm">
-              <input type="file" id="selectFiles" value="Import" />
-            </span>&nbsp;
-            <button type="button" class="btn btn-secondary btn-sm" id="btn_load_file">Load from file</button>
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-3 wrapper">
-        <p>
         <h4 class="text-muted">Games:</h4>
-        </p>
-        <p><span id="game_buttons">
-          </span>
-        </p>
+        <span id="game_buttons"></span>
+      </aside>
+
+      <main class="main">
+        <div id="inventory_container" class="hidden-sm">
+          <h3>Inventory</h3>
+          <div id="inventory">
+            <p class="inventory_item"></p>
+          </div>
+        </div>
+        <div id="terminal"></div>
+      </main>
+    </div>
+
+    <div class="scroller">
+      <div class="btn-group">
+        <button type="button" class="btn" id="btn_take" onclick="advntx.terminalLink('take');">Take</button>
+        <button type="button" class="btn" id="btn_open" onclick="advntx.terminalLink('open');">Open</button>
+        <button type="button" class="btn" id="btn_close" onclick="advntx.terminalLink('close');">Close</button>
+        <button type="button" class="btn" id="btn_examine" onclick="advntx.terminalLink('examine');">Examine</button>
+        <button type="button" class="btn" id="btn_look" onclick="advntx.executeLink('look');">Look</button>
+        <button type="button" class="btn" id="btn_enter" onclick="advntx.executeCurrent();">↵</button>
       </div>
     </div>
-    <div class="footer smalltext alert-warning">
-      <div class="row">
-        <div class="col-md-6">
+
+    <div class="scroller">
+      <div class="btn-group">
+        <button type="button" class="btn" id="btn_help">Help</button>
+        <button type="button" class="btn" id="btn_save_storage">Save</button>
+        <button type="button" class="btn" id="btn_load_storage">Load</button>
+        <button type="button" class="btn" id="btn_list_storage">List</button>
+        <button type="button" class="btn" id="btn_restart">Restart</button>
+      </div>
+    </div>
+
+    <div class="options-toggle">
+      <button type="button" class="btn" id="btn_options" onclick="$('#options').toggle();">Options</button>
+    </div>
+
+    <div id="options" class="hidden">
+      <div class="btn-group">
+        <button type="button" class="btn" id="btn_invert" onclick="advntx.toggleTerminalColors();">Invert colors</button>
+      </div>
+      <div class="btn-group">
+        <button type="button" class="btn" id="btn_save_file">Download savegame</button>
+      </div>
+      <div class="btn-group">
+        <span class="btn">
+          <input type="file" id="selectFiles" value="Import" />
+        </span>
+        <button type="button" class="btn" id="btn_load_file">Load from file</button>
+      </div>
+    </div>
+
+    <footer class="footer smalltext">
+      <div class="footer-inner">
+        <div>
           <p>2018
             <a href="https://osteronline.de/" target="_blank" alt="Stefan Ostermann">Stefan Ostermann</a>
           </p>
@@ -144,16 +97,13 @@
             <a href="https://thoster.net/" target="_blank">thoster.net</a>
           </p>
         </div>
-        <div class="col-md-6">
-          <div>
-            <span aria-hidden="true"></span>
-            Frameworks:
-            <a href="http://terminal.jcubic.pl/" target="_blank">JQuery Terminal</a>&nbsp;
-            <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>&nbsp;
-          </div>
+        <div>
+          <span aria-hidden="true"></span>
+          Framework:
+          <a href="http://terminal.jcubic.pl/" target="_blank">JQuery Terminal</a>
         </div>
       </div>
-    </div>
+    </footer>
   </div>
   <!-- FIXME global variable, value is replaced by gulp-version-number -->
   <script>
@@ -164,7 +114,7 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery.terminal.min.js"></script>
   <script src="js/main.js"></script>
-  
+
 </body>
 
 </html>

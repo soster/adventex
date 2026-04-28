@@ -12,7 +12,7 @@ Adventex is a JavaScript interactive fiction (text adventure) game framework. Ad
 - **Language:** JavaScript (ES6 modules, ES2015+)
 - **Bundler:** Rollup 4 (UMD output, with terser minification)
 - **CSS:** SCSS compiled via Dart Sass to `dist/css`
-- **UI Dependencies:** jQuery 4, jquery.terminal 2.45, Bootstrap 5.3
+- **UI Dependencies:** jQuery 4, jquery.terminal 2.45, custom CSS Grid layout
 - **Testing:** Mocha 11 + Chai 6, browser-only tests via BrowserSync 3
 - **Dev Server:** BrowserSync with file watching
 
