@@ -53,13 +53,13 @@ export default class EventHandler {
       return false;
     }
 
-    for (var i = 0; i < prereq.length; i++) {
-      var arr = prereq[i].split('|');
+    for (let i = 0; i < prereq.length; i++) {
+      const arr = prereq[i].split('|');
       if (to_check.indexOf(arr[0]) == -1) {
         return false;
       } else {
         if (arr.length > 1) {
-          var state = this.inventoryHandler.getStateOfObject(arr[0]);
+          const state = this.inventoryHandler.getStateOfObject(arr[0]);
           if (state == undefined && arr[1] == constants.NONE) {
             continue;
           }
@@ -82,11 +82,11 @@ export default class EventHandler {
       return true;
     }
 
-    for (var i = 0; i < prereq.length; i++) {
-      var arr = prereq[i].split('|');
+    for (let i = 0; i < prereq.length; i++) {
+      const arr = prereq[i].split('|');
       if (to_check.indexOf(arr[0]) != -1) {
         if (arr.length > 1) {
-          var state = this.inventoryHandler.get_state_of_object(arr[0]);
+          const state = this.inventoryHandler.getStateOfObject(arr[0]);
           if (state == arr[1]) {
             return false;
           }
@@ -105,8 +105,8 @@ export default class EventHandler {
       return true;
     }
 
-    for (var i = 0; i < prereq_triggered_events.length; i++) {
-      var event = this.state.events[prereq_triggered_events[i]];
+    for (let i = 0; i < prereq_triggered_events.length; i++) {
+      const event = this.state.events[prereq_triggered_events[i]];
       if (event === undefined) {
         return true;
       }
@@ -126,8 +126,8 @@ export default class EventHandler {
       return true;
     }
 
-    for (var i = 0; i < prereq_visited_locations.length; i++) {
-      var loc = this.state.locations[prereq_visited_locations[i]];
+    for (let i = 0; i < prereq_visited_locations.length; i++) {
+      const loc = this.state.locations[prereq_visited_locations[i]];
       if (loc.visited === undefined || loc.visited == false) {
         return false;
       }
@@ -139,9 +139,9 @@ export default class EventHandler {
     if (isEmpty(prereq)) {
       return true;
     }
-    var arr = prereq.split('|');
+    const arr = prereq.split('|');
     if (arr.length == 2) {
-      var location = this.state.locations[arr[0]];
+      const location = this.state.locations[arr[0]];
       if (location === undefined) {
         return false;
       }
@@ -167,10 +167,10 @@ export default class EventHandler {
   }
 
   findEvents(location, used_items, location_items, verb, preposition, events) {
-    var retEvents = [];
-    for (var property in events) {
+    const retEvents = [];
+    for (const property in events) {
       if (events.hasOwnProperty(property) && property != 'start_event') {
-        var event = events[property];
+        const event = events[property];
         if (event.disabled != undefined && event.disabled) {
           continue;
         }
@@ -181,8 +181,8 @@ export default class EventHandler {
         }
 
 
-        var keyNames = Object.keys(event);
-        var condition = true;
+        let keyNames = Object.keys(event);
+        let condition = true;
 
         // all of them
         for (var i = 0; i < keyNames.length; i++) {
@@ -272,13 +272,13 @@ export default class EventHandler {
 
 
   executeEvent(event, echo) {
-    var location = this.state.locations[this.state.location];
-    var objects_message_before = listFormattedObjects(location.objects, this.state.objects, this.inventoryHandler);
+    const location = this.state.locations[this.state.location];
+    const objects_message_before = listFormattedObjects(location.objects, this.state.objects, this.inventoryHandler);
 
-    for (var property in event) {
+    for (const property in event) {
       if (event.hasOwnProperty(property)) {
         if (property.startsWith(constants.ACTION_PREFIX)) {
-          var handler = this[property];
+          const handler = this[property];
           if (handler !== undefined) {
             handler.execute_action(event[property]);
           }
@@ -294,11 +294,11 @@ export default class EventHandler {
     event.triggered_steps = this.state.steps;
 
     if (!isEmpty(event.action_trigger_event)) {
-      var nevent = this.state.events[event.action_trigger_event];
+      const nevent = this.state.events[event.action_trigger_event];
       return this.executeEvent(nevent, echo);
     }
 
-    var objects_message = listFormattedObjects(location.objects, this.state.objects, this.inventoryHandler);
+    const objects_message = listFormattedObjects(location.objects, this.state.objects, this.inventoryHandler);
     if (objects_message !== objects_message_before && objects_message.length > 0) {
       echo(advntx.messages.info_you_see+'\n'+ objects_message);
     }

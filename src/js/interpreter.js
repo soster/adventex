@@ -28,7 +28,7 @@ export default class Interpreter {
 
 
   interpret(command, describeLocationEcho, initInventory, echo, initGame, load, save, listSaveGames) {
-    var original = command;
+    const original = command;
     this.echo = echo;
     this.describeLocationEcho = describeLocationEcho;
     this.initInventory = initInventory;
@@ -44,41 +44,41 @@ export default class Interpreter {
       removeTargetFromLinks();
       return;
     }
-    var words = this.advntx.parser.parse(command);
-    var firstVerb = getFirstOfType(words, 'verbs');
+    const words = this.advntx.parser.parse(command);
+    let firstVerb = getFirstOfType(words, 'verbs');
     var firstObject = getFirstOfType(words, 'objects');
-    var lastVerb = getLastOfType(words, 'verbs');
-    var preposition = getFirstOfType(words, 'prepositions');
+    const lastVerb = getLastOfType(words, 'verbs');
+    const preposition = getFirstOfType(words, 'prepositions');
 
     //sometimes we need just the second word of the command without distinguishing between objects / verbs and so on:
-    var secondWord = this.getSecondWord(command)
-    var objects = words['objects'];
-    var misc = words['misc'];
-    var firstMisc = getFirstOfType(words, 'misc');
-    var foundNothing = false;
+    const secondWord = this.getSecondWord(command)
+    const objects = words['objects'];
+    const misc = words['misc'];
+    const firstMisc = getFirstOfType(words, 'misc');
+    let foundNothing = false;
 
-    var itemIdsFromLocation = this.advntx.locationHandler.findItemIdsInLocation(objects, this.advntx.state.locations[this.advntx.state.location]);
-    var itemIdsFromInventory = this.advntx.inventoryHandler.findItemIdsInInventory(objects);
+    const itemIdsFromLocation = this.advntx.locationHandler.findItemIdsInLocation(objects, this.advntx.state.locations[this.advntx.state.location]);
+    const itemIdsFromInventory = this.advntx.inventoryHandler.findItemIdsInInventory(objects);
     var itemIds = [];
 
     var itemIds = itemIdsFromLocation.concat(itemIdsFromInventory);
-    var locationObject = this.advntx.state.locations[this.advntx.state.location];
+    let locationObject = this.advntx.state.locations[this.advntx.state.location];
 
-    var executedPreEvents = [];
-    var foundEvent = false;
+    const executedPreEvents = [];
+    let foundEvent = false;
 
     var firstObject = undefined;
     if (itemIds.length>0) {
       firstObject = itemIds[0];
     }
-    var withObject = undefined;
+    let withObject = undefined;
     if (itemIds.length>1 && preposition==advntx.messages.with) {
       withObject = itemIds[1];
     }
 
 
 
-    var direction = getFirstOfType(words, 'directions');
+    const direction = getFirstOfType(words, 'directions');
 
     // check if the player entered a direction, then artificially add the verb for 'go'.
     // important: Do this before any event is executed!
@@ -91,8 +91,8 @@ export default class Interpreter {
     }
 
     // find and execute events BEFORE executing standard verbs:
-    var preEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
-    var doContinue = true;
+    const preEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
+    let doContinue = true;
     for (var i = 0; i < preEvents.length; i++) {
       var event = preEvents[i];
       if (event.only_after == true) {
@@ -156,7 +156,7 @@ export default class Interpreter {
     locationObject = this.advntx.state.locations[this.advntx.state.location];
 
     // find and execute events AFTER executing standard verbs:
-    var postEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
+    const postEvents = this.advntx.eventHandler.findEvents(this.advntx.state.location, itemIds, locationObject.objects, firstVerb, preposition, this.advntx.state.events);
     if (doContinue) {
       for (var i = 0; i < postEvents.length; i++) {
         var event = postEvents[i];
@@ -172,15 +172,15 @@ export default class Interpreter {
 
 
     if (!foundEvent && foundNothing && !isEmpty(firstVerb) && objects.length > 0) {
-      var itemId = itemIds[0];
-      var obj = this.advntx.state.objects[itemId];
+      const itemId = itemIds[0];
+      const obj = this.advntx.state.objects[itemId];
 
       if (obj != undefined && obj.custom_errors != undefined) {
-        var error = obj.custom_errors;
-        var errorMessage = error[firstVerb];
+        const error = obj.custom_errors;
+        const errorMessage = error[firstVerb];
         echo(errorMessage, this.warnColor);
       } else {
-        var placeholder = ' ';
+        let placeholder = ' ';
         if (!isEmpty(preposition)) {
           placeholder = ' ' + preposition + ' ';
         }
@@ -194,7 +194,7 @@ export default class Interpreter {
       }
     }
 
-    var allEvents = preEvents.concat(postEvents);
+    const allEvents = preEvents.concat(postEvents);
     if (this.checkWinningCondition(allEvents)) {
       echo(this.advntx.messages.info_you_win.format(this.advntx.state.steps, this.advntx.state.points), advntx.config.win_color);
     }
@@ -209,8 +209,8 @@ export default class Interpreter {
   }
 
   getSecondWord(command) {
-    var ws = command.split(' ');
-    var name = '';
+    const ws = command.split(' ');
+    let name = '';
     if (ws.length > 1) {
       name = ws[1];
     }
@@ -235,8 +235,8 @@ export default class Interpreter {
 
   read(firstObjectId) {
     if (!isEmpty(firstObjectId)) {
-      var obj = this.advntx.state.objects[firstObjectId];
-      var read = this.advntx.inventoryHandler.getReadOfState(firstObjectId,obj.state);
+      const obj = this.advntx.state.objects[firstObjectId];
+      let read = this.advntx.inventoryHandler.getReadOfState(firstObjectId,obj.state);
       if (isEmpty(read)) {
         read = obj.read;
       }
@@ -251,7 +251,7 @@ export default class Interpreter {
 
   // open/unlock and close
   interactWithObjectState(verb,firstObjectId, withObjectId, preposition) {
-    var state = '';
+    let state = '';
 
     if (verb==this.advntx.messages.verb_open) {
       state = this.advntx.messages.state_open;
@@ -273,7 +273,7 @@ export default class Interpreter {
       return;
     }
     if (this.advntx.inventoryHandler.hasState(firstObjectId, state)) {
-      var needed;
+      let needed;
       if (state==this.advntx.messages.state_open && this.advntx.inventoryHandler.isLocked(firstObjectId)) {
         needed = this.advntx.inventoryHandler.getLockUnlockItem(firstObjectId);
       } else {
@@ -293,20 +293,20 @@ export default class Interpreter {
           this.advntx.inventoryHandler.lock(firstObjectId, true);
         }
 
-        var text = advntx.inventoryHandler.getDescriptionOfState(firstObjectId, state);
+        let text = advntx.inventoryHandler.getDescriptionOfState(firstObjectId, state);
         if (text===undefined) {
           text = advntx.messages.info_success;
         }
         this.echo(text);
 
-        var objects = advntx.state.objects[firstObjectId].states[state].objects;
+        const objects = advntx.state.objects[firstObjectId].states[state].objects;
         if (objects!==undefined&&objects.length>0) {
           this.echo(advntx.messages.info_you_see);
           this.echo(listFormattedObjects(objects, advntx.state.objects, advntx.inventoryHandler));
         }
         
       } else {
-        var error = this.advntx.inventoryHandler.getErrorOfState(firstObjectId, state);
+        let error = this.advntx.inventoryHandler.getErrorOfState(firstObjectId, state);
         if (isEmpty(error)) {
           error = this.advntx.messages.error_verb_object.format(verb+' ',getName(this.advntx.state.objects,firstObjectId),'');
         }
@@ -319,15 +319,15 @@ export default class Interpreter {
 
 
   move(direction, item_ids, misc) {
-    var new_location = undefined;
+    let new_location = undefined;
     if (isEmpty(direction)) {
       if (item_ids.length > 0) {
-        var item_id = item_ids[0];
+        const item_id = item_ids[0];
         this.advntx.interpreter.echo(this.advntx.messages.error_movement_thing.format(this.advntx.inventoryHandler.getNameWithArticle(item_id)), this.warnColor);
         return;
       }
       if (this.advntx.config.debug && misc.length > 0) {
-        var loc = this.advntx.state.locations[misc[0]];
+        const loc = this.advntx.state.locations[misc[0]];
         if (loc != undefined) {
           new_location = misc[0];
         }
@@ -337,7 +337,7 @@ export default class Interpreter {
         return;
       }
     }
-    var location = this.advntx.state.locations[this.advntx.state.location];
+    const location = this.advntx.state.locations[this.advntx.state.location];
 
     if (new_location == undefined) {
       new_location = this.advntx.locationHandler.findConnectionsForDirection(location, direction);
@@ -357,14 +357,14 @@ export default class Interpreter {
     } else if (objects.length == 0) {
       this.echo(this.advntx.messages.error_specific_get.format(this.advntx.messages.this), this.errorColor);
     }
-    for (var i = 0; i < item_ids.length; i++) {
-      var item_id = item_ids[i];
+    for (let i = 0; i < item_ids.length; i++) {
+      const item_id = item_ids[i];
       if (!this.advntx.inventoryHandler.isPortable(item_id)) {
-        var portable_error = this.advntx.inventoryHandler.getPortableError(item_id);
+        const portable_error = this.advntx.inventoryHandler.getPortableError(item_id);
         if (!isEmpty(portable_error)) {
           this.echo(portable_error, this.warnColor);
         } else {
-          var indevname = this.advntx.inventoryHandler.getNameWithArticle(item_id);
+          const indevname = this.advntx.inventoryHandler.getNameWithArticle(item_id);
           this.echo(this.advntx.messages.error_portable.format(indevname), this.warnColor);
         }
 
@@ -383,7 +383,7 @@ export default class Interpreter {
       return;
     }
 
-    var desc = getDescription(this.advntx.state.objects, firstObject);
+    const desc = getDescription(this.advntx.state.objects, firstObject);
     this.echo(desc);
   }
 
@@ -396,13 +396,13 @@ export default class Interpreter {
       }
 
       if (!isEmpty(firstObject) && preposition==this.advntx.messages.preposition_at) {
-        var desc = getDescription(this.advntx.state.objects, firstObject);
+        const desc = getDescription(this.advntx.state.objects, firstObject);
         this.echo(desc);
       } else if (!isEmpty(firstObject) && preposition==this.advntx.messages.preposition_inside) {
-        var object = advntx.state.objects[firstObject];
+        const object = advntx.state.objects[firstObject];
         if (object.state!==undefined && object.state!='none') {
-          var ids = getObjectIdsForState(object.states[object.state]);
-          var objectsMessage = listFormattedObjects(ids, advntx.state.objects, advntx.inventoryHandler);
+          const ids = getObjectIdsForState(object.states[object.state]);
+          const objectsMessage = listFormattedObjects(ids, advntx.state.objects, advntx.inventoryHandler);
           this.echo(advntx.messages.info_inside_you_see.format(advntx.inventoryHandler.getNameWithArticle(firstObject)));
           this.echo(objectsMessage);
         }
@@ -420,8 +420,8 @@ export default class Interpreter {
       this.echo(this.advntx.messages.error_drop.format(this.advntx.messages.this));
     }
 
-    for (var i = 0; i < item_ids.length; i++) {
-      var item_id = item_ids[i];
+    for (let i = 0; i < item_ids.length; i++) {
+      const item_id = item_ids[i];
       if (isEmpty(item_id)) {
         this.echo(this.advntx.messages.error_thing.format(item), this.errorColor);
         break;
@@ -436,9 +436,9 @@ export default class Interpreter {
   }
 
   triggerEvent(event) {
-    var old_location = this.advntx.state.location;
+    const old_location = this.advntx.state.location;
 
-    var doContinue = this.advntx.eventHandler.executeEvent(event, this.advntx.interpreter.echo);
+    const doContinue = this.advntx.eventHandler.executeEvent(event, this.advntx.interpreter.echo);
 
     if (old_location != this.advntx.state.location) {
       setTimeout(function () {
@@ -471,19 +471,19 @@ export default class Interpreter {
   }
 
   buildVocabularyHelpString(helpString, vocabularyObjects) {
-    var vocabString = '';
-    for (var i = 0; i < vocabularyObjects.length; i++) {
+    let vocabString = '';
+    for (let i = 0; i < vocabularyObjects.length; i++) {
       if (i != 0)
         vocabString += ', ';
       vocabString += vocabularyObjects[i];
     }
-    var string = helpString.format(vocabString);
+    const string = helpString.format(vocabString);
     return string;
   }
 
 
   checkWinningCondition(events) {
-    for (var i = 0; i < events.length; i++) {
+    for (let i = 0; i < events.length; i++) {
       if (this.advntx.state.events['win_event'] === events[i]) {
         return true;
       }

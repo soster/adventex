@@ -43,10 +43,10 @@ export default class EventActionHandler {
 
     add_items(action) {
         // into the inventory
-        for (var i = 0; i < action.length; i++) {
-            var temp = action[i].split(':');
+        for (let i = 0; i < action.length; i++) {
+            const temp = action[i].split(':');
             if (temp.length == 1 || (temp.length == 2 && temp[0] == constants.INVENTORY)) {//inventory
-                var obj = temp[0];
+                let obj = temp[0];
                 if (temp.length == 2) {
                     obj = temp[1];
                 }
@@ -76,13 +76,13 @@ export default class EventActionHandler {
     }
 
     remove_items(action) {
-        var removed = false;
+        let removed = false;
 
-        for (var i = 0; i < action.length; i++) {
-            var temp = action[i].split(':');
+        for (let i = 0; i < action.length; i++) {
+            const temp = action[i].split(':');
             if (temp.length == 1 || (temp.length == 2 && temp[0] == constants.INVENTORY)) {//inventory
-                var ilength = this.state.inventory.length;
-                var obj = temp[0];
+                const ilength = this.state.inventory.length;
+                let obj = temp[0];
                 if (temp.length == 2) {
                     obj = temp[1];
                 }
@@ -97,7 +97,7 @@ export default class EventActionHandler {
                 } else {
                     location = this.state.locations[temp[0]];
                 }
-                var olength = location.objects.length;
+                const olength = location.objects.length;
                 location.objects.remove(temp[1]);
                 if (location.objects.length < olength) {
                     removed = true;
@@ -108,13 +108,13 @@ export default class EventActionHandler {
     }
 
     move_items(action) {
-        for (var i = 0; i < action.length; i++) {
-            var temp = action[i].split(':');
+        for (let i = 0; i < action.length; i++) {
+            const temp = action[i].split(':');
             if (temp.length == 3) {
-                var obj = temp[0];
-                var from = temp[1];
-                var to = temp[2];
-                var removed = false;
+                const obj = temp[0];
+                const from = temp[1];
+                const to = temp[2];
+                let removed = false;
 
                 if (from === constants.INVENTORY) {
                     removed = this.remove_items(obj);
@@ -166,11 +166,11 @@ class AddItemActionHandler extends EventActionHandler {
 
 class NewConnectionsHandler extends EventActionHandler {
     execute_action(action) {
-        for (var i = 0; i < action.length; i++) {
-            var temp = action[i].split(':');
-            var place = this.state.locations[temp[0]];
-            var direction = temp[1];
-            var to = temp[2];
+        for (let i = 0; i < action.length; i++) {
+            const temp = action[i].split(':');
+            const place = this.state.locations[temp[0]];
+            const direction = temp[1];
+            const to = temp[2];
             place.connections[direction] = to;
         }
     }
@@ -191,8 +191,8 @@ class MoveToLocationActionHandler extends EventActionHandler {
 
 class DisableEventsActionHandler extends EventActionHandler {
     execute_action(action) {
-        for (var i = 0; i < action.length; i++) {
-            var nevent = this.state.events[action[i]];
+        for (let i = 0; i < action.length; i++) {
+            const nevent = this.state.events[action[i]];
             nevent.disabled = true;
         }
     }
@@ -204,8 +204,8 @@ class DisableEventsActionHandler extends EventActionHandler {
 class EnableEventsActionHandler extends EventActionHandler {
     execute_action(action) {
         if (!isEmpty(action)) {
-            for (var i = 0; i < action.length; i++) {
-                var nevent = this.state.events[action[i]];
+            for (let i = 0; i < action.length; i++) {
+                const nevent = this.state.events[action[i]];
                 if (nevent != undefined) {
                     nevent.disabled = false;
                     nevent.triggered_steps = this.state.steps;
@@ -222,8 +222,8 @@ class EnableEventsActionHandler extends EventActionHandler {
 
 class UntriggerEventsActionHandler extends EventActionHandler {
     execute_action(action) {
-        for (var i = 0; i < action.length; i++) {
-            var nevent = this.state.events[action[i]];
+        for (let i = 0; i < action.length; i++) {
+            const nevent = this.state.events[action[i]];
             if (nevent != undefined) {
                 nevent.triggered = false;
                 nevent.triggered_steps = 0;
@@ -237,8 +237,8 @@ class UntriggerEventsActionHandler extends EventActionHandler {
 
 class SetStateItemsActionEventHandler extends EventActionHandler {
     execute_action(action) {
-        for (var i = 0; i < action.length; i++) {
-            var arr = action[i].split('|');
+        for (let i = 0; i < action.length; i++) {
+            const arr = action[i].split('|');
             setStateOfObject(arr[0], arr[1], this.state.objects);
         }
     }
@@ -249,8 +249,8 @@ class SetStateItemsActionEventHandler extends EventActionHandler {
 
 class SetStateLocationsActionEventHandler extends EventActionHandler {
     execute_action(action) {
-        for (var i = 0; i < action.length; i++) {
-            var arr = action[i].split('|');
+        for (let i = 0; i < action.length; i++) {
+            const arr = action[i].split('|');
             setStateOfObject(arr[0], arr[1], this.state.locations);
         }
     }

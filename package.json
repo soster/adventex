@@ -30,18 +30,19 @@
         "watch": "npm-run-all -p build watch-css watch-js watch-svg watch-img watch-copy",
         "serve-start": "browser-sync start --files 'dist' --server 'dist'",
         "serve": "npm-run-all -p watch serve-start",
+        "lint": "eslint src/**/*.js",
         "test": "mocha -r esm",
         "serve-tests": "browser-sync start --config 'test/browser-sync.js' "
     },
-
-    "devDependencies": {
+"devDependencies": {
+        "@eslint/js": "^10.0.1",
         "@rollup/plugin-commonjs": "^29.0.2",
         "@rollup/plugin-node-resolve": "^16.0.3",
         "browser-sync": "^3.0.4",
         "chai": "^6.2.2",
         "chokidar-cli": "^3.0.0",
         "copyfiles": "^2.4.1",
-        "esm": "^3.2.25",
+        "eslint": "^10.2.1",
         "imagemin-cli": "^8.0.0",
         "imagemin-mozjpeg": "^10.0.0",
         "imagemin-pngcrush": "^7.0.0",

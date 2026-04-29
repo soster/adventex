@@ -29,15 +29,15 @@ export default class LocationHandler {
 
 
   removeItemFromLocation(location, item) {
-    var place = this.state.locations[location];
+    const place = this.state.locations[location];
     if (place !== undefined && place.objects !== undefined) {
       var loc = place.objects.indexOf(item);
       if (loc != -1) {
         place.objects.splice(loc, 1);
       }
 
-      for (var i = 0; i < place.objects.length; i++) {
-        var obj = this.state.objects[place.objects[i]];
+      for (let i = 0; i < place.objects.length; i++) {
+        const obj = this.state.objects[place.objects[i]];
         if (!isEmpty(obj.state) && obj.state != constants.NONE && obj.states[obj.state].objects !== undefined) {
           var loc = obj.states[obj.state].objects.indexOf(item);
           if (loc != -1) {
@@ -49,12 +49,12 @@ export default class LocationHandler {
   }
 
   addItemToLocation(location, item) {
-    var place = this.state.locations[location];
+    const place = this.state.locations[location];
     place.objects.push(item);
   }
 
   inLocation(itemOrPerson) {
-    var olocation = this.state.locations[this.state.location];
+    const olocation = this.state.locations[this.state.location];
     if (olocation.objects.indexOf(itemOrPerson.toLowerCase()) != -1) {
       return true;
     }
@@ -76,11 +76,11 @@ export default class LocationHandler {
       return [];
     }
 
-    var itemIds = findItemIds(names, location.objects, this.state.objects);
+    let itemIds = findItemIds(names, location.objects, this.state.objects);
 
     if (location.objects !== undefined) {
-      for (var i = 0; i < location.objects.length; i++) {
-        var obj = this.state.objects[location.objects[i]];
+      for (let i = 0; i < location.objects.length; i++) {
+        const obj = this.state.objects[location.objects[i]];
         if (!isEmpty(obj.state) && obj.state != constants.NONE) {
           itemIds = itemIds.concat(findItemIds(names, obj.states[obj.state].objects, this.state.objects));
         }
@@ -94,7 +94,7 @@ export default class LocationHandler {
   }
 
   getItemIdsFromLocation(location) {
-    var itemIds = [];
+    let itemIds = [];
     if (location.objects != undefined) {
       itemIds = itemIds.concat(location.objects);
     }
@@ -105,8 +105,8 @@ export default class LocationHandler {
 
     if (location.objects !== undefined) {
 
-      for (var i = 0; i < location.objects.length; i++) {
-        var obj = this.state.objects[location.objects[i]];
+      for (let i = 0; i < location.objects.length; i++) {
+        const obj = this.state.objects[location.objects[i]];
         if (obj===undefined) {
           throw "object " +location.objects[i] + " does not exist!"
         }
@@ -124,16 +124,16 @@ export default class LocationHandler {
   }
 
   getLocationDescription(location_id) {
-    var loc = this.state.locations[location_id];
-    var description = getDescription(this.state.locations, location_id);
+    const loc = this.state.locations[location_id];
+    const description = getDescription(this.state.locations, location_id);
     return description;
   }
 
 
   getLocationImage(location_id) {
-    var loc = this.state.locations[location_id];
+    const loc = this.state.locations[location_id];
     if (loc!=undefined) {
-      var image = getImage(this.state.locations, location_id);
+      const image = getImage(this.state.locations, location_id);
       return image;
     }
     return undefined;
@@ -144,9 +144,9 @@ export default class LocationHandler {
   }
 
   findConnectionsForDirection(location, direction) {
-    var state = location.state;
+    const state = location.state;
     if (!isEmpty(state) && location.states != undefined) {
-      var stateObj = location.states[state];
+      const stateObj = location.states[state];
       if (stateObj != undefined && stateObj.connections != undefined) {
         return stateObj.connections[direction];
       }
@@ -155,13 +155,13 @@ export default class LocationHandler {
       return (location.connections[direction]);
     }
 
-    for (var i = 0; i < location.objects.length; i++) {
-      var obj = this.state.objects[location.objects[i]];
+    for (let i = 0; i < location.objects.length; i++) {
+      const obj = this.state.objects[location.objects[i]];
       if (obj=== undefined) {
         throw "Object" + location.objects[i] + " not found";
       }
       if (!isEmpty(obj.state) && obj.state != constants.NONE) {
-        var connections = obj.states[obj.state].connections;
+        const connections = obj.states[obj.state].connections;
         if (connections !== undefined && (location.reversed === undefined || location.reversed.indexOf(location.objects[i]) == -1)) {
           return connections[direction];
         }
@@ -175,7 +175,7 @@ export default class LocationHandler {
   }
 
   visited(location_id) {
-    var loc = this.getLocationById(location_id);
+    const loc = this.getLocationById(location_id);
     if (loc === undefined) {
       return false;
     }
