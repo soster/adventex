@@ -9,7 +9,7 @@
   "locations": {
     "compartment": {
       "name": "Your Compartment",
-      "description": "A cozy compartment on the Midnight Express. A narrow bed runs along the left wall, a small table sits opposite it, and a window shows darkness rushing by. Your door leads to the corridor.",
+      "description": "A cozy compartment on the Midnight Express. A narrow bed runs along the left wall, a small table sits opposite it, and a window shows darkness rushing by.\nYour door leads south to the corridor.",
       "objects": ["bed", "table", "window", "compartment_door"],
       "connections": {
         "south": "corridor"
@@ -17,7 +17,7 @@
     },
     "corridor": {
       "name": "Train Corridor",
-      "description": "A narrow carpeted corridor running the length of the train car. An announcement speaker is mounted on the wall. Doors lead to various compartments.",
+      "description": "A narrow carpeted corridor running the length of the train car. An announcement speaker is mounted on the wall.\nYour compartment door is to the north. The dining car is to the east. The conductor's office is to the west. A locked door leads south.",
       "objects": ["speaker"],
       "connections": {
         "north": "compartment",
@@ -28,7 +28,7 @@
     },
     "dining_car": {
       "name": "Dining Car",
-      "description": "The dining car is quiet this early morning. Half-eaten breakfast plates sit on the tables. A service cart stands near the waiter's station.",
+      "description": "The dining car is quiet this early morning. Half-eaten breakfast plates sit on the tables. A service cart stands near the waiter's station.\nThe corridor is to the west.",
       "objects": ["tables", "waiter_station", "service_cart"],
       "connections": {
         "west": "corridor"
@@ -36,7 +36,7 @@
     },
     "conductors_office": {
       "name": "Conductor's Office",
-      "description": "A small office cluttered with paperwork. A desk holds train documents, a drawer sits beneath it, and an old radio sits on a shelf.",
+      "description": "A small office cluttered with paperwork. A desk holds train documents, a drawer sits beneath it, and an old radio sits on a shelf.\nThe corridor is to the east.",
       "objects": ["desk", "drawer", "radio"],
       "connections": {
         "east": "corridor"
@@ -44,7 +44,7 @@
     },
     "safe_room": {
       "name": "Safe Room",
-      "description": "A small secure room at the end of the corridor. A large safe stands against the wall.",
+      "description": "A small secure room at the end of the corridor. A large safe stands against the wall.\nThe corridor is to the north.",
       "objects": ["safe"],
       "connections": {
         "north": "corridor"

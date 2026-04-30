@@ -1,7 +1,8 @@
-import { assert } from 'chai';
-import { readFileSync } from 'fs';
+import * as chai from '../node_modules/chai/index.js';
+var assert = chai.assert;
 import '../src/js/functions.js';
 import Parser from '../src/js/parser.js';
+import parseJson from '../src/js/json.js';
 import EventHandler from '../src/js/eventhandler.js'
 import InventoryHandler from '../src/js/inventoryhandler.js'
 import LocationHandler from '../src/js/locationhandler.js'
@@ -26,10 +27,6 @@ import {
 
 
 // some mocking:
-globalThis.window = globalThis;
-globalThis.document = {
-  querySelectorAll: () => [],
-};
 window.advntx = (function (my) {
   var parser;
   
@@ -51,20 +48,10 @@ window.advntx = (function (my) {
 before(function (done) {
   var advntx = window.advntx;
   advntx.currentGame = 'games/escape';
-  advntx.vocabulary = JSON.parse(readFileSync('src/games/escape/vocabulary.json', 'utf8'));
-  advntx.messages = JSON.parse(readFileSync('src/games/escape/messages.json', 'utf8'));
-  advntx.state = JSON.parse(readFileSync('src/games/escape/gamestate.json', 'utf8'));
-  advntx.config = JSON.parse(readFileSync('src/games/escape/config.json', 'utf8'));
-  // build vocabulary.objects from state:
-  advntx.vocabulary.objects = [];
-  for (var property in advntx.state.objects) {
-    advntx.vocabulary.objects.push(advntx.state.objects[property].name);
-  }
-
   function async_done(bool) {
     var objectIds = Object.keys(objects);
     advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, objectIds);
-
+    
     var dummy = function()  {
 
     };
@@ -74,7 +61,7 @@ before(function (done) {
     advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, dummy);
     done();
   };
-  async_done(true);
+  parseJson(async_done, advntx);
 });
 
 function echo(string) {
