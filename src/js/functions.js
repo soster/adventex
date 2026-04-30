@@ -5,7 +5,7 @@
 * 'Replace {0}'.format('this')
 */
 String.prototype.format = String.prototype.f = function() {
-    var s = this,
+    let s = this,
         i = arguments.length;
 
     while (i--) {
@@ -31,5 +31,11 @@ function stringEquals(a, b) {
     return typeof a === 'string' && typeof b === 'string'
         ? a.localeCompare(b, undefined, { sensitivity: 'accent' }) === 0
         : a === b;
+}
+
+// make available as globals for non-module code:
+if (typeof globalThis !== 'undefined') {
+  globalThis.isEmpty = isEmpty;
+  globalThis.stringEquals = stringEquals;
 }
 

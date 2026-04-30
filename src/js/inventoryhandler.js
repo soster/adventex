@@ -34,7 +34,7 @@ export default class InventoryHandler {
     }
 
     getPortableError (itemId) {
-      var text = this.l_state.objects[itemId].error_portable; 
+      const text = this.l_state.objects[itemId].error_portable; 
       return text; 
     }
 
@@ -53,9 +53,9 @@ export default class InventoryHandler {
     }
 
     findItemIdsForNameAnywhere (name) {
-      var itemIds = [];
-      for (var property in this.l_state.objects) {
-        var item = this.l_state.objects[property];
+      const itemIds = [];
+      for (const property in this.l_state.objects) {
+        const item = this.l_state.objects[property];
         if (item.name.endsWith(name) && itemIds.indexOf(item.name)==-1) {
           itemIds.push(property);
         }
@@ -64,7 +64,7 @@ export default class InventoryHandler {
     }
 
     getStateOfObject(itemId) {
-      var object = this.l_state.objects[itemId];
+      const object = this.l_state.objects[itemId];
       if (object===undefined) {
         return constants.NONE;
       }
@@ -76,7 +76,7 @@ export default class InventoryHandler {
 
 
     getSpecificStateOfObject(itemId, state) {
-      var object = this.l_state.objects[itemId];
+      const object = this.l_state.objects[itemId];
 
       if (object===undefined || object.states === undefined) {
         return undefined;
@@ -92,7 +92,7 @@ export default class InventoryHandler {
     }
 
     getNameOfState(itemId, state) {
-      var sobj = this.getSpecificStateOfObject(itemId, state);
+      const sobj = this.getSpecificStateOfObject(itemId, state);
       if (sobj===undefined) {
         return '';
       }
@@ -100,7 +100,7 @@ export default class InventoryHandler {
     }
 
     getDescriptionOfState(itemId, state) {
-      var sobj = this.getSpecificStateOfObject(itemId, state);
+      const sobj = this.getSpecificStateOfObject(itemId, state);
       if (sobj===undefined) {
         return '';
       }
@@ -108,7 +108,7 @@ export default class InventoryHandler {
     }
 
     getReadOfState(itemId, state) {
-      var sobj = this.getSpecificStateOfObject(itemId, state);
+      const sobj = this.getSpecificStateOfObject(itemId, state);
       if (sobj===undefined) {
         return '';
       }
@@ -116,7 +116,7 @@ export default class InventoryHandler {
     }
 
     getErrorOfState(itemId, state) {
-      var object = this.l_state.objects[itemId];
+      const object = this.l_state.objects[itemId];
       if (state!=constants.NONE&&object.states[state]===undefined) {
         throw state+' is not an allowed state for '+itemId;
       }
@@ -127,7 +127,7 @@ export default class InventoryHandler {
     }
 
     hasState(itemId, state) {
-      var object = this.l_state.objects[itemId];
+      const object = this.l_state.objects[itemId];
       if (state!=constants.NONE&&(object.states===undefined||object.states[state]===undefined)) {
         return false;
       }
@@ -135,14 +135,14 @@ export default class InventoryHandler {
     }
 
     setState(itemId, state) {
-      var object = this.l_state.objects[itemId];
+      const object = this.l_state.objects[itemId];
       if (this.hasState(itemId, state)) {
         object.state = state;
       }
     }
 
     lock(itemId, lock) {
-      var object = this.l_state.objects[itemId];
+      const object = this.l_state.objects[itemId];
       if (object!==undefined) {
         object.locked = lock;
       }
@@ -174,8 +174,8 @@ export default class InventoryHandler {
     }
 
     getStateString(itemId) {
-      var stateName = this.getNameOfState(itemId, this.getStateOfObject(itemId));
-      var stateString = '';
+      const stateName = this.getNameOfState(itemId, this.getStateOfObject(itemId));
+      let stateString = '';
       if (!isEmpty(stateName)) {
         stateString = '('+stateName+')';
       }
@@ -192,17 +192,17 @@ export default class InventoryHandler {
 
 
     getNameWithArticle (itemId, accusativ) {
-      var item = this.l_state.objects[itemId];
+      const item = this.l_state.objects[itemId];
       if (item===undefined) {
         return '';
       }
-      var article = item.article;
+      let article = item.article;
       
       if (accusativ === true && item.article_acc != undefined) {
         article = item.article_acc;
       }
 
-      var name = item.name; 
+      const name = item.name; 
 
 
       if ( ! isEmpty(article)) {

@@ -29,11 +29,20 @@ import Interpreter from './interpreter.js'
 
 
 
+function escapeHtml(attr) {
+  return String(attr)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 /**
- * Set advntx as global variable. 
+ * Set advntx as global variable.
  * window is needed for global access.
  */
- window.advntx = {
+window.advntx = {
   
   echo(text, color, clazz, bold) {
     if (color != undefined || clazz != undefined || bold != undefined) {
@@ -43,36 +52,36 @@ import Interpreter from './interpreter.js'
       if (color === undefined) {
         color = '';
       }
-      var formatting = '';
+      let formatting = '';
       if (bold) {
         formatting = 'b';
       }
       text = '[[' + formatting + ';' + color + ';;' + clazz + ']' + text + ']';
     }
 
-    var old_prompt = advntx.term.get_prompt();
-    var less = true;
-    var cols = advntx.term.cols();
-    var rows = advntx.term.rows()-2;
-    var lines = text.split('\n');
-    var numLines = lines.length;
-    for (var i=0;i<lines.length;i++) {
-      var textWithoutFormatting = $.terminal.strip(lines[i])
+    const old_prompt = advntx.term.get_prompt();
+    const less = true;
+    const cols = advntx.term.cols();
+    const rows = advntx.term.rows()-2;
+    const lines = text.split('\n');
+    let numLines = lines.length;
+    for (let i=0;i<lines.length;i++) {
+      const textWithoutFormatting = $.terminal.strip(lines[i])
       numLines += Math.floor(textWithoutFormatting.length/(cols+1));
     }
 
     // if number of lines to big, stop after some lines to display "press any key":
     if (numLines >= rows) {
-      var pos = 0;
-      var left = 0;
+      let pos = 0;
+      const left = 0;
       advntx.waitForKey = true;
       function print() {
-        var to_print = [];
-        var numOfLines = 0;
-        var origLinesPrinted = 0;
-        for (var i=pos;i<lines.length;i++) {
+        const to_print = [];
+        let numOfLines = 0;
+        let origLinesPrinted = 0;
+        for (let i=pos;i<lines.length;i++) {
           numOfLines++;
-          var textWithoutFormatting = $.terminal.strip(lines[i])
+          const textWithoutFormatting = $.terminal.strip(lines[i])
           numOfLines += Math.floor(textWithoutFormatting.length/(cols+1));
           origLinesPrinted+=1;
           to_print.push(lines[i]);
@@ -114,8 +123,8 @@ import Interpreter from './interpreter.js'
   },
 
   formatHeadline(text) {
-    var lines = text.split('\n');
-    for (var i=0;i<lines.length;i++) {
+    const lines = text.split('\n');
+    for (let i=0;i<lines.length;i++) {
       lines[i] = lines[i].replace('\n','');
       lines[i] = '[[;;;headline]' + lines[i] + ']';
     }
@@ -123,30 +132,30 @@ import Interpreter from './interpreter.js'
   },
 
   describeLocationEcho(locationId, alwaysShowFullDescription, preEventText, postEventText) {
-    var loc = advntx.locationHandler.getLocationById(locationId);
-    var name = getName(advntx.state.locations, locationId);
-    var headline = '';
-    var description = '';
-    var image = 'fallback.png';
+    const loc = advntx.locationHandler.getLocationById(locationId);
+    const name = getName(advntx.state.locations, locationId);
+    let headline = '';
+    let description = '';
+    let image = 'fallback.png';
 
     if (!advntx.locationHandler.visited(locationId) || alwaysShowFullDescription) {
       headline = advntx.formatHeadline(name);
       description = advntx.locationHandler.getLocationDescription(locationId);
       image = advntx.currentGame+'/'+advntx.locationHandler.getLocationImage(locationId);
       // loop through possible directions:
-      for (var key in loc.connections) {
-        var direction = key;
+      for (const key in loc.connections) {
+        const direction = key;
         description = description.replace(direction, '[[!;;;;javascript:advntx.terminalLink(\' ' + direction + ' \');]' + direction + ']');
       }
     }
-    var prompt = name + '>';
+    const prompt = name + '>';
     advntx.term.set_prompt('[[b;;]' + prompt + ']');
 
-    var objects = advntx.locationHandler.getItemIdsFromLocation(advntx.state.locations[locationId]);
-    var message = advntx.messages.info_you_see;
-    var objectsMessage = listFormattedObjects(objects, advntx.state.objects, advntx.inventoryHandler);
+    const objects = advntx.locationHandler.getItemIdsFromLocation(advntx.state.locations[locationId]);
+    const message = advntx.messages.info_you_see;
+    const objectsMessage = listFormattedObjects(objects, advntx.state.objects, advntx.inventoryHandler);
 
-    var text = '';
+    let text = '';
 
     if (!isEmpty(preEventText)) {
       text = preEventText+'\n';
@@ -186,12 +195,12 @@ import Interpreter from './interpreter.js'
     getJSON('games/games.json', function (result) {
       advntx.games = result;
       $('#game_buttons').children().remove();
-      for (var key in advntx.games) {
+      for (const key in advntx.games) {
         if (key == 'default') {
           continue;
         }
-        var $button = $('<button type="button" class="btn" id="btn_escape" onclick="advntx.initGame(true,\'' + key + '\');">' + advntx.games[key].name + '</button>');
-        var $space = $('<span>&nbsp;</span>');
+        const $button = $('<button type="button" class="btn btn-game-select" data-game-id="' + escapeHtml(key) + '">' + escapeHtml(advntx.games[key].name) + '</button>');
+        const $space = $('<span>&nbsp;</span>');
         $button.appendTo($('#game_buttons'));
         $space.appendTo($('#game_buttons'));
       }
@@ -229,7 +238,7 @@ import Interpreter from './interpreter.js'
   executeCurrent() {
     if (advntx.waitForKey) {
       // simulate backspace key:
-      var e = $.Event('keydown', { keyCode: 8});
+      const e = $.Event('keydown', { keyCode: 8});
       advntx.term.trigger(e);
     } else {
       advntx.term.exec(advntx.term.get_command());
@@ -239,7 +248,7 @@ import Interpreter from './interpreter.js'
   },
 
   load(name) {
-    var retrievedObject = localStorage.getItem('advntx' + name);
+    const retrievedObject = localStorage.getItem('advntx' + name);
     if (retrievedObject != undefined) {
       advntx.state = JSON.parse(retrievedObject);
       advntx.echo(advntx.messages.info_game_loaded.format(name));
@@ -256,10 +265,10 @@ import Interpreter from './interpreter.js'
   },
 
   listSavegames() {
-    for (var i in localStorage) {
+    for (const i in localStorage) {
       if (i.startsWith('advntx')) {
-        var name = i.replace('advntx', '');
-        var link = name;
+        let name = i.replace('advntx', '');
+        const link = name;
         if (isEmpty(name)) {
           name = 'default';
         }
@@ -272,7 +281,7 @@ import Interpreter from './interpreter.js'
 
     if (advntx.term === undefined) {
       advntx.term = $('#terminal').terminal(function (command) {
-        var echo = advntx.echo;
+        const echo = advntx.echo;
 
         advntx.interpreter.interpret(command, advntx.describeLocationEcho, advntx.initInventory, advntx.echo, advntx.initGame, advntx.load, advntx.save, advntx.listSavegames);
       }, {
@@ -310,10 +319,10 @@ import Interpreter from './interpreter.js'
       advntx.htmlInitialized = true;
     }
 
-    var text = advntx.formatHeadline(advntx.messages.greetings.format(advntx.version))+'\n';
+    let text = advntx.formatHeadline(advntx.messages.greetings.format(advntx.version))+'\n';
     advntx.initInventory();
     if (reset) {
-      var startEvent = advntx.state.events['start_event'];
+      const startEvent = advntx.state.events['start_event'];
       advntx.eventHandler.executeEvent(startEvent, function(eventText) {
         text += eventText;
       });
@@ -346,7 +355,7 @@ import Interpreter from './interpreter.js'
   },
 
   asyncRefocusTerminal() {
-    window.setTimeout('advntx.refocusTerminal();', 250);
+    window.setTimeout(() => advntx.refocusTerminal(), 250);
   },
 
   inventoryClick(item) {
@@ -359,11 +368,11 @@ import Interpreter from './interpreter.js'
     if (advntx.state.inventory.length == 0) {
       $('#inventory').append('<p class="inventory_item">' + advntx.messages.info_inventory_empty + '</p>');
     }
-    for (var i = 0; i < advntx.state.inventory.length; i++) {
-      var item = advntx.state.inventory[i];
-      var itemName = getName(advntx.state.objects, item);
-      var stateString = ' ' + advntx.inventoryHandler.getStateString(item);
-      $('#inventory').append('<p class="inventory_item"><button type="button" onclick="advntx.inventoryClick(\'' + itemName + '\')" class="btn inventory_button">' + itemName + stateString + '</button></p>');
+    for (let i = 0; i < advntx.state.inventory.length; i++) {
+      const item = advntx.state.inventory[i];
+      const itemName = getName(advntx.state.objects, item);
+      const stateString = ' ' + advntx.inventoryHandler.getStateString(item);
+      $('#inventory').append('<p class="inventory_item"><button type="button" data-item-name="' + escapeHtml(itemName) + '" class="btn inventory_button">' + escapeHtml(itemName) + escapeHtml(stateString) + '</button></p>');
     }
   }
 
@@ -377,6 +386,14 @@ window.periodicUpdates = function periodicUpdates() {
 
 /** Global Initializations */
 $(document).ready(function () {
+  $('#game_buttons').on('click', '.btn-game-select', function () {
+    advntx.initGame(true, $(this).data('game-id'));
+  });
+
+  $('#inventory').on('click', '.inventory_button', function () {
+    advntx.inventoryClick($(this).data('item-name'));
+  });
+
   $('#btn_help').click(function () {
     advntx.term.exec(advntx.messages.verb_help, false);
     advntx.initInventory();
@@ -399,16 +416,15 @@ $(document).ready(function () {
   });
 
   $('#btn_load_file').click(function () {
-    var files = document.getElementById('selectFiles').files;
+    const files = document.getElementById('selectFiles').files;
     if (files===undefined || files.length <= 0) {
       return false;
     }
     
-    var fr = new FileReader();
+    const fr = new FileReader();
 
-    fr.onload = function(e) { 
-      console.log(e);
-        var result = JSON.parse(e.target.result);
+   fr.onload = function(e) {
+        const result = JSON.parse(e.target.result);
         advntx.state = result;
         advntx.term.exec('clear');
         advntx.initGame(false);
@@ -419,11 +435,11 @@ $(document).ready(function () {
   });
 
   $('#btn_save_file').click(function() {    
-    var dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(advntx.state, null, 2));
-    var downloadAnchorNode = document.createElement('a');
+    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(advntx.state, null, 2));
+    const downloadAnchorNode = document.createElement('a');
     downloadAnchorNode.setAttribute('href',     dataStr);
-    var date = new Date();
-		var df = date.getMonth()+'-'+date.getDate()+'-'+date.getYear()+' '+(date.getHours()+1)+'_'+date.getMinutes();
+    const date = new Date();
+		const df = date.getMonth()+'-'+date.getDate()+'-'+date.getYear()+' '+(date.getHours()+1)+'_'+date.getMinutes();
     downloadAnchorNode.setAttribute('download', 'advntx_' + df + '.json');
     
     document.body.appendChild(downloadAnchorNode);
@@ -440,7 +456,7 @@ $(document).ready(function () {
 
 
 
-  window.setInterval('window.periodicUpdates()', 1000);
+  window.setInterval(window.periodicUpdates, 1000);
   advntx.initGame(true);
 });
 

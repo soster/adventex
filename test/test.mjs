@@ -1,7 +1,7 @@
-import * as chai from '../node_modules/chai/index.js';
-
+import { assert } from 'chai';
+import { readFileSync } from 'fs';
+import '../src/js/functions.js';
 import Parser from '../src/js/parser.js';
-import parseJson from '../src/js/json.js';
 import EventHandler from '../src/js/eventhandler.js'
 import InventoryHandler from '../src/js/inventoryhandler.js'
 import LocationHandler from '../src/js/locationhandler.js'
@@ -25,12 +25,11 @@ import {
 
 
 
-var assert = chai.assert;
-
-
-
-
 // some mocking:
+globalThis.window = globalThis;
+globalThis.document = {
+  querySelectorAll: () => [],
+};
 window.advntx = (function (my) {
   var parser;
   
@@ -52,11 +51,20 @@ window.advntx = (function (my) {
 before(function (done) {
   var advntx = window.advntx;
   advntx.currentGame = 'games/escape';
-  // waits until done is called (async!)
+  advntx.vocabulary = JSON.parse(readFileSync('src/games/escape/vocabulary.json', 'utf8'));
+  advntx.messages = JSON.parse(readFileSync('src/games/escape/messages.json', 'utf8'));
+  advntx.state = JSON.parse(readFileSync('src/games/escape/gamestate.json', 'utf8'));
+  advntx.config = JSON.parse(readFileSync('src/games/escape/config.json', 'utf8'));
+  // build vocabulary.objects from state:
+  advntx.vocabulary.objects = [];
+  for (var property in advntx.state.objects) {
+    advntx.vocabulary.objects.push(advntx.state.objects[property].name);
+  }
+
   function async_done(bool) {
     var objectIds = Object.keys(objects);
     advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, objectIds);
-    
+
     var dummy = function()  {
 
     };
@@ -66,7 +74,7 @@ before(function (done) {
     advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, dummy);
     done();
   };
-  parseJson(async_done, advntx);
+  async_done(true);
 });
 
 function echo(string) {
@@ -412,9 +420,9 @@ describe('advntx test suite', function () {
   });
 
   it('find events', function () {
-    assert.equal(events[0], advntx.eventHandler.findEvents(location, ['door', 'stone'], 'open', undefined, events)[0]);
-    assert.equal(0, advntx.eventHandler.findEvents(location, ['torch'], [], 'throw', undefined, events).length);
-    assert.equal(1, advntx.eventHandler.findEvents(location, ['torch', 'guard'], [], 'throw', undefined, events).length);
+    assert.equal(events[0], advntx.eventHandler.findEvents(advntx.state.location, ['door', 'stone'], 'open', undefined, events)[0]);
+    assert.equal(0, advntx.eventHandler.findEvents(advntx.state.location, ['torch'], [], 'throw', undefined, events).length);
+    assert.equal(1, advntx.eventHandler.findEvents(advntx.state.location, ['torch', 'guard'], [], 'throw', undefined, events).length);
 
 
   });
@@ -460,10 +468,10 @@ describe('advntx test suite', function () {
     var locationObjects = locations[advntx.state.location].objects;
     var oldEventHandler = advntx.eventHandler;
     advntx.eventHandler = new EventHandler(advntx.state,oldEventHandler.vocabulary, oldEventHandler.initInventory);
-    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'take', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(advntx.state.location, ['torch'], locationObjects, 'take', undefined, events);
     assert.equal(0, foundEvents.length);
     advntx.state.inventory = [];
-    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], locationObjects, 'take', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(advntx.state.location, ['torch'], locationObjects, 'take', undefined, events);
     assert.equal(1, foundEvents.length);
     assert.equal(events['not_inventory'], foundEvents[0]);
     advntx.state = save;
@@ -473,7 +481,7 @@ describe('advntx test suite', function () {
 
   it('testing "any" condition events', function () {
     advntx.state.inventory = ['torch'];
-    var foundEvents = advntx.eventHandler.findEvents(location, ['torch'], [], 'help', undefined, events);
+    var foundEvents = advntx.eventHandler.findEvents(advntx.state.location, ['torch'], [], 'help', undefined, events);
     assert.equal(1, foundEvents.length);
     assert.equal(events['any_event'], foundEvents[0]);
   });
@@ -490,25 +498,25 @@ describe('advntx test suite', function () {
     var eventHandler = new EventHandler(advntx.state, advntx.vocabulary, function(){});
     var locationObjects = locations[advntx.state.location].objects;
 
-    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'kindle', undefined, events);
+    var foundEvents = eventHandler.findEvents(advntx.state.location, ['torch'], locationObjects, 'kindle', undefined, events);
     assert.equal(0, foundEvents.length);
     objects['torch'].state = 'none';
-    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'kindle', undefined, events);
+    var foundEvents = eventHandler.findEvents(advntx.state.location, ['torch'], locationObjects, 'kindle', undefined, events);
     assert.equal(events['kindle_torch'], foundEvents[0])
     eventHandler.executeEvent(events['kindle_torch'], echo);
     assert.equal('burning', objects['torch'].state);
     assert.equal('burniiiiing', advntx.inventoryHandler.getNameOfState('torch', 'burning'));
-    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'extinguish', undefined, events);
+    var foundEvents = eventHandler.findEvents(advntx.state.location, ['torch'], locationObjects, 'extinguish', undefined, events);
     eventHandler.executeEvent(foundEvents[0], echo);
     assert.equal('none', objects['torch'].state);
-    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'examine', undefined, events);
+    var foundEvents = eventHandler.findEvents(advntx.state.location, ['torch'], locationObjects, 'examine', undefined, events);
     assert.equal(0, foundEvents.length);
     objects['torch'].state = 'burning';
-    var foundEvents = eventHandler.findEvents(location, ['torch'], locationObjects, 'examine', undefined, events);
+    var foundEvents = eventHandler.findEvents(advntx.state.location, ['torch'], locationObjects, 'examine', undefined, events);
     assert.equal(1, foundEvents.length);
     eventHandler.executeEvent(foundEvents[0], echo);
 
-    var foundEvents = eventHandler.findEvents(location, ['ring'], ['ring', 'barrel'], 'clean', undefined, events);
+    var foundEvents = eventHandler.findEvents(advntx.state.location, ['ring'], ['ring', 'barrel'], 'clean', undefined, events);
     assert.equal(0, foundEvents.length);
     advntx.state = save;
   });

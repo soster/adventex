@@ -10,7 +10,7 @@ export default function parseJson(asyncInit, advntx) {
 
 
   // counter for number of necessary requests:
-  var jsons = 0;
+  let jsons = 0;
   const num_requests_necessary = 4;
 
 
@@ -18,8 +18,8 @@ export default function parseJson(asyncInit, advntx) {
 
   function asyncInitLocal() {
     advntx.vocabulary.objects = [];
-    for (var property in advntx.state.objects) {
-      var item = advntx.state.objects[property];
+    for (const property in advntx.state.objects) {
+      const item = advntx.state.objects[property];
       advntx.vocabulary.objects.push(item.name);
     }
     asyncInit(true);

@@ -9,10 +9,10 @@ import * as constants from './const.js'
 
 
 export function getDescription(objects, id) {
-  var obj = objects[id];
+  const obj = objects[id];
   if (obj != undefined && !isEmpty(obj.state) && obj.state != constants.NONE && obj.states != undefined) {
-    var state = obj.states[obj.state];
-    var desc = state['description'];
+    const state = obj.states[obj.state];
+    const desc = state['description'];
     if (!isEmpty(desc)) {
       return desc;
     }
@@ -35,8 +35,8 @@ export function isHidden(objects, id) {
 
 export function getProperty(objects, property, id) {
   id = id.toLowerCase();
-  var obj = objects[id];
-  var state = constants.NONE;
+  const obj = objects[id];
+  let state = constants.NONE;
 
   if (obj !== undefined && obj.state !== undefined) {
     state = obj.state;
@@ -81,12 +81,12 @@ export function getOfType(words, type, number) {
 }
 
 export function getObjectIdsForState(state) {
-  var ids = [];
+  const ids = [];
   if (state===undefined||state.objects===undefined) {
     return ids;
   }
 
-  for (var i=0;i<state.objects.length;i++) {
+  for (let i=0;i<state.objects.length;i++) {
     ids.push(state.objects[i]);
   }
   return ids;
@@ -94,7 +94,7 @@ export function getObjectIdsForState(state) {
 
 
 export function findFirstMatch(words, type, objects) {
-  for (var i = 0; i < words[type].length; i++) {
+  for (let i = 0; i < words[type].length; i++) {
     if (objects[words[type][i]] !== undefined) {
       return words[type][i];
     }
@@ -112,17 +112,17 @@ export function getJSON(url, result) {
 }
 
 export function listFormattedObjects(list, list_of_all, inventoryHandler, takeVerb) {
-  var message = '';
+  let message = '';
   if (list !== undefined && list.length > 0) {
-    for (var i = 0; i < list.length; i++) {
+    for (let i = 0; i < list.length; i++) {
       if (isHidden(list_of_all, list[i])) {
         continue;
       }
       if (i > 0 && !isHidden(list_of_all, list[i - 1])) {
         message += ', ';
       }
-      var effect = inventoryHandler.getEffect(list[i]);
-      var color = inventoryHandler.getColor(list[i]);
+      let effect = inventoryHandler.getEffect(list[i]);
+      let color = inventoryHandler.getColor(list[i]);
       if (color === undefined) {
         color = '';
       }
@@ -130,10 +130,10 @@ export function listFormattedObjects(list, list_of_all, inventoryHandler, takeVe
         effect = '';
       }
 
-      var name = getName(list_of_all, list[i]);
+      const name = getName(list_of_all, list[i]);
       message += '[[!;' + color + ';;' + effect + ';javascript:advntx.terminalLink(\' '+name+'\');]' + name;
 
-      var stateString = inventoryHandler.getStateString(list[i]);
+      const stateString = inventoryHandler.getStateString(list[i]);
       if (!isEmpty(stateString)) {
         message += ' ' + stateString;
       }
@@ -158,16 +158,16 @@ export function checkSynonyms(main, to_check, synonyms) {
 }
 
 export function findItemIds(names, objects, allObjects) {
-  var retItemIds = [];
+  const retItemIds = [];
   if (names === undefined || objects === undefined)
     return retItemIds;
 
-  for (var i = 0; i < names.length; i++) {
-    var name = names[i];
-    var itemIds = findItemIdsForName(name, allObjects);
-    for (var i2 = 0; i2 < itemIds.length; i2++) {
-      var itemId = itemIds[i2];
-      var index = objects.indexOf(itemId);
+  for (let i = 0; i < names.length; i++) {
+    const name = names[i];
+    const itemIds = findItemIdsForName(name, allObjects);
+    for (let i2 = 0; i2 < itemIds.length; i2++) {
+      const itemId = itemIds[i2];
+      const index = objects.indexOf(itemId);
       if (index != -1 && retItemIds.indexOf(itemId) == -1) {
         retItemIds.push(objects[index]);
       }
@@ -178,7 +178,7 @@ export function findItemIds(names, objects, allObjects) {
 }
 
 export function setStateOfObject(id, state, objects) {
-  var object = objects[id];
+  const object = objects[id];
   if (state != constants.NONE && object.states[state] === undefined) {
     throw state + ' is not an allowed state for ' + id;
   }
@@ -186,14 +186,14 @@ export function setStateOfObject(id, state, objects) {
 }
 
 export function findItemIdsForName(name, objects) {
-  var itemIds = [];
-  for (var property in objects) {
-    var item = objects[property];
+  const itemIds = [];
+  for (const property in objects) {
+    const item = objects[property];
     if (stringEquals(item.name,name)) {
       itemIds.push(property);
     }
-    for (var synid in item.synonyms) {
-      var syn = item.synonyms[synid];
+    for (const synid in item.synonyms) {
+      const syn = item.synonyms[synid];
       if (stringEquals(syn, name)) {
         itemIds.push(property);
       }
@@ -203,23 +203,23 @@ export function findItemIdsForName(name, objects) {
 }
 
 export function getObjectNameArray(objects) {
-  var names = [];
-  for (var property in objects) {
-    var item = objects[property];
+  const names = [];
+  for (const property in objects) {
+    const item = objects[property];
     names.push(item.name);
   }
   return names;
 }
 
 export function getFromStateOrObject(objectId, property, objects) {
-  var object = objects[objectId];
+  const object = objects[objectId];
 
   if (object === undefined) {
     return '';
   }
 
-  var state = object.state;
-  var effect;
+  const state = object.state;
+  let effect;
   if (!isEmpty(state) && state != constants.NONE && object.states[state] != undefined) {
     effect = object.states[state][property];
   }
