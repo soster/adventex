@@ -128,7 +128,7 @@ Locations define the different places in the adventure, including their descript
         "start_location": {
             "name": "Starting Room",
             "description": "You are in a small, dimly lit room. There is a door to the east.",
-            "exits": {
+            "connections": {
                 "east": "next_location"
             },
             "objects": ["book", "table"]
@@ -136,13 +136,16 @@ Locations define the different places in the adventure, including their descript
         "next_location": {
             "name": "Next Room",
             "description": "You are in a larger room with a window. There is a door to the west.",
-            "exits": {
+            "connections": {
                 "west": "start_location"
             },
             "objects": ["chest", "window"]
         }
     }
 }
+```
+
+**Important:** Location descriptions must mention direction words (north, south, east, west, etc.) for each exit. The engine replaces these words with clickable links in the terminal UI. Without them, players can't see available exits. The `connections` field defines the actual navigation, while the description provides the visible clickable links.
 ```
 
 ### Verbs
