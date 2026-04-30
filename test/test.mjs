@@ -515,6 +515,94 @@ describe('advntx test suite', function () {
 
 });
 
+describe('The Midnight Express - winning flow', function () {
+  var heistState, heistAdvntx;
+
+  before(function (done) {
+    advntx.currentGame = 'games/heist';
+    function async_done() {
+      var objectIds = Object.keys(advntx.state.objects);
+      advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, objectIds);
+      advntx.inventoryHandler = new InventoryHandler(advntx.state, function() {});
+      advntx.interpreter = new Interpreter(advntx);
+      advntx.locationHandler = new LocationHandler(advntx.state);
+      advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, function() {});
+      done();
+    }
+    parseJson(async_done, advntx);
+  });
+
+  it('should win by following the investigation path', function () {
+    var echoLog = [];
+    var echo = function(text) { echoLog.push(text); };
+    var winTriggered = false;
+    var winCheck = function(events) {
+      for (var i = 0; i < events.length; i++) {
+        if (advntx.state.events['win_event'] === events[i]) {
+          winTriggered = true;
+        }
+      }
+    };
+
+    // Override checkWinningCondition to capture win
+    var origCheck = advntx.interpreter.checkWinningCondition;
+    advntx.interpreter.checkWinningCondition = function(events) {
+      winCheck(events);
+      return origCheck.call(advntx.interpreter, events);
+    };
+
+    // Step 1: Start in compartment
+    assert.equal('compartment', advntx.state.location, 'Should start in compartment');
+
+    // Step 2: Look under bed to find the strange key
+    advntx.interpreter.interpret('look under bed', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.include(advntx.state.inventory, 'strange_key', 'Should find strange key');
+
+    // Step 3: Go south to corridor
+    advntx.interpreter.interpret('go south', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('corridor', advntx.state.location, 'Should be in corridor');
+
+    // Step 4: Go east to dining car
+    advntx.interpreter.interpret('go east', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('dining_car', advntx.state.location, 'Should be in dining car');
+
+    // Step 5: Go west back to corridor, then west to conductor's office
+    advntx.interpreter.interpret('go west', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    advntx.interpreter.interpret('go west', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('conductors_office', advntx.state.location, 'Should be in conductor office');
+
+    // Step 6: Open drawer with strange key
+    advntx.interpreter.interpret('open drawer with strange key', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('open', advntx.state.objects['drawer'].state, 'Drawer should be open');
+
+    // Step 7: Take passenger list
+    advntx.interpreter.interpret('take passenger list', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.include(advntx.state.inventory, 'passenger_list', 'Should have passenger list');
+
+    // Step 8: Go east to corridor, east to dining car
+    advntx.interpreter.interpret('go east', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    advntx.interpreter.interpret('go east', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('dining_car', advntx.state.location, 'Should be in dining car');
+
+    // Step 9: Look under service cart to find diamond
+    advntx.interpreter.interpret('look under service cart', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.include(advntx.state.inventory, 'diamond', 'Should find diamond');
+
+    // Step 10: Go west to corridor, west to conductor's office
+    advntx.interpreter.interpret('go west', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    advntx.interpreter.interpret('go west', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('conductors_office', advntx.state.location, 'Should be in conductor office');
+
+    // Step 11: Use radio to win
+    advntx.interpreter.interpret('use radio', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.isTrue(winTriggered, 'Win event should be triggered');
+
+    // Restore
+    advntx.interpreter.checkWinningCondition = origCheck;
+  });
+});
+
+
 // Run Mocha after all tests are registered
 mocha.run();
 

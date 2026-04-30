@@ -1,0 +1,232 @@
+{
+  "timestamp": "2026-04-30T23:00:00.000Z",
+  "inventory": [],
+  "location": "compartment",
+  "seconds": 0,
+  "steps": 0,
+  "hints": 0,
+  "points": 0,
+  "locations": {
+    "compartment": {
+      "name": "Your Compartment",
+      "description": "A cozy compartment on the Midnight Express. A narrow bed runs along the left wall, a small table sits opposite it, and a window shows darkness rushing by. Your door leads to the corridor.",
+      "objects": ["bed", "table", "window", "compartment_door"],
+      "connections": {
+        "south": "corridor"
+      }
+    },
+    "corridor": {
+      "name": "Train Corridor",
+      "description": "A narrow carpeted corridor running the length of the train car. An announcement speaker is mounted on the wall. Doors lead to various compartments.",
+      "objects": ["speaker"],
+      "connections": {
+        "north": "compartment",
+        "east": "dining_car",
+        "west": "conductors_office",
+        "south": "safe_room"
+      }
+    },
+    "dining_car": {
+      "name": "Dining Car",
+      "description": "The dining car is quiet this early morning. Half-eaten breakfast plates sit on the tables. A service cart stands near the waiter's station.",
+      "objects": ["tables", "waiter_station", "service_cart"],
+      "connections": {
+        "west": "corridor"
+      }
+    },
+    "conductors_office": {
+      "name": "Conductor's Office",
+      "description": "A small office cluttered with paperwork. A desk holds train documents, a drawer sits beneath it, and an old radio sits on a shelf.",
+      "objects": ["desk", "drawer", "radio"],
+      "connections": {
+        "east": "corridor"
+      }
+    },
+    "safe_room": {
+      "name": "Safe Room",
+      "description": "A small secure room at the end of the corridor. A large safe stands against the wall.",
+      "objects": ["safe"],
+      "connections": {
+        "north": "corridor"
+      }
+    }
+  },
+  "objects": {
+    "strange_key": {
+      "name": "strange key",
+      "description": "A small brass key. It doesn't look like it belongs to you.",
+      "portable": true,
+      "hidden": true,
+      "article": "a"
+    },
+    "diamond": {
+      "name": "diamond",
+      "description": "A brilliant-cut diamond, easily worth thousands. It catches the light beautifully.",
+      "portable": true,
+      "hidden": true,
+      "article": "the"
+    },
+    "passenger_list": {
+      "name": "passenger list",
+      "description": "A typed list of all passengers aboard the Midnight Express.",
+      "read": "Passenger List - Midnight Express\n\n1. Herr Mueller - luggage: 2 suitcases\n2. Madame Laurent - luggage: none\n3. Signor Bianchi - luggage: 1 trunk\n4. Miss Whitfield - luggage: 3 bags\n5. Dr. Patel - luggage: 1 case\n\nNote: Madame Laurent checked in with no luggage at all.",
+      "portable": true,
+      "hidden": true,
+      "article": "the"
+    },
+    "manifest": {
+      "name": "manifest",
+      "description": "The cargo manifest for tonight's run.",
+      "read": "Cargo Manifest - Midnight Express\n\nItem: 1 diamond (3.2 carat, brilliant-cut)\nInsured value: 50,000 francs\nDelivery: Zurich station\nHandler: Conductor Weber\n\nNote: Item stored in safe room, level 3 clearance.",
+      "portable": false,
+      "article": "the"
+    },
+    "bed": {
+      "name": "bed",
+      "description": "A narrow but comfortable bed. Still warm from last night.",
+      "portable": false,
+      "article": "the"
+    },
+    "table": {
+      "name": "table",
+      "description": "A small fold-down table. Nothing of interest on it.",
+      "portable": false,
+      "article": "the"
+    },
+    "window": {
+      "name": "window",
+      "description": "Darkness rushes past the window. The countryside is a blur of shadows at this speed.",
+      "portable": false,
+      "article": "the"
+    },
+    "compartment_door": {
+      "name": "door",
+      "description": "A sturdy wooden door with a brass handle. It leads to the corridor.",
+      "portable": false,
+      "article": "the"
+    },
+    "speaker": {
+      "name": "announcement speaker",
+      "description": "A wall-mounted announcement speaker. It crackles faintly.",
+      "portable": false,
+      "article": "the"
+    },
+    "tables": {
+      "name": "tables",
+      "description": "Several round tables with half-eaten breakfast plates. The meal service was interrupted.",
+      "portable": false,
+      "article": "the"
+    },
+    "waiter_station": {
+      "name": "waiter's station",
+      "description": "A small counter with coffee pots and silverware. The waiter has not yet returned.",
+      "portable": false,
+      "article": "the"
+    },
+    "service_cart": {
+      "name": "service cart",
+      "description": "A metal service cart with shelves for dishes and silverware.",
+      "portable": false,
+      "article": "the"
+    },
+    "desk": {
+      "name": "desk",
+      "description": "A cluttered wooden desk. The cargo manifest lies on top.",
+      "portable": false,
+      "article": "the"
+    },
+    "drawer": {
+      "name": "drawer",
+      "description": "A locked drawer beneath the desk. It has a small keyhole.",
+      "portable": false,
+      "locked": true,
+      "lock_object": "strange_key",
+      "article": "the",
+      "state": "closed",
+      "states": {
+        "open": {
+          "name": "open",
+          "description": "The drawer is open. Inside you find a passenger list.",
+          "objects": ["passenger_list"]
+        },
+        "closed": {
+          "name": "closed"
+        }
+      }
+    },
+    "radio": {
+      "name": "radio",
+      "description": "An old train radio for contacting the conductor.",
+      "portable": false,
+      "article": "the"
+    },
+    "safe": {
+      "name": "safe",
+      "description": "A large metal safe. The door hangs open — it was forced. The interior is empty. The diamond is gone.",
+      "portable": false,
+      "article": "the"
+    }
+  },
+  "events": {
+    "start_event": {
+      "name": "Awakening",
+      "description": "You wake with a start. The train rocks gently beneath you. Last night's memories are hazy — you recall boarding the Midnight Express in Paris, settling into your compartment, and drifting off.\n\nThen you hear it: footsteps in the corridor, a muffled argument near the conductor's office. Something clatters. Then silence.\n\nA strange key lies on the floor beside your bed. It wasn't there when you went to sleep.",
+      "action_move_to_location": "compartment"
+    },
+    "find_key": {
+      "description": "You look down at the floor beside the bed. There's a strange key lying there. You pick it up.",
+      "prereq_verb": "look",
+      "prereq_preposition": "under",
+      "prereq_location": "compartment",
+      "action_add_items": ["strange_key"]
+    },
+    "announcement": {
+      "description": "The speaker crackles to life. The conductor's voice cuts through the static:\n\n\"Attention passengers. A diamond has been stolen from the safe room. Please remain in your compartments. I am investigating the matter.\"\n\nThe static returns.",
+      "prereq_verb": "examine",
+      "prereq_used_items": ["speaker"]
+    },
+    "open_drawer_with_key": {
+      "description": "You use the strange key to open the drawer. Inside you find a passenger list.",
+      "prereq_verb": "open",
+      "prereq_used_items": ["drawer", "strange_key"],
+      "prereq_inventory_items": ["strange_key"],
+      "action_set_state_items": ["drawer|open"]
+    },
+    "waiter_clue": {
+      "description": "You examine the waiter's station more closely. Scratched into the counter with a knife point:\n\n\"Laurent near safe 3AM\"\n\nSomeone was trying to leave a message. Madame Laurent was near the safe room in the middle of the night.",
+      "prereq_verb": "examine",
+      "prereq_used_items": ["waiter_station"],
+      "prereq_inventory_items": ["passenger_list"]
+    },
+    "find_diamond": {
+      "description": "You kneel and peer under the service cart. Something glints in the dim light. You reach in and pull out the stolen diamond!\n\nIt must have been hidden here during the struggle.",
+      "prereq_verb": "look",
+      "prereq_preposition": "under",
+      "prereq_used_items": ["service_cart"],
+      "prereq_location": "dining_car",
+      "prereq_inventory_items": ["passenger_list"],
+      "action_add_items": ["diamond"]
+    },
+    "call_conductor_win": {
+      "description": "You pick up the radio and press the call button.\n\n\"Conductor Weber here.\"\n\n\"I found the diamond,\" you say. \"It was hidden under the service cart in the dining car.\"\n\nThere's a long pause. \"Excellent work, sir. You've saved the day. We'll have someone collect it immediately.\"\n\nThe conductor thanks you profusely. The case is closed.",
+      "prereq_verb": "use",
+      "prereq_used_items": ["radio"],
+      "prereq_inventory_items": ["diamond"],
+      "prereq_location": "conductors_office",
+      "action_trigger_event": "win_event"
+    },
+    "call_conductor_no_diamond": {
+      "description": "You pick up the radio and press the call button.\n\n\"Conductor Weber here.\"\n\n\"I'm investigating the theft,\" you say.\n\n\"I appreciate your concern, sir, but please keep your voice down. I'm handling the situation.\"\n\nThe line goes dead.",
+      "prereq_verb": "use",
+      "prereq_used_items": ["radio"],
+      "not": {
+        "prereq_inventory_items": ["diamond"]
+      },
+      "prereq_location": "conductors_office"
+    },
+    "win_event": {
+      "description": "You managed to recover the stolen diamond!",
+      "action_points": 10
+    }
+  }
+}

@@ -14,7 +14,11 @@
     "escape": {
         "name": "Escape Game",
         "path": "escape"
-    }
+    },
 
+    "heist": {
+        "name": "The Midnight Express",
+        "path": "heist"
+    }
 
 }

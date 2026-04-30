@@ -1,0 +1,21 @@
+{
+  "verbs": [
+    "go", "walk", "take", "get", "drop", "use", "open", "close",
+    "examine", "look", "read", "search", "help", "restart", "load",
+    "save", "list", "inventory"
+  ],
+  "directions": [
+    "north", "east", "south", "west"
+  ],
+  "prepositions": [
+    "from", "to", "with", "on", "at", "in", "into", "under", "behind", "inside"
+  ],
+  "adjectives": [
+    "strange", "small", "large", "brilliant", "locked", "open", "closed"
+  ],
+  "synonyms": {
+    "take": ["get"],
+    "go": ["walk"],
+    "look": ["watch"]
+  }
+}
