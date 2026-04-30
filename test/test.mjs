@@ -521,8 +521,11 @@ describe('The Midnight Express - winning flow', function () {
   before(function (done) {
     advntx.currentGame = 'games/heist';
     function async_done() {
-      var objectIds = Object.keys(advntx.state.objects);
-      advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, objectIds);
+      var objectNames = [];
+      for (var key in advntx.state.objects) {
+        objectNames.push(advntx.state.objects[key].name);
+      }
+      advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, objectNames, advntx.state.objects);
       advntx.inventoryHandler = new InventoryHandler(advntx.state, function() {});
       advntx.interpreter = new Interpreter(advntx);
       advntx.locationHandler = new LocationHandler(advntx.state);

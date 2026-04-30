@@ -212,8 +212,7 @@
       "prereq_verb": "use",
       "prereq_used_items": ["radio"],
       "prereq_inventory_items": ["diamond"],
-      "prereq_location": "conductors_office",
-      "action_trigger_event": "win_event"
+      "prereq_location": "conductors_office"
     },
     "call_conductor_no_diamond": {
       "description": "You pick up the radio and press the call button.\n\n\"Conductor Weber here.\"\n\n\"I'm investigating the theft,\" you say.\n\n\"I appreciate your concern, sir, but please keep your voice down. I'm handling the situation.\"\n\nThe line goes dead.",
@@ -226,6 +225,10 @@
     },
     "win_event": {
       "description": "You managed to recover the stolen diamond!",
+      "prereq_verb": "use",
+      "prereq_used_items": ["radio"],
+      "prereq_inventory_items": ["diamond"],
+      "prereq_location": "conductors_office",
       "action_points": 10
     }
   }
