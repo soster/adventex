@@ -112,10 +112,20 @@ body {
     gap: 0.5rem;
 }
 
+#terminal {
+    flex-shrink: 0;
+}
+
 #inventory_container {
     h3 {
         margin: 0 0 0.5rem;
     }
+}
+
+#inventory {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
 }
 
 /* buttons */
