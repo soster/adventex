@@ -10,11 +10,12 @@ Adventex is a JavaScript interactive fiction (text adventure) game framework. Ad
 ## Tech Stack
 
 - **Language:** JavaScript (ES6 modules, ES2015+)
-- **Bundler:** Rollup 4 (UMD output, with terser minification)
-- **CSS:** SCSS compiled via Dart Sass to `dist/css`
-- **UI Dependencies:** jQuery 4, jquery.terminal 2.45, custom CSS Grid layout
+- **Bundler:** Rollup 4 (UMD output, terser minification in production, sourcemaps always)
+- **CSS:** SCSS compiled via Dart Sass (`sass.mjs`) — produces both `.css` and `.min.css`
+- **UI Dependencies:** jQuery 4, jquery.terminal 2.45 (copied to `dist/` by build), custom CSS Grid layout
 - **Testing:** Mocha 11 + Chai 6, browser-only tests via BrowserSync 3
-- **Dev Server:** BrowserSync with file watching
+- **Linting:** ESLint 10 (`eslint.config.mjs`), run via `npm run lint`
+- **Dev Server:** BrowserSync with chokidar file watching
 
 ## Project Structure
 
@@ -30,38 +31,41 @@ src/
     helper.js      # Utility functions (findItemIds, getName, etc.)
     json.js        # JSON file loader for game data
     const.js       # Constants
-    functions.js   # Legacy CommonJS utilities (copied to dist as-is)
+    functions.js   # Legacy CommonJS utilities (copied to dist as-is, NOT bundled)
   scss/main.scss   # Styles (compiled to dist/css)
   copy/index.html  # HTML template (copied to dist)
   svg/             # SVG assets (optimized with SVGO)
   img/             # Image assets (minified with imagemin)
   games/           # Adventure data (JSON files per game)
-    games.json     # Game registry
+    games.json     # Game registry (key: id, value: {name, path})
     escape/        # Default escape room game
     tutorial/      # Tutorial adventure
-    de/            # German language adventure
-    ai/            # AI-generated adventure
+    de/            # German language tutorial
+    heist/         # "The Midnight Express" game
+    ai/            # AI-generated adventure (NOT registered in games.json)
 test/
-  test.mjs         # Mocha test suite (browser-only)
+  test.mjs         # Mocha test suite (browser-only, covers engine + heist game flow)
   index.html       # Test runner page
   browser-sync.js  # Test server config
 ```
 
 ## Build System
 
-All build output goes to `dist/`. Key npm scripts:
+All build output goes to `dist/` (git-ignored). Key npm scripts:
 
 | Command | Description |
 |---------|-------------|
-| `npm run build` | Full clean build (JS bundle, CSS, images, static assets) |
-| `npm run serve` | Dev server with live reload (build + watch + BrowserSync) |
-| `npm run js` | Rollup JS bundle only |
-| `npm run css` | Compile SCSS to CSS |
-| `npm run test` | Run Mocha tests (requires browser via `serve-tests`) |
+| `npm run build` | Full clean build (clean + parallel: js, css, img, copy, statics) |
+| `npm run serve` | Dev server with live reload (build + watch all + BrowserSync) |
+| `npm run js` | Rollup JS bundle only (`src/js/main.js` → `dist/js/main.js`, UMD) |
+| `npm run css` | Compile SCSS to CSS (produces both `.css` and `.min.css`) |
+| `npm run lint` | ESLint (`src/**/*.js`) |
+| `npm run test` | Run Mocha tests (`mocha -r esm`) |
 | `npm run serve-tests` | Start BrowserSync for browser-based tests |
 
-Rollup config: `rollup.config.mjs` — bundles `src/js/main.js` → `dist/js/main.js` (UMD format).
-CSS pipeline: `sass.mjs` — compiles `src/scss/main.scss` → `dist/css/main.css` (minified, with banner).
+**Build order:** `npm run build` runs `clean` first (serial), then `build-dirty` (parallel: js, css, img, copy, statics). The `statics` step copies jQuery and jquery.terminal from `node_modules` into `dist/`. The `copy` step copies `src/copy/`, `src/games/`, and `src/js/functions.js` individually.
+
+**Rollup quirks:** `functions.js` is treated as CommonJS via `@rollup/plugin-commonjs` (included in the `commonjs` plugin config). Sourcemaps are always generated. Terser only runs in production (`!ROLLUP_WATCH`).
 
 ## Game Engine Architecture
 
@@ -97,22 +101,28 @@ The game engine is data-driven. Each game is a directory under `src/games/<game_
 - **`var` declarations** are common (legacy style, not being refactored)
 - **Callback-based async** throughout (no Promises/async-await in engine code)
 - **Global state** via `window.advntx` object
-- **No linting or type checking** configured — code is untyped
+- **Untyped JavaScript** — no TypeScript
+- **ESLint globals:** `$`, `window`, `document`, `console`, `setTimeout`, `setInterval`, `FileReader`, `localStorage`, `advntx` (writable), `isEmpty`, `stringEquals`, `g_ver`
+- **ESLint rules to respect:** `no-eval`/`no-implied-eval`/`no-new-func` are errors; `no-var`/`prefer-const`/`no-console` are warnings; `_` prefix ignores unused args
 - Comments are sparse; README.md and test file are primary documentation
 
 ## Testing
 
-Tests are **browser-only** (they depend on `window`, `chai` global, and DOM). Run via:
+Tests are **browser-only** (depend on `window`, `chai` global, and DOM). The test suite has two describe blocks:
+1. Core engine tests (Parser, EventHandler, Interpreter, LocationHandler, InventoryHandler)
+2. Full game flow test for "The Midnight Express" (`heist` game)
+
+Run via:
 ```bash
 npm run serve-tests
 ```
-Then open the BrowserSync URL in a browser. The test suite covers Parser, EventHandler, Interpreter, LocationHandler, and InventoryHandler.
+Then open the BrowserSync URL in a browser.
 
 ## Adding a New Game
 
 1. Create `src/games/<name>/` directory
 2. Add `gamestate.json`, `vocabulary.json`, `messages.json`, `config.json`
-3. Register in `src/games/games.json`
+3. Register in `src/games/games.json` (add entry with `name` and `path`)
 4. Run `npm run build` (games are copied to `dist/games/`)
 
 ## Important Notes for AI Agents
@@ -123,4 +133,5 @@ Then open the BrowserSync URL in a browser. The test suite covers Parser, EventH
 - Games are purely JSON-driven; engine code changes are rare
 - The `dist/` directory is git-ignored and regenerated by build
 - `src/js/functions.js` is copied as-is (not bundled) due to CommonJS compatibility
+- `src/games/ai/` exists but is NOT registered in `games.json`
 - **Location descriptions must mention direction words** (north, south, east, west, etc.) for each exit. The engine replaces these words with clickable links in the terminal UI. Without them, players can't see available exits. See `src/games/escape/gamestate.json` for examples.
