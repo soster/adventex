@@ -204,7 +204,6 @@
       "prereq_preposition": "under",
       "prereq_used_items": ["service_cart"],
       "prereq_location": "dining_car",
-      "prereq_inventory_items": ["passenger_list"],
       "action_add_items": ["diamond"]
     },
     "call_conductor_win": {
