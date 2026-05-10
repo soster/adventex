@@ -193,9 +193,19 @@
       "action_set_state_items": ["drawer|open"]
     },
     "waiter_clue": {
-      "description": "You examine the waiter's station more closely. Scratched into the counter with a knife point, the letters uneven and hurried:\n\n\"Laurent near safe 3AM\"\n\nSomeone was trying to leave a message. The handwriting is shaking — whoever wrote this was afraid. Madame Laurent was near the safe room in the middle of the night.",
+      "description": "You examine the waiter's station more closely. Scratched into the counter with a knife point, the letters uneven and hurried:\n\n\"Laurent near safe 3AM\"\n\nSomeone was trying to leave a message. The handwriting is shaking — whoever wrote this was afraid.",
       "prereq_verb": "examine",
       "prereq_used_items": ["waiter_station"],
+      "trigger_once": true,
+      "not": {
+        "prereq_inventory_items": ["passenger_list"]
+      }
+    },
+    "waiter_clue_laurent": {
+      "description": "The scratched message reads \"Laurent near safe 3AM.\" You cross-reference it with the passenger list — Madame Laurent checked in with no luggage at all. If she was the one who stole the diamond, she wouldn't need suitcases to carry it out.\n\nThe pieces are coming together. The waiter saw her near the safe room, and she must have hidden the diamond somewhere on the train before fleeing.",
+      "prereq_verb": "examine",
+      "prereq_used_items": ["waiter_station"],
+      "trigger_once": true,
       "prereq_inventory_items": ["passenger_list"]
     },
     "find_diamond": {
