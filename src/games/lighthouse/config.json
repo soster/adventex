@@ -1,0 +1,12 @@
+{
+  "console": {
+    "height": 320,
+    "prompt": "lighthouse> "
+  },
+  "standard_wait_eventtext": 1000,
+  "text_color": "#c8d6e5",
+  "error_color": "#e74c3c",
+  "warn_color": "#f39c12",
+  "win_color": "#1abc9c",
+  "debug": false
+}

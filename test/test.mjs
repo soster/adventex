@@ -601,6 +601,112 @@ describe('The Midnight Express - winning flow', function () {
 });
 
 
+describe('The Lighthouse - winning flow', function () {
+  var lhAdvntx;
+
+  before(function (done) {
+    advntx.currentGame = 'games/lighthouse';
+    function async_done() {
+      var objectNames = [];
+      for (var key in advntx.state.objects) {
+        objectNames.push(advntx.state.objects[key].name);
+      }
+      advntx.parser = new Parser(advntx.vocabulary.verbs, advntx.vocabulary.directions, advntx.vocabulary.prepositions, advntx.vocabulary.adjectives, objectNames, advntx.state.objects);
+      advntx.inventoryHandler = new InventoryHandler(advntx.state, function() {});
+      advntx.interpreter = new Interpreter(advntx);
+      advntx.locationHandler = new LocationHandler(advntx.state);
+      advntx.eventHandler = new EventHandler(advntx.state, advntx.vocabulary, function() {});
+      done();
+    }
+    parseJson(async_done, advntx);
+  });
+
+  it('should win by lighting the lighthouse beacon', function () {
+    var echoLog = [];
+    var echo = function(text) { echoLog.push(text); };
+    var winTriggered = false;
+    var winCheck = function(events) {
+      for (var i = 0; i < events.length; i++) {
+        if (advntx.state.events['win_event'] === events[i]) {
+          winTriggered = true;
+        }
+      }
+    };
+
+    var origCheck = advntx.interpreter.checkWinningCondition;
+    advntx.interpreter.checkWinningCondition = function(events) {
+      winCheck(events);
+      return origCheck.call(advntx.interpreter, events);
+    };
+
+    // Step 1: Start on the beach
+    assert.equal('beach', advntx.state.location, 'Should start on the beach');
+
+    // Step 2: Search driftwood to find matches
+    advntx.interpreter.interpret('search driftwood', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.include(advntx.state.inventory, 'matches', 'Should find matches in driftwood');
+
+    // Step 3: Go north to the entrance
+    advntx.interpreter.interpret('go north', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('entrance', advntx.state.location, 'Should be at the entrance');
+
+    // Step 4: Take the rusty key from the wall
+    advntx.interpreter.interpret('take rusty key', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.include(advntx.state.inventory, 'quarters_key', 'Should have the rusty key');
+
+    // Step 5: Open the wooden door to the keeper's quarters
+    advntx.interpreter.interpret('open wooden door with rusty key', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.property(advntx.state.locations['entrance'].connections, 'east', 'Should have east connection to quarters');
+
+    // Step 6: Go east into the keeper's quarters
+    advntx.interpreter.interpret('go east', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('quarters', advntx.state.location, 'Should be in the keeper quarters');
+
+    // Step 7: Take the brass key from the coat rack
+    advntx.interpreter.interpret('take brass key', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.include(advntx.state.inventory, 'cellar_key', 'Should have the brass key');
+
+    // Step 8: Read the journal for clues
+    advntx.interpreter.interpret('read journal', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.include(echoLog.join('\n'), 'cellar', 'Journal should mention the cellar');
+
+    // Step 9: Go west back to entrance
+    advntx.interpreter.interpret('go west', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('entrance', advntx.state.location, 'Should be back at the entrance');
+
+    // Step 10: Open the iron hatch to the cellar
+    advntx.interpreter.interpret('open iron hatch with brass key', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.property(advntx.state.locations['entrance'].connections, 'down', 'Should have down connection to cellar');
+
+    // Step 11: Go down into the cellar
+    advntx.interpreter.interpret('go down', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('cellar', advntx.state.location, 'Should be in the cellar');
+
+    // Step 12: Take the lamp oil
+    advntx.interpreter.interpret('take oil', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.include(advntx.state.inventory, 'oil', 'Should have lamp oil');
+
+    // Step 13: Go up to entrance, then up to lantern room
+    advntx.interpreter.interpret('go up', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('entrance', advntx.state.location, 'Should be at the entrance');
+    advntx.interpreter.interpret('go up', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('lantern', advntx.state.location, 'Should be in the lantern room');
+
+    // Step 14: Fill the oil lamp
+    advntx.interpreter.interpret('fill oil lamp with oil', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('filled', advntx.state.objects['oil_lamp'].state, 'Oil lamp should be filled');
+    assert.notInclude(advntx.state.inventory, 'oil', 'Oil should be consumed');
+
+    // Step 15: Light the oil lamp with matches - triggers the ending
+    advntx.interpreter.interpret('light oil lamp with matches', function(){}, function(){}, echo, function(){}, function(){}, function(){}, function(){});
+    assert.equal('lit', advntx.state.objects['oil_lamp'].state, 'Oil lamp should be lit');
+    assert.isTrue(winTriggered, 'Win event should be triggered');
+
+    advntx.interpreter.checkWinningCondition = origCheck;
+  });
+});
+
+
 // Run Mocha after all tests are registered
 mocha.run();
 

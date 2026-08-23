@@ -1,0 +1,109 @@
+{
+    "verbs": [
+        "go",
+        "walk",
+        "take",
+        "get",
+        "drop",
+        "use",
+        "open",
+        "close",
+        "unlock",
+        "lock",
+        "examine",
+        "look",
+        "read",
+        "search",
+        "run",
+        "climb",
+        "push",
+        "pull",
+        "fill",
+        "light",
+        "kindle",
+        "hint",
+        "help",
+        "restart",
+        "load",
+        "save",
+        "list",
+        "inventory"
+    ],
+    "directions": [
+        "north",
+        "east",
+        "south",
+        "west",
+        "up",
+        "down",
+        "left",
+        "right",
+        "forward",
+        "backward"
+    ],
+    "prepositions": [
+        "from",
+        "to",
+        "with",
+        "around",
+        "by",
+        "on",
+        "off",
+        "at",
+        "in",
+        "out",
+        "into",
+        "onto",
+        "over",
+        "under",
+        "behind",
+        "through",
+        "inside"
+    ],
+    "adjectives": [
+        "black",
+        "white",
+        "gray",
+        "grey",
+        "blue",
+        "green",
+        "brown",
+        "rusty",
+        "heavy",
+        "small",
+        "large",
+        "old",
+        "ancient",
+        "narrow",
+        "solid",
+        "brass",
+        "iron",
+        "wooden",
+        "leather",
+        "empty",
+        "filled",
+        "dry",
+        "wet",
+        "dark",
+        "bright",
+        "glowing",
+        "locked"
+    ],
+    "synonyms": {
+        "take": [
+            "get",
+            "pick"
+        ],
+        "go": [
+            "walk",
+            "climb"
+        ],
+        "look": [
+            "watch",
+            "examine"
+        ],
+        "light": [
+            "kindle"
+        ]
+    }
+}

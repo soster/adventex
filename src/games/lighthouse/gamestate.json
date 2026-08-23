@@ -1,0 +1,330 @@
+{
+	"timestamp": "2024-11-15T02:30:00.000Z",
+	"inventory": [],
+	"location": "beach",
+	"seconds": 0,
+	"steps": 0,
+	"hints": 0,
+	"points": 0,
+	"locations": {
+		"beach": {
+			"name": "Foggy beach",
+			"description": "Thick fog rolls across the black sand. Waves crash against jagged rocks to the east and west.\nThrough the mist, a tall silhouette rises to the north - the lighthouse.\nA piece of driftwood lies half-buried in the sand near your feet.",
+			"objects": ["driftwood"],
+			"connections": {
+				"north": "entrance"
+			}
+		},
+		"entrance": {
+			"name": "Lighthouse ground floor",
+			"description": "The cold stone interior of the lighthouse. Salt crusts the floor.\nSpiral stairs climb up to the lantern room.\nAn iron hatch leads down to the cellar, but it is locked.\nTo the east, a wooden door leads to the keeper's quarters - also locked.\nA rusty key hangs on a nail beside the eastern door.",
+			"objects": ["quarters_key", "locked_hatch", "locked_quarters_door"],
+			"connections": {
+				"south": "beach",
+				"up": "lantern",
+				"down": "cellar"
+			}
+		},
+		"quarters": {
+			"name": "Keeper's quarters",
+			"description": "A small room with a narrow bed, a wooden desk, and a coat rack.\nA single bulb hangs from the ceiling, flickering despite the power being out.\nOn the desk, a leather journal lies open.\nA brass key hangs from the coat rack.",
+			"objects": ["journal", "cellar_key", "bed", "desk"],
+			"connections": {
+				"west": "entrance"
+			}
+		},
+		"cellar": {
+			"name": "Lighthouse cellar",
+			"description": "Damp and cold. The stone walls are covered in a strange blue-green moss that pulses faintly, like a slow heartbeat.\nA wooden barrel sits in the corner.\nCarvings cover the far wall - ancient symbols of spirals and tentacles.\nBeneath them, someone has scratched words into the stone: 'When the light returns, they will answer.'",
+			"objects": ["oil_barrel", "glowing_moss", "carvings"],
+			"connections": {
+				"up": "entrance"
+			}
+		},
+		"lantern": {
+			"name": "Lantern room",
+			"description": "The top of the lighthouse. A massive Fresnel lens dominates the room, its prismatic glass catching what little light there is.\nFog presses against every window.\nAn oil lamp sits in the center of the lens mechanism, its reservoir dry and empty.\nYou can hear the sea far below, and something else - a low humming, as if the lighthouse itself is breathing.",
+			"objects": ["fresnel_lens", "oil_lamp", "fog_windows"],
+			"connections": {
+				"down": "entrance"
+			}
+		}
+	},
+	"objects": {
+		"driftwood": {
+			"name": "driftwood",
+			"description": "A weathered piece of driftwood with a small hollow carved into it.\nInside, you find a packet of matches, still dry.",
+			"portable": false,
+			"article": "the",
+			"state": "unsearched",
+			"states": {
+				"unsearched": {
+					"name": "unsearched"
+				},
+				"searched": {
+					"name": "searched",
+					"description": "Just a piece of driftwood now. The hollow is empty."
+				}
+			}
+		},
+		"matches": {
+			"name": "matches",
+			"description": "A small packet of waterproof matches. The box is labelled 'STRIKE ANYWHERE.'",
+			"portable": true,
+			"article": "the"
+		},
+		"quarters_key": {
+			"name": "rusty key",
+			"description": "A small rusty key on a nail. It looks like it could open a wooden door.",
+			"portable": true,
+			"article": "the"
+		},
+		"cellar_key": {
+			"name": "brass key",
+			"description": "A heavy brass key with a circular bow. It looks old but well-maintained.",
+			"portable": true,
+			"article": "the"
+		},
+		"journal": {
+			"name": "journal",
+			"description": "A leather-bound journal. The pages are filled with a careful, looping handwriting.\nThe final entry reads:\n\n'October 31st. The fog has not lifted in weeks. The lights below the waves grow brighter each night - they know the beacon is failing. I cannot leave. Someone must keep the signal alive. If you are reading this, the oil will be in the cellar. Light the lamp. They are waiting.'\n\nThe entry is signed with a name you cannot quite make out.",
+			"portable": false,
+			"article": "the"
+		},
+		"bed": {
+			"name": "narrow bed",
+			"description": "A single iron bed with a thin mattress. It hasn't been slept in for a long time.",
+			"portable": false,
+			"article": "the"
+		},
+		"desk": {
+			"name": "wooden desk",
+			"description": "A scarred wooden desk. The journal lies open on its surface.",
+			"portable": false,
+			"article": "the"
+		},
+		"locked_hatch": {
+			"name": "iron hatch",
+			"description": "A heavy iron hatch set into the floor, leading down into darkness.\nIt is secured with a heavy padlock.",
+			"portable": false,
+			"article": "the"
+		},
+		"locked_quarters_door": {
+			"name": "wooden door",
+			"description": "A solid wooden door leading to the keeper's quarters.\nIt is locked.",
+			"portable": false,
+			"article": "the"
+		},
+		"oil_barrel": {
+			"name": "wooden barrel",
+			"description": "A sturdy wooden barrel filled with lamp oil. The stopper is already removed.",
+			"portable": false,
+			"article": "the"
+		},
+		"oil": {
+			"name": "lamp oil",
+			"description": "Clear lamp oil with a faint blue tint. It smells of salt and something else - something you can't quite place.",
+			"portable": true,
+			"article": "the"
+		},
+		"glowing_moss": {
+			"name": "glowing moss",
+			"description": "A bioluminescent moss that covers the stone walls. It pulses in a slow, rhythmic pattern - almost like breathing.\nThe light is faintly blue-green, like deep ocean water.",
+			"portable": false,
+			"article": "the"
+		},
+		"carvings": {
+			"name": "stone carvings",
+			"description": "Ancient carvings etched into the cellar wall. Spirals, tentacles, and eye-like symbols.\nSomeone has scratched a message beneath them: 'When the light returns, they will answer.'",
+			"portable": false,
+			"article": "the"
+		},
+		"fresnel_lens": {
+			"name": "Fresnel lens",
+			"description": "A massive first-order Fresnel lens, its concentric rings of prismatic glass catching and refracting every available photon.\nIt was designed to be seen for miles across the ocean.\nEven in the dark, it looks hungry for light.",
+			"portable": false,
+			"article": "the"
+		},
+		"oil_lamp": {
+			"name": "oil lamp",
+			"description": "A large brass oil lamp mounted in the center of the lens mechanism.\nIts reservoir is dry and empty.\nThe wick is intact but charred from previous use.",
+			"portable": false,
+			"article": "the",
+			"state": "empty",
+			"states": {
+				"empty": {
+					"name": "empty",
+					"description": "A large brass oil lamp. Its reservoir is dry."
+				},
+				"filled": {
+					"name": "filled",
+					"description": "A large brass oil lamp, now filled with oil.\nThe wick soaks up the fuel, ready to be lit."
+				},
+				"lit": {
+					"name": "lit",
+					"description": "The oil lamp burns with a steady, bright flame.\nThe Fresnel lens transforms it into a powerful beam that cuts through the fog."
+				}
+			}
+		},
+		"fog_windows": {
+			"name": "fog-pressed windows",
+			"description": "Circular windows on every side, pressed with thick fog.\nBeyond them, nothing is visible but grey.",
+			"portable": false,
+			"article": "the"
+		}
+	},
+	"events": {
+		"start_event": {
+			"name": "Arrival",
+			"description": "You wake on the beach with no memory of how you arrived.\nThe fog is thick. The cold seeps through your clothes.\nAhead, a lighthouse stands against the grey sky.\nYou have no choice but to investigate.",
+			"action_move_to_location": "beach"
+		},
+
+		"search_driftwood": {
+			"description": "You pry open the hollow in the driftwood and find a packet of matches inside. Lucky find.",
+			"prereq_verb": "search",
+			"prereq_used_items": ["driftwood|unsearched"],
+			"action_add_items": ["inventory:matches"],
+			"action_set_state_items": ["driftwood|searched"],
+			"action_points": 5
+		},
+
+		"examine_driftwood_empty": {
+			"description": "The driftwood is just a piece of wood. Nothing useful here.",
+			"prereq_verb": "search",
+			"prereq_used_items": ["driftwood|searched"]
+		},
+
+		"open_quarters": {
+			"description": "The rusty key turns with a screech. The door to the keeper's quarters swings open.",
+			"prereq_verb": "unlock",
+			"prereq_used_items": ["locked_quarters_door", "quarters_key"],
+			"prereq_inventory_items": ["quarters_key"],
+			"prereq_location": "entrance",
+			"action_new_connections": "entrance:quarters:east",
+			"action_points": 5
+		},
+
+		"open_quarters_with_key": {
+			"description": "The rusty key turns with a screech. The door to the keeper's quarters swings open.",
+			"prereq_verb": "open",
+			"prereq_used_items": ["locked_quarters_door", "quarters_key"],
+			"prereq_inventory_items": ["quarters_key"],
+			"prereq_location": "entrance",
+			"action_new_connections": "entrance:quarters:east",
+			"action_points": 5
+		},
+
+		"try_open_quarters_no_key": {
+			"description": "The door won't budge. It's locked tight.",
+			"prereq_verb": "open",
+			"prereq_used_items": ["locked_quarters_door"],
+			"prereq_location": "entrance",
+			"not": {
+				"prereq_inventory_items": ["quarters_key"]
+			}
+		},
+
+		"open_cellar": {
+			"description": "The brass key fits the padlock on the iron hatch. It clicks open with a satisfying sound.",
+			"prereq_verb": "unlock",
+			"prereq_used_items": ["locked_hatch", "cellar_key"],
+			"prereq_inventory_items": ["cellar_key"],
+			"prereq_location": "entrance",
+			"action_new_connections": "entrance:cellar:down",
+			"action_points": 5
+		},
+
+		"open_cellar_with_key": {
+			"description": "The brass key fits the padlock on the iron hatch. It clicks open with a satisfying sound.",
+			"prereq_verb": "open",
+			"prereq_used_items": ["locked_hatch", "cellar_key"],
+			"prereq_inventory_items": ["cellar_key"],
+			"prereq_location": "entrance",
+			"action_new_connections": "entrance:cellar:down",
+			"action_points": 5
+		},
+
+		"try_open_cellar_no_key": {
+			"description": "The hatch is secured with a heavy padlock. You'll need a key.",
+			"prereq_verb": "open",
+			"prereq_used_items": ["locked_hatch"],
+			"prereq_location": "entrance",
+			"not": {
+				"prereq_inventory_items": ["cellar_key"]
+			}
+		},
+
+		"take_oil": {
+			"description": "You carefully pour lamp oil into a container. The oil shimmers with a faint blue hue.",
+			"prereq_verb": "take",
+			"prereq_used_items": ["oil"],
+			"prereq_location": "cellar",
+			"action_continue": true
+		},
+
+		"fill_lamp": {
+			"description": "You pour the lamp oil into the lamp's reservoir. The wick darkens as it absorbs the fuel.\nThe lamp is ready to be lit.",
+			"prereq_verb": "fill",
+			"prereq_used_items": ["oil_lamp|empty", "oil"],
+			"prereq_inventory_items": ["oil"],
+			"prereq_location": "lantern",
+			"action_set_state_items": ["oil_lamp|filled"],
+			"action_remove_items": ["inventory:oil"],
+			"action_points": 5
+		},
+
+		"light_lamp": {
+			"description": "You strike a match and touch the flame to the wick.\nThe lamp ignites with a warm golden glow.\nThe Fresnel lens catches the light and throws it outward in a brilliant beam.\n\nThen the impossible happens.\n\nThrough the fog-pressed windows, you see them - lights beneath the waves. Dozens at first, then hundreds, then thousands. They rise from the deep in spiraling patterns, answering the beacon's call.\n\nThe lighthouse wasn't built to warn ships away from the rocks.\nIt was built to call THEM home.\n\nThe humming grows louder. The light pulses in rhythm with the glowing moss far below.\nYou understand now. The keeper never left.\nThe keeper became the light.",
+			"prereq_verb": "light",
+			"prereq_used_items": ["oil_lamp|filled", "matches"],
+			"prereq_inventory_items": ["matches"],
+			"prereq_location": "lantern",
+			"action_set_state_items": ["oil_lamp|lit"],
+			"action_remove_items": ["inventory:matches"],
+			"action_trigger_event": "win_event",
+			"action_points": 15
+		},
+
+		"try_fill_no_oil": {
+			"description": "The lamp's reservoir is empty. You need lamp oil to fill it.",
+			"prereq_verb": "fill",
+			"prereq_used_items": ["oil_lamp|empty"],
+			"prereq_location": "lantern",
+			"not": {
+				"prereq_inventory_items": ["oil"]
+			}
+		},
+
+		"try_light_no_matches": {
+			"description": "The lamp is filled but you have nothing to light it with.",
+			"prereq_verb": "light",
+			"prereq_used_items": ["oil_lamp|filled"],
+			"prereq_location": "lantern",
+			"not": {
+				"prereq_inventory_items": ["matches"]
+			}
+		},
+
+		"try_light_empty_lamp": {
+			"description": "The lamp is empty. There's nothing to light.",
+			"prereq_verb": "light",
+			"prereq_used_items": ["oil_lamp|empty"],
+			"prereq_location": "lantern"
+		},
+
+		"read_journal": {
+			"description": "You read through the journal's entries. Early pages describe routine lighthouse keeping - oil levels, weather logs, ship passages.\nBut the later entries grow strange:\n\n'November 12th. The lights below the waves are brighter tonight. They pulse in patterns I cannot decipher. Elara says they are learning the signal.'\n\n'November 28th. The fog has not lifted. The radio is dead. But the lights below - they understand now. They mirror the beacon's rhythm.'\n\nThe final entry is barely legible:\n\n'December 31st. I can hear them singing. Not with voices - with light. They want the beacon lit. They have been waiting so long. When it burns again, the doorway opens. I will stay. Someone must keep the signal alive.'",
+			"prereq_verb": "read",
+			"prereq_used_items": ["journal"],
+			"prereq_location": "quarters"
+		},
+
+		"win_event": {
+			"description": "\nThe beam of the lighthouse sweeps across the ocean, and beneath the waves, a galaxy of lights answers.\nYou are no longer afraid. You understand your purpose now.\n\nThe fog begins to lift. Dawn is coming.\nBut you know you will not leave.\n\nYou are the keeper now.",
+			"prereq_location": "lantern",
+			"prereq_location_items": ["oil_lamp|lit"],
+			"action_points": 20
+		}
+	}
+}

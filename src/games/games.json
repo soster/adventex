@@ -19,6 +19,11 @@
     "heist": {
         "name": "The Midnight Express",
         "path": "heist"
+    },
+
+    "lighthouse": {
+        "name": "The Lighthouse",
+        "path": "lighthouse"
     }
 
 }
