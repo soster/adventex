@@ -17,6 +17,8 @@
     "error_open_close_with": "{0} doesn't work on {1}",
     "error_look": "You can't look at that!",
     "error_examine": "What do you want to examine?",
+    "error_save_invalid": "Savegame {0} could not be loaded: it is not a valid savegame.",
+    "error_save_not_found": "No savegame called {0}.",
     "error_read": "You can't read that!",
     "this": "this",
     "verb_help": "help",

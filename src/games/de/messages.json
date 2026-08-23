@@ -17,6 +17,8 @@
     "error_open_close_with": "{0} funktioniert nicht mit {1}",
     "error_look": "Du kannst das nicht betrachten!",
     "error_examine": "Was möchtest Du Dir genauer anschauen?",
+    "error_save_invalid": "Speicherspiel {0} konnte nicht geladen werden: ungültiges oder beschädigtes Speicherspiel.",
+    "error_save_not_found": "Kein Speicherspiel mit dem Namen {0}.",
     "error_read": "Du kannst das nicht lesen!",
     "this": "dies",
     "verb_help": "hilfe",

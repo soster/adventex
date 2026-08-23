@@ -17,7 +17,9 @@ import {
   setStateOfObject,
   getObjectNameArray,
   getJSON,
-  removeTargetFromLinks
+  removeTargetFromLinks,
+  escapeHtml,
+  escapeJsLinkParam
 } from './helper.js'
 
 import InventoryHandler from './inventoryhandler.js'
@@ -29,13 +31,56 @@ import Interpreter from './interpreter.js'
 
 
 
-function escapeHtml(attr) {
-  return String(attr)
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+/**
+ * Checks whether data looks like a valid savegame state before it is
+ * assigned to the live game state.
+ */
+function isValidSaveState(state) {
+  if (state === null || typeof state !== 'object' || Array.isArray(state)) {
+    return false;
+  }
+  if (typeof state.locations !== 'object' || state.locations === null || Array.isArray(state.locations)) {
+    return false;
+  }
+  if (typeof state.location !== 'string' || !Object.prototype.hasOwnProperty.call(state.locations, state.location)) {
+    return false;
+  }
+  const location = state.locations[state.location];
+  if (location === null || typeof location !== 'object' || Array.isArray(location)) {
+    return false;
+  }
+  if (typeof state.objects !== 'object' || state.objects === null || Array.isArray(state.objects)) {
+    return false;
+  }
+  if (typeof state.events !== 'object' || state.events === null || Array.isArray(state.events)) {
+    return false;
+  }
+  if (!Array.isArray(state.inventory)) {
+    return false;
+  }
+  for (let i = 0; i < state.inventory.length; i++) {
+    const id = state.inventory[i];
+    if (typeof id !== 'string' || !Object.prototype.hasOwnProperty.call(state.objects, id)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * Parses and validates JSON savegame data. Returns undefined on failure.
+ */
+function parseSaveData(data) {
+  let state;
+  try {
+    state = JSON.parse(data);
+  } catch {
+    return undefined;
+  }
+  if (!isValidSaveState(state)) {
+    return undefined;
+  }
+  return state;
 }
 
 /**
@@ -145,7 +190,7 @@ window.advntx = {
       // loop through possible directions:
       for (const key in loc.connections) {
         const direction = key;
-        description = description.replace(direction, '[[!;;;;javascript:advntx.terminalLink(\' ' + direction + ' \');]' + direction + ']');
+        description = description.replace(direction, '[[!;;;;javascript:advntx.terminalLink(\' ' + escapeJsLinkParam(direction) + ' \');]' + direction + ']');
       }
     }
     const prompt = name + '>';
@@ -249,12 +294,19 @@ window.advntx = {
 
   load(name) {
     const retrievedObject = localStorage.getItem('advntx' + name);
-    if (retrievedObject != undefined) {
-      advntx.state = JSON.parse(retrievedObject);
-      advntx.echo(advntx.messages.info_game_loaded.format(name));
-      advntx.term.exec('clear');
-      advntx.initGame(false);
+    if (retrievedObject == undefined || retrievedObject === '') {
+      advntx.echo(advntx.messages.error_save_not_found.format(name), advntx.config.warn_color);
+      return;
     }
+    const state = parseSaveData(retrievedObject);
+    if (state === undefined) {
+      advntx.echo(advntx.messages.error_save_invalid.format(name), advntx.config.warn_color);
+      return;
+    }
+    advntx.state = state;
+    advntx.echo(advntx.messages.info_game_loaded.format(name));
+    advntx.term.exec('clear');
+    advntx.initGame(false);
   },
 
   save(name) {
@@ -272,7 +324,7 @@ window.advntx = {
         if (isEmpty(name)) {
           name = 'default';
         }
-        advntx.echo('[[!;;;;javascript:advntx.terminalLink(\'load ' + link + '\');]' + name + ']');
+        advntx.echo('[[!;;;;javascript:advntx.terminalLink(\'load ' + escapeJsLinkParam(link) + '\');]' + name + ']');
       }
     }
   },
@@ -424,8 +476,14 @@ $(document).ready(function () {
     const fr = new FileReader();
 
    fr.onload = function(e) {
-        const result = JSON.parse(e.target.result);
-        advntx.state = result;
+        const fileName = files.item(0).name;
+        const state = parseSaveData(e.target.result);
+        if (state === undefined) {
+          advntx.echo(advntx.messages.error_save_invalid.format(fileName), advntx.config.warn_color);
+          return;
+        }
+        advntx.state = state;
+        advntx.echo(advntx.messages.info_game_loaded.format(fileName));
         advntx.term.exec('clear');
         advntx.initGame(false);
     }

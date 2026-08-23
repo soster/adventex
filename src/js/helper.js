@@ -102,12 +102,27 @@ export function findFirstMatch(words, type, objects) {
   return '';
 }
 
-export function getJSON(url, result) {
+export function getJSON(url, result, error) {
   // new fetch api of ecma6:
-  fetch(url).then(function(response) {
+  fetch(url).then(function (response) {
+    if (!response.ok) {
+      throw new Error('HTTP ' + response.status + ' loading ' + url);
+    }
     return response.json();
-  }).then(function(json) {
+  }).then(function (json) {
     result(json);
+  }).catch(function (err) {
+    if (typeof error === 'function') {
+      error(err, url);
+    } else {
+      console.error('[adventex] could not load ' + url, err);
+      // the terminal may not exist yet (game data is loaded before it is
+      // created), so fall back to writing directly into the terminal div:
+      const terminal = document.getElementById('terminal');
+      if (terminal !== null) {
+        terminal.textContent = 'Could not load game file: ' + url;
+      }
+    }
   });
 }
 
@@ -131,7 +146,7 @@ export function listFormattedObjects(list, list_of_all, inventoryHandler, takeVe
       }
 
       const name = getName(list_of_all, list[i]);
-      message += '[[!;' + color + ';;' + effect + ';javascript:advntx.terminalLink(\' '+name+'\');]' + name;
+      message += '[[!;' + color + ';;' + effect + ';javascript:advntx.terminalLink(\' '+escapeJsLinkParam(name)+'\');]' + name;
 
       const stateString = inventoryHandler.getStateString(list[i]);
       if (!isEmpty(stateString)) {
@@ -227,6 +242,33 @@ export function getFromStateOrObject(objectId, property, objects) {
     effect = object[property];
   }
   return effect;
+}
+
+/**
+ * Escapes a value for safe inclusion in HTML.
+ */
+export function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+/**
+ * Escapes a value embedded in the single-quoted javascript: link that the
+ * terminal creates. The terminal itself HTML-escapes <, > and " in link
+ * data, so only the javascript: URL / JS string level hazards remain:
+ * & (HTML entities), # (cuts the URL off at the fragment), '
+ * (JS string terminator) and \ (JS escape sequences).
+ */
+export function escapeJsLinkParam(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/\\/g, '\\\\')
+    .replace(/#/g, '%23')
+    .replace(/'/g, '\\u0027');
 }
 
 // otherwise clicking on links in the terminal opens a new tab...

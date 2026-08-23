@@ -423,7 +423,7 @@ export default class Interpreter {
     for (let i = 0; i < item_ids.length; i++) {
       const item_id = item_ids[i];
       if (isEmpty(item_id)) {
-        this.echo(this.advntx.messages.error_thing.format(item), this.errorColor);
+        this.echo(this.advntx.messages.error_thing.format(item_id), this.errorColor);
         break;
       } else {
         this.advntx.inventoryHandler.removeFromInventory(item_id);
@@ -441,8 +441,8 @@ export default class Interpreter {
     const doContinue = this.advntx.eventHandler.executeEvent(event, this.advntx.interpreter.echo);
 
     if (old_location != this.advntx.state.location) {
-      setTimeout(function () {
-        this.advntx.interpreter.describeLocationEcho(this.advntx.state.location, false)
+      setTimeout(() => {
+        this.advntx.interpreter.describeLocationEcho(this.advntx.state.location, false);
       }, this.advntx.config.standard_wait_eventtext);
     }
 
@@ -452,22 +452,6 @@ export default class Interpreter {
 
   standardError(command) {
     this.echo(this.advntx.messages.error.format(command), this.errorColor);
-  }
-
-  /**
-   * Checks a command for equality and for synonyms.
-   */
-  check(input, to_check) {
-    if (input == to_check) {
-      return true;
-    }
-    if (vocabulary.synonyms[to_check] != undefined) {
-      if (vocabulary.synonyms[to_check].indexOf(input) != -1) {
-        return true;
-      }
-    }
-    return false;
-
   }
 
   buildVocabularyHelpString(helpString, vocabularyObjects) {
