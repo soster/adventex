@@ -62,6 +62,7 @@ All build output goes to `dist/` (git-ignored). Key npm scripts:
 | `npm run lint` | ESLint (`src/**/*.js`) |
 | `npm run test` | Run Mocha tests (`mocha -r esm`) |
 | `npm run serve-tests` | Start BrowserSync for browser-based tests |
+| `npm run test:headless` | Automated headless tests: engine (Node) + browser E2E (Chromium, auto-skip if absent) |
 
 **Build order:** `npm run build` runs `clean` first (serial), then `build-dirty` (parallel: js, css, img, copy, statics). The `statics` step copies jQuery and jquery.terminal from `node_modules` into `dist/`. The `copy` step copies `src/copy/`, `src/games/`, and `src/js/functions.js` individually.
 
@@ -108,15 +109,37 @@ The game engine is data-driven. Each game is a directory under `src/games/<game_
 
 ## Testing
 
-Tests are **browser-only** (depend on `window`, `chai` global, and DOM). The test suite has two describe blocks:
-1. Core engine tests (Parser, EventHandler, Interpreter, LocationHandler, InventoryHandler)
-2. Full game flow test for "The Midnight Express" (`heist` game)
+Two suites:
 
-Run via:
+### 1. Headless automation (preferred for agents/CI) — no manual interaction
+
+```bash
+npm run test:headless
+```
+
+One command: builds if needed, runs the **engine test** (real engine + real
+game data under Node, ~5s: save/load validation, `getJSON` errors, link
+escaping, full escape-game playthrough, arrest/teleport regression) and the
+**browser E2E test** (real Chromium against `dist/`, ~25s: boot, rendered
+links, full playthrough through the UI, zero JS exceptions). The browser
+layer auto-skips when no Chromium/Chrome is installed. See
+`test/headless/README.md` for details, the winning command sequence, and
+how to extend (new game playthroughs, text-normalization gotchas).
+
+```bash
+node test/headless/engine.test.mjs    # engine layer only
+node test/headless/browser.test.mjs   # browser layer only
+```
+
+### 2. Browser Mocha suite (manual)
+
+Tests are **browser-only** (they depend on `window`, `chai` global, and DOM). Run via:
 ```bash
 npm run serve-tests
 ```
-Then open the BrowserSync URL in a browser.
+Then open the BrowserSync URL in a browser. The suite covers Parser,
+EventHandler, Interpreter, LocationHandler, and InventoryHandler, plus the
+heist and lighthouse win flows.
 
 ## Adding a New Game
 

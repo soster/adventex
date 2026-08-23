@@ -32,7 +32,8 @@
         "serve": "npm-run-all -p watch serve-start",
         "lint": "eslint src/**/*.js",
         "test": "mocha -r esm",
-        "serve-tests": "browser-sync start --config 'test/browser-sync.js' "
+        "serve-tests": "browser-sync start --config 'test/browser-sync.js' ",
+        "test:headless": "node test/headless/run.mjs"
     },
 "devDependencies": {
         "@eslint/js": "^10.0.1",
